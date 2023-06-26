@@ -14,6 +14,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.organization>gianpyy</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.projectKey>Gianpyy_GamePlay</sonar.projectKey>
+        <sonar.sources>.</sonar.sources>
+        <sonar.java.binaries>.</sonar.java.binaries>
     </properties>
 
 
@@ -25,6 +28,4 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
-
 </project>
