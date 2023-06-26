@@ -5,7 +5,8 @@ public class Prodotto {
     /*
         VARIABILI DI CLASSE
      */
-    private String barcode, nome;
+    private String barcode;
+    private String nome;
     private float prezzo;
 
 
