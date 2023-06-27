@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Videogioco extends Prodotto{
     /*
-        VARIABILI DI CLASSE
+        ATTRIBUTI
      */
     private String piattaforma;
     private String descrizione;
@@ -23,9 +23,9 @@ public class Videogioco extends Prodotto{
         super();
     }
 
-    public Videogioco(String barcode, String nome, float prezzo, String piattaforma, String descrizione, String condizioni, String numeroGiocatori, Date dataRilascio,
+    public Videogioco(String barcode, String nome, float prezzo, int sconto, String piattaforma, String descrizione, String condizioni, String numeroGiocatori, Date dataRilascio,
                       List<String> categorie, List<String> pegi, int etaPegi) {
-        super(barcode, nome, prezzo);
+        super(barcode, nome, prezzo, sconto);
         this.piattaforma = piattaforma;
         this.descrizione = descrizione;
         this.condizioni = condizioni;
