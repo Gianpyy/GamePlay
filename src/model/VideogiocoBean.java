@@ -1,9 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Videogioco extends Prodotto{
+public class VideogiocoBean extends ProdottoBean implements Serializable {
     /*
         ATTRIBUTI
      */
@@ -12,41 +13,27 @@ public class Videogioco extends Prodotto{
     private String condizioni;
     private String numeroGiocatori;
     private Date dataRilascio;
-    private List<String> categorie;
-    private List<String> pegi;
+    private String categoria;
     private int etaPegi;
 
     /*
         COSTRUTTORI
      */
-    public Videogioco() {
+    public VideogiocoBean() {
         super();
     }
 
-    public Videogioco(String barcode, String nome, float prezzo, int sconto, String piattaforma, String descrizione, String condizioni, String numeroGiocatori, Date dataRilascio,
-                      List<String> categorie, List<String> pegi, int etaPegi) {
+    public VideogiocoBean(String barcode, String nome, float prezzo, int sconto, String piattaforma, String descrizione, String condizioni, String numeroGiocatori, Date dataRilascio,
+                          String categoria,int etaPegi) {
         super(barcode, nome, prezzo, sconto);
         this.piattaforma = piattaforma;
         this.descrizione = descrizione;
         this.condizioni = condizioni;
         this.numeroGiocatori = numeroGiocatori;
         this.dataRilascio = dataRilascio;
-        this.categorie = categorie;
-        this.pegi = pegi;
+        this.categoria = categoria;
         this.etaPegi = etaPegi;
     }
-
-    /*
-        METODI
-     */
-    public void addCategoria(String categoria) {
-        categorie.add(categoria);
-    }
-
-    public void addContenuto(String contenuto) {
-        pegi.add(contenuto);
-    }
-
     /*
         GETTERS
      */
@@ -70,16 +57,12 @@ public class Videogioco extends Prodotto{
         return dataRilascio;
     }
 
-    public List<String> getCategorie() {
-        return categorie;
-    }
-
-    public List<String> getPegi() {
-        return pegi;
-    }
-
     public int getEtaPegi() {
         return etaPegi;
+    }
+
+    public String getCategoria() {
+        return categoria;
     }
 
     /*
@@ -105,15 +88,11 @@ public class Videogioco extends Prodotto{
         this.dataRilascio = dataRilascio;
     }
 
-    public void setCategorie(List<String> categorie) {
-        this.categorie = categorie;
-    }
-
-    public void setPegi(List<String> pegi) {
-        this.pegi = pegi;
-    }
-
     public void setEtaPegi(int etaPegi) {
         this.etaPegi = etaPegi;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

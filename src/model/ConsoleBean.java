@@ -1,6 +1,8 @@
 package model;
 
-public class Console extends Prodotto {
+import java.io.Serializable;
+
+public class ConsoleBean extends ProdottoBean implements Serializable {
     /*
         ATTRIBUTI
      */
@@ -11,10 +13,10 @@ public class Console extends Prodotto {
         COSTRUTTORI
      */
 
-    public Console() {
+    public ConsoleBean() {
     }
 
-    public Console(String barcode, String nome, float prezzo, int sconto, String famiglia, String annoRilascio) {
+    public ConsoleBean(String barcode, String nome, float prezzo, int sconto, String famiglia, String annoRilascio) {
         super(barcode, nome, prezzo, sconto);
         this.famiglia = famiglia;
         this.annoRilascio = annoRilascio;

@@ -1,6 +1,8 @@
 package model;
 
-public class Prodotto {
+import java.io.Serializable;
+
+public class ProdottoBean implements Serializable {
 
     /*
         ATTRIBUTI
@@ -14,9 +16,9 @@ public class Prodotto {
     /*
         COSTRUTTORI
      */
-    public Prodotto() {}
+    public ProdottoBean() {}
 
-    public Prodotto(String barcode, String nome, float prezzo, int sconto) {
+    public ProdottoBean(String barcode, String nome, float prezzo, int sconto) {
         this.barcode = barcode;
         this.nome = nome;
         this.prezzo = prezzo;

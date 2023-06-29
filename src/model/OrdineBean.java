@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Ordine {
+public class OrdineBean implements Serializable {
     /*
         VARIABILI DI CLASSE
      */
@@ -18,9 +19,9 @@ public class Ordine {
         COSTRUTTORI
      */
 
-    public Ordine() {}
+    public OrdineBean() {}
 
-    public Ordine(String numeroOrdine, Date data, float totale, float acconto, String metodoPagamento, String stato, String indirizzo) {
+    public OrdineBean(String numeroOrdine, Date data, float totale, float acconto, String metodoPagamento, String stato, String indirizzo) {
         this.numeroOrdine = numeroOrdine;
         this.data = data;
         this.totale = totale;
@@ -30,7 +31,7 @@ public class Ordine {
         this.indirizzo = indirizzo;
     }
 
-    public Ordine(String numeroOrdine, Date data, float totale, String metodoPagamento, String indirizzo) {
+    public OrdineBean(String numeroOrdine, Date data, float totale, String metodoPagamento, String indirizzo) {
         this.numeroOrdine = numeroOrdine;
         this.data = data;
         this.totale = totale;
