@@ -17,6 +17,12 @@ public class UtenteBean implements Serializable {
      */
     public UtenteBean() {}
 
+    public UtenteBean(String username, String password, boolean admin) {
+        this.username = username;
+        this.password = password;
+        this.admin = admin;
+    }
+
     public UtenteBean(int codice, String username, String password, boolean admin) {
         this.codice = codice;
         this.username = username;
