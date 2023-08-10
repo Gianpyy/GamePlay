@@ -10,7 +10,7 @@
         <img class="logo" src="static/img/logo_placeholder.png" alt="cool logo">
         <input class="searchbar" type="text" placeholder="BARRA DI RICERCA">
         <a href="#">Carrello</a>
-        <a href="#">Login</a>
+        <a href="login.jsp">Login</a>
     </div>
 </body>
 </html>

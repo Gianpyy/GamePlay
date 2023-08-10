@@ -37,3 +37,13 @@ footer {
     clear: both;
     padding-top: 30px;
 }
+
+.login {
+    margin: 20px 0;
+    font-size: large;
+}
+
+.login.input {
+    margin: 10px;
+    width: 28px;
+}
