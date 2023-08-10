@@ -13,7 +13,7 @@
 <form class="login" method="post" action="#">
     Username: <input type="text" id="username"> <br>
     Password: <input type="password" id="password"> <br>
-    Non hai un'account? <a href="#">Registrati</a> <br>
+    Non hai un'account? <a href="register.jsp">Registrati</a> <br>
     <input type="submit" value="Login">
 </form>
 
