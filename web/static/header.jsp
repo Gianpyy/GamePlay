@@ -7,10 +7,18 @@
 </head>
 <body>
     <div style="background-color: indianred">
-        <form method="post" action="#">
+
             <img class="logo" src="static/img/logo_placeholder.png" alt="cool logo">
-            <input class="searchbar" type="text" placeholder="BARRA DI RICERCA" value="search">
+
+        <form method="post" action="#">
+            <input class="searchbar" type="text" placeholder="BARRA DI RICERCA">
+        </form>
+
+        <form method="post" action="#">
             <input type="button" value="Carrello">
+        </form>
+
+        <form method="post" action="#">
             <input type="button" value="Login">
         </form>
     </div>
