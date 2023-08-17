@@ -7,10 +7,12 @@
 </head>
 <body>
     <div style="background-color: indianred">
-        <img class="logo" src="static/img/logo_placeholder.png" alt="cool logo">
-        <input class="searchbar" type="text" placeholder="BARRA DI RICERCA">
-        <a href="#">Carrello</a>
-        <a href="login.jsp">Login</a>
+        <form method="post" action="#">
+            <img class="logo" src="static/img/logo_placeholder.png" alt="cool logo">
+            <input class="searchbar" type="text" placeholder="BARRA DI RICERCA" value="search">
+            <input type="button" value="Carrello">
+            <input type="button" value="Login">
+        </form>
     </div>
 </body>
 </html>
