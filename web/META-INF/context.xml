@@ -4,7 +4,7 @@
               auth="Container"
               driverClassName="com.mysql.cj.jdbc.Driver"
               type="javax.sql.DataSource"
-              username="root"
-              password="supersecurepassword"
-              url="jdbc:mysql://localhost:3306/GamePlayDB?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
+              username=""
+              password=""
+              url=""/>
 </Context>
