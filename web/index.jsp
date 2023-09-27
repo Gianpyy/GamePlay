@@ -1,3 +1,8 @@
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="model.ProdottoBean" %>
+<%@ page import="control.ProdottoDAO" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="java.util.LinkedList" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="it">
@@ -8,6 +13,16 @@
 <body>
 <header>
     <%@include file="static/header.jsp"%>
+    <% ProdottoDAO prodottoDAO = new ProdottoDAO(); %>
+    <% LinkedList<ProdottoBean> prodotti;
+        try {
+            prodotti = (LinkedList<ProdottoBean>) prodottoDAO.doRetrieveAll("");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    %>
+
+
 </header>
 
 <!--Sezione sconti e promozioni -->
@@ -15,12 +30,12 @@
 <h2>Sconti e promozioni</h2>
 
 <!-- Qui appaiono le cover dei prodotti in promozione -->
-  <% for (int i=0; i < 8; i++) { %>
+  <% for (ProdottoBean p : prodotti) { %>
     <div class="card">
       <img class="videogame" src="static/img/videogame_cover_placeholder.jpg" alt="Avatar">
       <div class="container">
-          <h4><b>Videogiuco</b></h4>
-          <p>70€</p>
+          <h4><b><%=p.getNome()%></b></h4>
+          <p><%=p.getPrezzo()%> €</p>
       </div>
   </div>
   <% } %>
@@ -34,7 +49,7 @@
 <section>
 <h2>Per te</h2>
 <!-- Qui appaiono le cover dei prodotti personalizzati in base alle preferenze dell'utente -->
-<% for (int i=0; i < 8; i++) { %>
+<% for (int i = 0; i < 8; i++) { %>
 <div class="card">
     <img class="videogame" src="static/img/videogame_cover_placeholder.jpg" alt="Avatar">
     <div class="container">
@@ -53,7 +68,7 @@
 <section>
 <h2>In arrivo</h2>
 <!-- Qui appaiono le cover dei prodotti in arrivo -->
-<% for (int i=0; i < 8; i++) { %>
+<% for (int i = 0; i < 8; i++) { %>
 <div class="card">
     <img class="videogame" src="static/img/videogame_cover_placeholder.jpg" alt="Avatar">
     <div class="container">
@@ -72,7 +87,7 @@
 <section>
 <h2>Uscite recenti</h2>
 <!-- Qui appaiono le cover dei prodotti usciti di recente -->
-<% for (int i=0; i < 8; i++) { %>
+<% for (int i = 0; i < 8; i++) { %>
 <div class="card">
     <img class="videogame" src="static/img/videogame_cover_placeholder.jpg" alt="Avatar">
     <div class="container">
