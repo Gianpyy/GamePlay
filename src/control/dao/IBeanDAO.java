@@ -1,4 +1,4 @@
-package control;
+package control.dao;
 
 import java.sql.SQLException;
 import java.util.Collection;

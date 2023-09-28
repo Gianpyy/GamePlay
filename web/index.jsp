@@ -1,5 +1,5 @@
 <%@ page import="model.ProdottoBean" %>
-<%@ page import="control.ProdottoDAO" %>
+<%@ page import="control.dao.ProdottoDAO" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.LinkedList" %>
 <%@ page contentType="text/html;charset=UTF-8"%>

@@ -1,4 +1,4 @@
-package control;
+package control.dao;
 
 import model.UtenteBean;
 
@@ -71,7 +71,7 @@ public class UtenteDAO implements IBeanDAO<UtenteBean>{
     public boolean doDelete(int code) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        int result = 0;
+        int result;
 
         String sqlStatement = "DELETE FROM " +UtenteDAO.TABLE_NAME+" WHERE codice = ?";
 
