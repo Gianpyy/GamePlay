@@ -18,7 +18,7 @@
             <input type="button" value="Carrello">
         </form>
 
-        <form method="post" action="../login.jsp">
+        <form method="post" action="login.jsp">
             <input type="submit" value="Login">
         </form>
     </div>
