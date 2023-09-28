@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
     <title>Registrati</title>
   <link rel="stylesheet" href="static/styles/styles.css">
@@ -11,10 +11,14 @@
 </header>
 
 <form class="login" method="post" action="index.jsp">
-  Nome: <input type="text" id="nome"> <br>
-  Cognome: <input type="text" id="cognome"> <br>
-  Username: <input type="text" id="username"> <br>
-  Password: <input type="password" id="password"> <br>
+  <label for="nome">Nome: </label>
+  <input type="text" id="nome"> <br>
+  <label for="cognome">Cognome: </label>
+  <input type="text" id="cognome"> <br>
+  <label for="username">Username: </label>
+  <input type="text" id="username"> <br>
+  <label for="password">Password: </label>
+  <input type="password" id="password"> <br>
   <input type="submit" value="Registrati ora">
 </form>
 

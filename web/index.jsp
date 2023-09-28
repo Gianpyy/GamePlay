@@ -1,4 +1,3 @@
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="model.ProdottoBean" %>
 <%@ page import="control.ProdottoDAO" %>
 <%@ page import="java.sql.SQLException" %>
@@ -31,7 +30,7 @@
 
 <!-- Qui appaiono le cover dei prodotti in promozione -->
   <% for (ProdottoBean p : prodotti) { %>
-    <div class="card">
+    <div class="card" id="<%=p.getBarcode()%>">
       <img class="videogame" src="static/img/videogame_cover_placeholder.jpg" alt="Avatar">
       <div class="container">
           <h4><b><%=p.getNome()%></b></h4>
