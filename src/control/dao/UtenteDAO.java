@@ -189,4 +189,46 @@ public class UtenteDAO implements IBeanDAO<UtenteBean>{
 
         return utenteBeanCollection;
     }
+
+    public UtenteBean doRetrieveByUsernameAndPassword(String username, String password) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        UtenteBean utenteBean = new UtenteBean();
+
+        String sqlStatement = "SELECT * FROM " + UtenteDAO.TABLE_NAME +" WHERE username = ? AND psw = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+
+            //Eseguo la query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            //Salvo il risultato della query nel bean
+            while (resultSet.next()) {
+                utenteBean.setCodice(resultSet.getInt("codice"));
+                utenteBean.setUsername(resultSet.getString("username"));
+                utenteBean.setPassword(resultSet.getString("psw"));
+                utenteBean.setAdmin(resultSet.getBoolean("amministratore"));
+            }
+
+            //Chiudo la connessione
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return utenteBean;
+    }
 }

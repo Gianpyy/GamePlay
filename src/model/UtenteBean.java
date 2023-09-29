@@ -15,7 +15,10 @@ public class UtenteBean implements Serializable {
     /*
         COSTRUTTORI
      */
-    public UtenteBean() {}
+    public UtenteBean() {
+        this.username = null;
+        this.password = null;
+    }
 
     public UtenteBean(String username, String password, boolean admin) {
         this.username = username;

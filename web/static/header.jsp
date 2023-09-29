@@ -18,9 +18,35 @@
             <input type="button" value="Carrello">
         </form>
 
+        <%
+            Boolean isLogged = (Boolean) session.getAttribute("isLogged");
+            if(isLogged == null || !isLogged) {
+        %>
         <form method="post" action="login.jsp">
             <input type="submit" value="Login">
         </form>
+        <%
+            }
+            else {
+                Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+                if (!isAdmin) {
+        %>
+                    Benvenuto
+        <%      }
+                else {
+        %>
+                    Amministratore
+        <%
+                }
+        %>
+        <%=session.getAttribute("username")%>
+
+        <form method="post" action="Logout">
+            <input type="submit" value="Logout">
+        </form>
+        <%
+            }
+        %>
     </div>
 </body>
 </html>

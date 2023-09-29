@@ -1,3 +1,4 @@
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it">
@@ -10,12 +11,21 @@
     <%@include file="static/header.jsp"%>
 </header>
 
-<form class="login" method="post" action="#">
+<%
+    List<String> errors = (List<String>) request.getAttribute("errors");
+    if(errors != null) {
+        for (String error : errors) { %>
+            <%=error%> <br>
+        <%
+        }
+    }
+%>
+<form class="login" method="post" action="Login">
     <label for="username">Username: </label>
-    <input type="text" id="username"> <br>
+    <input type="text" name="username" id="username"> <br>
 
     <label for="password">Password: </label>
-    <input type="password" id="password"> <br>
+    <input type="password" name="password" id="password"> <br>
     Non hai un'account? <a href="register.jsp">Registrati</a> <br>
     <input type="submit" value="Login">
 </form>
