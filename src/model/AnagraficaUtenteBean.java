@@ -13,18 +13,21 @@ public class AnagraficaUtenteBean implements Serializable {
     private Date dataDiNascita;
     private String sesso;
 
+    private int codiceUtente;
+
     /*
         COSTRUTTORI
      */
     public AnagraficaUtenteBean() {
     }
 
-    public AnagraficaUtenteBean(String codiceFiscale, String nome, String cognome, Date dataDiNascita, String sesso) {
+    public AnagraficaUtenteBean(String codiceFiscale, String nome, String cognome, Date dataDiNascita, String sesso, int codiceUtente) {
         this.codiceFiscale = codiceFiscale;
         this.nome = nome;
         this.cognome = cognome;
         this.dataDiNascita = dataDiNascita;
         this.sesso = sesso;
+        this.codiceUtente = codiceUtente;
     }
 
     /*
@@ -49,10 +52,15 @@ public class AnagraficaUtenteBean implements Serializable {
     public String getSesso() {
         return sesso;
     }
+    public int getCodiceUtente() {
+        return codiceUtente;
+    }
+
+
 
     /*
-        SETTERS
-     */
+            SETTERS
+         */
     public void setCodiceFiscale(String codiceFiscale) {
         this.codiceFiscale = codiceFiscale;
     }
@@ -71,5 +79,8 @@ public class AnagraficaUtenteBean implements Serializable {
 
     public void setSesso(String sesso) {
         this.sesso = sesso;
+    }
+    public void setCodiceUtente(int codiceUtente) {
+        this.codiceUtente = codiceUtente;
     }
 }
