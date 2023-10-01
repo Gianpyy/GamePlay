@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         List<String> errors = new ArrayList<>();
-        LOGGER.log(Level.INFO, "\nUsername: {0}\nPassword: {1}\n", new String[]{username, password});
+        //LOGGER.log(Level.INFO, "\nUsername: {0}\nPassword: {1}\n", new String[]{username, password});
         RequestDispatcher dispatcherToLoginPage = req.getRequestDispatcher("login.jsp");
 
         //Controllo che username e password non siano vuoti
@@ -63,7 +63,7 @@ public class LoginServlet extends HttpServlet {
         UtenteBean user = new UtenteBean();
         try {
             user = utenteDAO.doRetrieveByUsernameAndPassword(username, password);
-            LOGGER.log(Level.INFO,"\nUsername retrieved from database: {0}\nUsername retrieved from database: {1}\n", new String[]{user.getUsername(), user.getPassword()});
+            //LOGGER.log(Level.INFO,"\nUsername retrieved from database: {0}\nUsername retrieved from database: {1}\n", new String[]{user.getUsername(), user.getPassword()});
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.toString());
         }

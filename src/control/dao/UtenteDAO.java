@@ -37,7 +37,7 @@ public class UtenteDAO implements IBeanDAO<UtenteBean>{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
-        String sqlStatement = "INSERT INTO " + UtenteDAO.TABLE_NAME + " (amministratore, username, psw) VALUES (?, ?, ?)";
+        String sqlStatement = "INSERT INTO " + UtenteDAO.TABLE_NAME + " (username, psw, amministratore) VALUES (?, ?, ?)";
 
         try{
             //Ottengo la connessione
@@ -46,9 +46,9 @@ public class UtenteDAO implements IBeanDAO<UtenteBean>{
 
             //Preparo il PreparedStatement
             preparedStatement = connection.prepareStatement(sqlStatement);
-            preparedStatement.setBoolean(1, user.isAdmin());
-            preparedStatement.setString(2, user.getUsername());
-            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setBoolean(3, false);
 
             //Eseguo la query
             preparedStatement.executeUpdate();
