@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-public class ProdottoDAO implements IBeanDAO<ProdottoBean> {
+public class ProdottoDAO implements IBeanDAO<ProdottoBean, String> {
     private static DataSource dataSource;
 
     private static final String TABLE_NAME = "prodotto";
@@ -33,7 +33,7 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean> {
     public ProdottoDAO() { /* Costruttore di default vuoto e senza parametri */}
 
     @Override
-    public synchronized void doSave(ProdottoBean product) throws SQLException {
+    public synchronized void doSave(ProdottoBean item) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -46,11 +46,11 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean> {
 
             //Preparo il PreparedStatement
             preparedStatement = connection.prepareStatement(sqlStatement);
-            preparedStatement.setString(1, product.getBarcode());
-            preparedStatement.setString(2, product.getNome());
-            preparedStatement.setFloat(3, product.getPrezzo());
-            preparedStatement.setInt(4, product.getSconto());
-            preparedStatement.setString(5, product.getTipo());
+            preparedStatement.setString(1, item.getBarcode());
+            preparedStatement.setString(2, item.getNome());
+            preparedStatement.setFloat(3, item.getPrezzo());
+            preparedStatement.setInt(4, item.getSconto());
+            preparedStatement.setString(5, item.getTipo());
 
             //Eseguo la query
             preparedStatement.executeUpdate();
@@ -70,11 +70,10 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean> {
     }
 
     @Override
-    public boolean doDelete(int code) throws SQLException {
+    public boolean doDelete(String code) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         int result;
-        String barcode = Integer.toString(code);
 
         String sqlStatement = "DELETE FROM " +ProdottoDAO.TABLE_NAME+" WHERE barcode = ?";
 
@@ -85,7 +84,7 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean> {
 
             //Preparo il PreparedStatement
             preparedStatement = connection.prepareStatement(sqlStatement);
-            preparedStatement.setString(1, barcode);
+            preparedStatement.setString(1, code);
 
             //Eseguo la query
             result = preparedStatement.executeUpdate();
@@ -105,11 +104,10 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean> {
     }
 
     @Override
-    public ProdottoBean doRetrieveByKey(int code) throws SQLException {
+    public ProdottoBean doRetrieveByKey(String code) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ProdottoBean prodottoBean = new ProdottoBean();
-        String barcode = Integer.toString(code);
 
         String sqlStatement = "SELECT * FROM " + ProdottoDAO.TABLE_NAME + " WHERE  barcode = ?";
 
@@ -120,7 +118,7 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean> {
 
             //Preparo il PreparedStatement
             preparedStatement = connection.prepareStatement(sqlStatement);
-            preparedStatement.setString(1, barcode);
+            preparedStatement.setString(1, code);
 
             //Eseguo la query
             ResultSet resultSet = preparedStatement.executeQuery();

@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-public class UtenteDAO implements IBeanDAO<UtenteBean>{
+public class UtenteDAO implements IBeanDAO<UtenteBean, Integer>{
     private static DataSource dataSource;
 
     private static final String TABLE_NAME = "utente";
@@ -33,7 +33,7 @@ public class UtenteDAO implements IBeanDAO<UtenteBean>{
     public UtenteDAO() { /* Costruttore di default senza parametri*/ }
 
     @Override
-    public synchronized void doSave(UtenteBean user) throws SQLException {
+    public synchronized void doSave(UtenteBean item) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -46,8 +46,8 @@ public class UtenteDAO implements IBeanDAO<UtenteBean>{
 
             //Preparo il PreparedStatement
             preparedStatement = connection.prepareStatement(sqlStatement);
-            preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(1, item.getUsername());
+            preparedStatement.setString(2, item.getPassword());
             preparedStatement.setBoolean(3, false);
 
             //Eseguo la query
@@ -68,7 +68,7 @@ public class UtenteDAO implements IBeanDAO<UtenteBean>{
     }
 
     @Override
-    public boolean doDelete(int code) throws SQLException {
+    public boolean doDelete(Integer code) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         int result;
@@ -102,7 +102,7 @@ public class UtenteDAO implements IBeanDAO<UtenteBean>{
     }
 
     @Override
-    public UtenteBean doRetrieveByKey(int code) throws SQLException {
+    public UtenteBean doRetrieveByKey(Integer code) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         UtenteBean utenteBean = new UtenteBean();

@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class AnagraficaUtenteDAO implements IBeanDAO<AnagraficaUtenteBean> {
+public class AnagraficaUtenteDAO implements IBeanDAO<AnagraficaUtenteBean, String> {
     private static DataSource dataSource;
 
     private static final String TABLE_NAME = "anagraficautente";
@@ -30,7 +30,7 @@ public class AnagraficaUtenteDAO implements IBeanDAO<AnagraficaUtenteBean> {
     }
 
     @Override
-    public void doSave(AnagraficaUtenteBean anagrafica) throws SQLException  {
+    public void doSave(AnagraficaUtenteBean item) throws SQLException  {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -43,12 +43,12 @@ public class AnagraficaUtenteDAO implements IBeanDAO<AnagraficaUtenteBean> {
 
             //Preparo il PreparedStatement
             preparedStatement = connection.prepareStatement(sqlStatement);
-            preparedStatement.setString(1, anagrafica.getCodiceFiscale());
-            preparedStatement.setString(2, anagrafica.getNome());
-            preparedStatement.setString(3, anagrafica.getCognome());
-            preparedStatement.setString(4, anagrafica.getSesso());
-            preparedStatement.setDate(5, AnagraficaUtenteDAO.toSqlDate(anagrafica.getDataDiNascita()));
-            preparedStatement.setInt(6, anagrafica.getCodiceUtente());
+            preparedStatement.setString(1, item.getCodiceFiscale());
+            preparedStatement.setString(2, item.getNome());
+            preparedStatement.setString(3, item.getCognome());
+            preparedStatement.setString(4, item.getSesso());
+            preparedStatement.setDate(5, AnagraficaUtenteDAO.toSqlDate(item.getDataDiNascita()));
+            preparedStatement.setInt(6, item.getCodiceUtente());
 
             //Eseguo la query
             preparedStatement.executeUpdate();
@@ -69,7 +69,7 @@ public class AnagraficaUtenteDAO implements IBeanDAO<AnagraficaUtenteBean> {
 
 
     @Override
-    public boolean doDelete(int code) throws SQLException {
+    public boolean doDelete(String code) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         int result;
@@ -83,7 +83,7 @@ public class AnagraficaUtenteDAO implements IBeanDAO<AnagraficaUtenteBean> {
 
             //Preparo il PreparedStatement
             preparedStatement = connection.prepareStatement(sqlStatement);
-            preparedStatement.setInt(1, code);
+            preparedStatement.setString(1, code);
 
             //Eseguo la query
             result = preparedStatement.executeUpdate();
@@ -104,9 +104,45 @@ public class AnagraficaUtenteDAO implements IBeanDAO<AnagraficaUtenteBean> {
     }
 
     @Override
-    public AnagraficaUtenteBean doRetrieveByKey(int code) throws SQLException {
-        //todo: method implementation
-        return null;
+    public AnagraficaUtenteBean doRetrieveByKey(String code) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        AnagraficaUtenteBean anagraficaUtenteBean = new AnagraficaUtenteBean();
+
+        String sqlStatement = "SELECT * FROM "+AnagraficaUtenteDAO.TABLE_NAME+" WHERE codiceFiscale = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, code);
+
+            //Eseguo la query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            //Salvo il risultato della query nel bean
+            while (resultSet.next()) {
+                anagraficaUtenteBean.setCodiceFiscale(resultSet.getString("codiceFiscale"));
+                anagraficaUtenteBean.setNome(resultSet.getString("nome"));
+                anagraficaUtenteBean.setCognome(resultSet.getString("cognome"));
+                anagraficaUtenteBean.setSesso(resultSet.getString("sesso"));
+                anagraficaUtenteBean.setDataDiNascita(resultSet.getDate("dataDiNascita"));
+                anagraficaUtenteBean.setCodiceUtente(resultSet.getInt("codice"));
+            }//Chiudo la connessione
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return anagraficaUtenteBean;
     }
 
     @Override
