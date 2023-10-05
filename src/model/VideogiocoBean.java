@@ -14,6 +14,7 @@ public class VideogiocoBean extends ProdottoBean implements Serializable {
     private Date dataRilascio;
     private String categoria;
     private int etaPegi;
+    private String edizione;
 
     /*
         COSTRUTTORI
@@ -23,7 +24,7 @@ public class VideogiocoBean extends ProdottoBean implements Serializable {
     }
 
     public VideogiocoBean(String barcode, String nome, float prezzo, int sconto, String piattaforma, String descrizione, String condizioni, String numeroGiocatori, Date dataRilascio,
-                          String categoria,int etaPegi) {
+                          String categoria,int etaPegi, String edizione) {
         super(barcode, nome, prezzo, sconto, "videogioco");
         this.piattaforma = piattaforma;
         this.descrizione = descrizione;
@@ -32,6 +33,7 @@ public class VideogiocoBean extends ProdottoBean implements Serializable {
         this.dataRilascio = dataRilascio;
         this.categoria = categoria;
         this.etaPegi = etaPegi;
+        this.edizione = edizione;
     }
     /*
         GETTERS
@@ -64,9 +66,13 @@ public class VideogiocoBean extends ProdottoBean implements Serializable {
         return categoria;
     }
 
+    public String getEdizione() {
+        return edizione;
+    }
+
     /*
-        SETTERS
-     */
+            SETTERS
+         */
     public void setPiattaforma(String piattaforma) {
         this.piattaforma = piattaforma;
     }
@@ -93,5 +99,9 @@ public class VideogiocoBean extends ProdottoBean implements Serializable {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public void setEdizione(String edizione) {
+        this.edizione = edizione;
     }
 }
