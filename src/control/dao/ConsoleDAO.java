@@ -1,6 +1,6 @@
 package control.dao;
 
-import model.VideogiocoBean;
+import model.ConsoleBean;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -10,14 +10,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
 
-public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
+public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
     private static DataSource dataSource;
 
     //L'entità è debole ed ha la chiave primaria in un'altra tabella, quindi servono due stringhe con i nomi delle tabelle
     private static final String SUPER_TABLE_NAME = "prodotto"; //nome tabella con la chiave primaria nel database
-    private static final String TABLE_NAME = "videogioco"; //nome tabella nel database
+    private static final String TABLE_NAME = "console"; //nome tabella nel database
 
     //Ottengo la risorsa tramite lookup
     static {
@@ -31,15 +32,13 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
         }
     }
 
-    public VideogiocoDAO() { /* Costruttore di default vuoto e senza parametri */ }
-
     @Override
-    public void doSave(VideogiocoBean item) throws SQLException {
+    public void doSave(ConsoleBean item) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
-        String inserimentoProdotto = "INSERT INTO " + VideogiocoDAO.SUPER_TABLE_NAME + " (barcode, nome, prezzo, sconto, tipo) VALUES (?, ?, ?, ?, ?)";
-        String inserimentoVideogioco = "INSERT INTO "+ VideogiocoDAO.TABLE_NAME +"(prodotto, piattaforma, descrizione, dataRilascio, condizioni, numeroGiocatori, etaPEGI, categoria, edizione, categoria) VALUES  (?,?,?,?,?,?,?,?,?,?)";
+        String inserimentoProdotto = "INSERT INTO " + ConsoleDAO.SUPER_TABLE_NAME + " (barcode, nome, prezzo, sconto, tipo) VALUES (?, ?, ?, ?, ?)";
+        String inserimentoConsole = "INSERT INTO " +ConsoleDAO.TABLE_NAME+ " (prodotto, famiglia, annoRilascio) VALUES (?,?,?)";
 
         try {
             //Ottengo la connessione
@@ -58,23 +57,16 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
             preparedStatement.executeUpdate();
 
             //Preparo l'inserimento nella tabella videogioco
-            preparedStatement = connection.prepareStatement(inserimentoVideogioco);
-            preparedStatement.setString(1, item.getBarcode());
-            preparedStatement.setString(2, item.getPiattaforma());
-            preparedStatement.setString(3, item.getDescrizione());
-            preparedStatement.setDate(4, toSqlDate(item.getDataRilascio()));
-            preparedStatement.setString(5, item.getCondizioni());
-            preparedStatement.setString(6, item.getNumeroGiocatori());
-            preparedStatement.setInt(7, item.getEtaPegi());
-            preparedStatement.setString(8, item.getCategoria());
-            preparedStatement.setString(9, item.getEdizione());
-            preparedStatement.setString(10, item.getCategoria());
+            preparedStatement = connection.prepareStatement(inserimentoConsole);
+            preparedStatement.setString(1,item.getBarcode());
+            preparedStatement.setString(2, item.getFamiglia());
+            preparedStatement.setInt(3, item.getAnnoRilascio());
 
             //Eseguo la seconda query
             preparedStatement.executeUpdate();
             connection.commit();
 
-        //Chiudo la connessione
+            //Chiudo la connessione
         } finally {
             try {
                 if (preparedStatement != null)
@@ -93,7 +85,7 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
         PreparedStatement preparedStatement = null;
         int result;
 
-        String sqlStatement = "DELETE FROM "+VideogiocoDAO.TABLE_NAME+" as V WHERE V.prodotto = ?";
+        String sqlStatement = "DELETE FROM "+ConsoleDAO.TABLE_NAME+" as C WHERE C.prodotto = ?";
 
         try {
             //Ottengo la connessione
@@ -122,12 +114,12 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
     }
 
     @Override
-    public VideogiocoBean doRetrieveByKey(String code) throws SQLException {
+    public ConsoleBean doRetrieveByKey(String code) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        VideogiocoBean videogiocoBean = new VideogiocoBean();
+        ConsoleBean consoleBean = new ConsoleBean();
 
-        String sqlStatement = "SELECT * FROM " +VideogiocoDAO.TABLE_NAME+" as V INNER JOIN "+VideogiocoDAO.SUPER_TABLE_NAME+" as P ON V.prodotto = P.barcode WHERE P.barcode = ?";
+        String sqlStatement = "SELECT * FROM " +ConsoleDAO.TABLE_NAME+" as C INNER JOIN "+ConsoleDAO.SUPER_TABLE_NAME+" as P ON C.prodotto = P.barcode WHERE P.barcode = ?";
 
         try {
             //Ottengo la connessione
@@ -143,18 +135,12 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
 
             //Salvo il risultato della query nei bean
             while (resultSet.next()) {
-                videogiocoBean.setBarcode(resultSet.getString("barcode"));
-                videogiocoBean.setNome(resultSet.getString("nome"));
-                videogiocoBean.setPrezzo(resultSet.getFloat("prezzo"));
-                videogiocoBean.setSconto(resultSet.getInt("sconto"));
-                videogiocoBean.setPiattaforma(resultSet.getString("piattaforma"));
-                videogiocoBean.setDescrizione(resultSet.getString("descrizione"));
-                videogiocoBean.setDataRilascio(resultSet.getDate("dataRilascio"));
-                videogiocoBean.setCondizioni(resultSet.getString("condizioni"));
-                videogiocoBean.setNumeroGiocatori(resultSet.getString("numeroGiocatori"));
-                videogiocoBean.setEtaPegi(resultSet.getInt("etaPEGI"));
-                videogiocoBean.setCategoria(resultSet.getString("categoria"));
-                videogiocoBean.setEdizione(resultSet.getString("edizione"));
+                consoleBean.setBarcode(resultSet.getString("barcode"));
+                consoleBean.setNome(resultSet.getString("nome"));
+                consoleBean.setPrezzo(resultSet.getFloat("prezzo"));
+                consoleBean.setSconto(resultSet.getInt("sconto"));
+                consoleBean.setFamiglia(resultSet.getString("famiglia"));
+                consoleBean.setAnnoRilascio(resultSet.getInt("annoRilascio"));
             }
         } finally {
             try {
@@ -165,16 +151,16 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
                     connection.close();
             }
         }
-        return videogiocoBean;
+        return consoleBean;
     }
 
     @Override
-    public Collection<VideogiocoBean> doRetrieveAll(String order) throws SQLException {
+    public Collection<ConsoleBean> doRetrieveAll(String order) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        Collection<VideogiocoBean> videogiocoBeanCollection = new LinkedList<>();
+        Collection<ConsoleBean> consoleBeanCollection = new LinkedList<>();
 
-        String sqlStatement = "SELECT * FROM " +VideogiocoDAO.TABLE_NAME+" as V INNER JOIN "+VideogiocoDAO.SUPER_TABLE_NAME+" as P ON V.prodotto = P.barcode";
+        String sqlStatement = "SELECT * FROM " +ConsoleDAO.TABLE_NAME+" as C INNER JOIN "+ConsoleDAO.SUPER_TABLE_NAME+" as P ON C.prodotto = P.barcode";
 
         //Aggiungo l'ordine in cui devono essere visualizzati i risultati, se disponibile
         if(order != null && !order.equals("")) {
@@ -194,20 +180,14 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
 
             //Salvo il risultato della query nei bean
             while (resultSet.next()) {
-                VideogiocoBean videogiocoBean = new VideogiocoBean();
-                videogiocoBean.setBarcode(resultSet.getString("barcode"));
-                videogiocoBean.setNome(resultSet.getString("nome"));
-                videogiocoBean.setPrezzo(resultSet.getFloat("prezzo"));
-                videogiocoBean.setSconto(resultSet.getInt("sconto"));
-                videogiocoBean.setPiattaforma(resultSet.getString("piattaforma"));
-                videogiocoBean.setDescrizione(resultSet.getString("descrizione"));
-                videogiocoBean.setDataRilascio(resultSet.getDate("dataRilascio"));
-                videogiocoBean.setCondizioni(resultSet.getString("condizioni"));
-                videogiocoBean.setNumeroGiocatori(resultSet.getString("numeroGiocatori"));
-                videogiocoBean.setEtaPegi(resultSet.getInt("etaPEGI"));
-                videogiocoBean.setCategoria(resultSet.getString("categoria"));
-                videogiocoBean.setEdizione(resultSet.getString("edizione"));
-                videogiocoBeanCollection.add(videogiocoBean);
+                ConsoleBean consoleBean = new ConsoleBean();
+                consoleBean.setBarcode(resultSet.getString("barcode"));
+                consoleBean.setNome(resultSet.getString("nome"));
+                consoleBean.setPrezzo(resultSet.getFloat("prezzo"));
+                consoleBean.setSconto(resultSet.getInt("sconto"));
+                consoleBean.setFamiglia(resultSet.getString("famiglia"));
+                consoleBean.setAnnoRilascio(resultSet.getInt("annoRilascio"));
+                consoleBeanCollection.add(consoleBean);
             }
         } finally {
             try {
@@ -219,18 +199,6 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
             }
         }
 
-        return videogiocoBeanCollection;
-    }
-
-
-    private static java.sql.Date toSqlDate(Date data) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(data);
-        calendar.set(Calendar.HOUR, 1);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        return new java.sql.Date(calendar.getTimeInMillis());
+        return consoleBeanCollection;
     }
 }

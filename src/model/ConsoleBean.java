@@ -7,7 +7,7 @@ public class ConsoleBean extends ProdottoBean implements Serializable {
         ATTRIBUTI
      */
     private String famiglia;
-    private String annoRilascio;
+    private int annoRilascio;
 
     /*
         COSTRUTTORI
@@ -16,7 +16,7 @@ public class ConsoleBean extends ProdottoBean implements Serializable {
     public ConsoleBean() {
     }
 
-    public ConsoleBean(String barcode, String nome, float prezzo, int sconto, String famiglia, String annoRilascio) {
+    public ConsoleBean(String barcode, String nome, float prezzo, int sconto, String famiglia, int annoRilascio) {
         super(barcode, nome, prezzo, sconto, "console");
         this.famiglia = famiglia;
         this.annoRilascio = annoRilascio;
@@ -29,7 +29,7 @@ public class ConsoleBean extends ProdottoBean implements Serializable {
         return famiglia;
     }
 
-    public String getAnnoRilascio() {
+    public int getAnnoRilascio() {
         return annoRilascio;
     }
 
@@ -40,7 +40,7 @@ public class ConsoleBean extends ProdottoBean implements Serializable {
         this.famiglia = famiglia;
     }
 
-    public void setAnnoRilascio(String annoRilascio) {
+    public void setAnnoRilascio(int annoRilascio) {
         this.annoRilascio = annoRilascio;
     }
 }
