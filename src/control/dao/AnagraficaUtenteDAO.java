@@ -29,6 +29,8 @@ public class AnagraficaUtenteDAO implements IBeanDAO<AnagraficaUtenteBean, Strin
         }
     }
 
+    public AnagraficaUtenteDAO() { /* Costruttore di default vuoto e senza parametri */ }
+
     @Override
     public void doSave(AnagraficaUtenteBean item) throws SQLException  {
         Connection connection = null;
