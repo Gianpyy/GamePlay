@@ -1,6 +1,7 @@
 package control.dao;
 
-import model.ConsoleBean;
+import model.GadgetBean;
+import model.VideogiocoBean;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -13,12 +14,12 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
+public class GadgetDAO implements IBeanDAO<GadgetBean, String> {
     private static DataSource dataSource;
 
     //L'entità è debole ed ha la chiave primaria in un'altra tabella, quindi servono due stringhe con i nomi delle tabelle
     private static final String SUPER_TABLE_NAME = "prodotto"; //nome tabella con la chiave primaria nel database
-    private static final String TABLE_NAME = "console"; //nome tabella nel database
+    private static final String TABLE_NAME = "gadget"; //nome tabella nel database
 
     //Ottengo la risorsa tramite lookup
     static {
@@ -32,15 +33,14 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
         }
     }
 
-    public ConsoleDAO() { /* Costruttore di default vuoto e senza parametri */ }
-
+    public GadgetDAO() { /* Costruttore di default vuoto e senza parametri */}
     @Override
-    public void doSave(ConsoleBean item) throws SQLException {
+    public void doSave(GadgetBean item) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
-        String inserimentoProdotto = "INSERT INTO " + ConsoleDAO.SUPER_TABLE_NAME + " (barcode, nome, prezzo, sconto, tipo) VALUES (?, ?, ?, ?, ?)";
-        String inserimentoConsole = "INSERT INTO " +ConsoleDAO.TABLE_NAME+ " (prodotto, famiglia, annoRilascio) VALUES (?,?,?)";
+        String inserimentoProdotto = "INSERT INTO " + GadgetDAO.SUPER_TABLE_NAME + " (barcode, nome, prezzo, sconto, tipo) VALUES (?, ?, ?, ?, ?)";
+        String inserimentoGadget = "INSERT INTO " + GadgetDAO.TABLE_NAME + "(prodotto, produttore, serie) VALUES  (?,?,?)";
 
         try {
             //Ottengo la connessione
@@ -59,10 +59,10 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
             preparedStatement.executeUpdate();
 
             //Preparo l'inserimento nella tabella videogioco
-            preparedStatement = connection.prepareStatement(inserimentoConsole);
-            preparedStatement.setString(1,item.getBarcode());
-            preparedStatement.setString(2, item.getFamiglia());
-            preparedStatement.setInt(3, item.getAnnoRilascio());
+            preparedStatement = connection.prepareStatement(inserimentoGadget);
+            preparedStatement.setString(1, item.getBarcode());
+            preparedStatement.setString(2, item.getProduttore());
+            preparedStatement.setString(3, item.getSerie());
 
             //Eseguo la seconda query
             preparedStatement.executeUpdate();
@@ -73,8 +73,7 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
             try {
                 if (preparedStatement != null)
                     preparedStatement.close();
-            }
-            finally {
+            } finally {
                 if (connection != null)
                     connection.close();
             }
@@ -87,7 +86,7 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
         PreparedStatement preparedStatement = null;
         int result;
 
-        String sqlStatement = "DELETE FROM "+ConsoleDAO.TABLE_NAME+" as C WHERE C.prodotto = ?";
+        String sqlStatement = "DELETE FROM "+GadgetDAO.TABLE_NAME+" as G WHERE G.prodotto = ?";
 
         try {
             //Ottengo la connessione
@@ -116,12 +115,12 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
     }
 
     @Override
-    public ConsoleBean doRetrieveByKey(String code) throws SQLException {
+    public GadgetBean doRetrieveByKey(String code) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        ConsoleBean consoleBean = new ConsoleBean();
+        GadgetBean gadgetBean = new GadgetBean();
 
-        String sqlStatement = "SELECT * FROM " +ConsoleDAO.TABLE_NAME+" as C INNER JOIN "+ConsoleDAO.SUPER_TABLE_NAME+" as P ON C.prodotto = P.barcode WHERE P.barcode = ?";
+        String sqlStatement = "SELECT * FROM " +GadgetDAO.TABLE_NAME+" as G INNER JOIN "+GadgetDAO.SUPER_TABLE_NAME+" as P ON G.prodotto = P.barcode WHERE P.barcode = ?";
 
         try {
             //Ottengo la connessione
@@ -137,12 +136,12 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
 
             //Salvo il risultato della query nei bean
             while (resultSet.next()) {
-                consoleBean.setBarcode(resultSet.getString("barcode"));
-                consoleBean.setNome(resultSet.getString("nome"));
-                consoleBean.setPrezzo(resultSet.getFloat("prezzo"));
-                consoleBean.setSconto(resultSet.getInt("sconto"));
-                consoleBean.setFamiglia(resultSet.getString("famiglia"));
-                consoleBean.setAnnoRilascio(resultSet.getInt("annoRilascio"));
+                gadgetBean.setBarcode(resultSet.getString("barcode"));
+                gadgetBean.setNome(resultSet.getString("nome"));
+                gadgetBean.setPrezzo(resultSet.getFloat("prezzo"));
+                gadgetBean.setSconto(resultSet.getInt("sconto"));
+                gadgetBean.setProduttore(resultSet.getString("produttore"));
+                gadgetBean.setSerie(resultSet.getString("serie"));
             }
         } finally {
             try {
@@ -153,21 +152,16 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
                     connection.close();
             }
         }
-        return consoleBean;
+        return gadgetBean;
     }
 
     @Override
-    public Collection<ConsoleBean> doRetrieveAll(String order) throws SQLException {
+    public Collection<GadgetBean> doRetrieveAll(String order) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        Collection<ConsoleBean> consoleBeanCollection = new LinkedList<>();
+        Collection<GadgetBean> gadgetBeanCollection = new LinkedList<>();
 
-        String sqlStatement = "SELECT * FROM " +ConsoleDAO.TABLE_NAME+" as C INNER JOIN "+ConsoleDAO.SUPER_TABLE_NAME+" as P ON C.prodotto = P.barcode";
-
-        //Aggiungo l'ordine in cui devono essere visualizzati i risultati, se disponibile
-        if(order != null && !order.equals("")) {
-            sqlStatement += " ORDER BY "+ order + " DESC";
-        }
+        String sqlStatement = "SELECT * FROM " +GadgetDAO.TABLE_NAME+" as G INNER JOIN "+GadgetDAO.SUPER_TABLE_NAME+" as P ON G.prodotto = P.barcode";
 
         try {
             //Ottengo la connessione
@@ -182,14 +176,14 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
 
             //Salvo il risultato della query nei bean
             while (resultSet.next()) {
-                ConsoleBean consoleBean = new ConsoleBean();
-                consoleBean.setBarcode(resultSet.getString("barcode"));
-                consoleBean.setNome(resultSet.getString("nome"));
-                consoleBean.setPrezzo(resultSet.getFloat("prezzo"));
-                consoleBean.setSconto(resultSet.getInt("sconto"));
-                consoleBean.setFamiglia(resultSet.getString("famiglia"));
-                consoleBean.setAnnoRilascio(resultSet.getInt("annoRilascio"));
-                consoleBeanCollection.add(consoleBean);
+                GadgetBean gadgetBean = new GadgetBean();
+                gadgetBean.setBarcode(resultSet.getString("barcode"));
+                gadgetBean.setNome(resultSet.getString("nome"));
+                gadgetBean.setPrezzo(resultSet.getFloat("prezzo"));
+                gadgetBean.setSconto(resultSet.getInt("sconto"));
+                gadgetBean.setProduttore(resultSet.getString("produttore"));
+                gadgetBean.setSerie(resultSet.getString("serie"));
+                gadgetBeanCollection.add(gadgetBean);
             }
         } finally {
             try {
@@ -200,7 +194,6 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
                     connection.close();
             }
         }
-
-        return consoleBeanCollection;
+        return gadgetBeanCollection;
     }
 }
