@@ -40,7 +40,7 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
         PreparedStatement preparedStatement = null;
 
         String inserimentoProdotto = "INSERT INTO " + ConsoleDAO.SUPER_TABLE_NAME + " (barcode, nome, prezzo, sconto, tipo) VALUES (?, ?, ?, ?, ?)";
-        String inserimentoConsole = "INSERT INTO " +ConsoleDAO.TABLE_NAME+ " (prodotto, famiglia, annoRilascio) VALUES (?,?,?)";
+        String inserimentoConsole = "INSERT INTO " +ConsoleDAO.TABLE_NAME+ " (prodotto, famiglia, annoRilascio, edizione) VALUES (?,?,?,?)";
 
         try {
             //Ottengo la connessione
@@ -55,6 +55,7 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
             preparedStatement.setInt(4, item.getSconto());
             preparedStatement.setString(5, item.getTipo());
 
+
             //Eseguo la prima query
             preparedStatement.executeUpdate();
 
@@ -63,6 +64,7 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
             preparedStatement.setString(1,item.getBarcode());
             preparedStatement.setString(2, item.getFamiglia());
             preparedStatement.setInt(3, item.getAnnoRilascio());
+            preparedStatement.setString(4, item.getEdizione());
 
             //Eseguo la seconda query
             preparedStatement.executeUpdate();
@@ -143,6 +145,7 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
                 consoleBean.setSconto(resultSet.getInt("sconto"));
                 consoleBean.setFamiglia(resultSet.getString("famiglia"));
                 consoleBean.setAnnoRilascio(resultSet.getInt("annoRilascio"));
+                consoleBean.setEdizione(resultSet.getString("edizione"));
             }
         } finally {
             try {
@@ -189,6 +192,52 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
                 consoleBean.setSconto(resultSet.getInt("sconto"));
                 consoleBean.setFamiglia(resultSet.getString("famiglia"));
                 consoleBean.setAnnoRilascio(resultSet.getInt("annoRilascio"));
+                consoleBean.setEdizione(resultSet.getString("edizione"));
+                consoleBeanCollection.add(consoleBean);
+            }
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return consoleBeanCollection;
+    }
+
+
+    public Collection<ConsoleBean> doRetrieveAllByConsoleName(String name) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        Collection<ConsoleBean> consoleBeanCollection = new LinkedList<>();
+
+        String sqlStatement = "SELECT * FROM " +ConsoleDAO.TABLE_NAME+" as C INNER JOIN "+ConsoleDAO.SUPER_TABLE_NAME+" as P ON P.nome = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, name);
+
+            //Eseguo la query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            //Salvo il risultato della query nei bean
+            while (resultSet.next()) {
+                ConsoleBean consoleBean = new ConsoleBean();
+                consoleBean.setBarcode(resultSet.getString("barcode"));
+                consoleBean.setNome(resultSet.getString("nome"));
+                consoleBean.setPrezzo(resultSet.getFloat("prezzo"));
+                consoleBean.setSconto(resultSet.getInt("sconto"));
+                consoleBean.setFamiglia(resultSet.getString("famiglia"));
+                consoleBean.setAnnoRilascio(resultSet.getInt("annoRilascio"));
+                consoleBean.setEdizione(resultSet.getString("edizione"));
                 consoleBeanCollection.add(consoleBean);
             }
         } finally {
