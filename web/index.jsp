@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    <script src="static/scripts/product.js"></script>
     <link rel="stylesheet" href="static/styles/styles.css">
     <title>Homepage</title>
 </head>
@@ -30,7 +31,7 @@
 
 <!-- Qui appaiono le cover dei prodotti in promozione -->
   <% for (ProdottoBean p : prodotti) { %>
-    <div class="card" id="<%=p.getBarcode()%>">
+    <div class="card" id="<%=p.getBarcode()%>" onclick="redirectToProductPage(this.id)">
       <img class="videogame" src="static/img/videogame_cover_placeholder.jpg" alt="Avatar">
       <div class="container">
           <h4><b><%=p.getNome()%></b></h4>

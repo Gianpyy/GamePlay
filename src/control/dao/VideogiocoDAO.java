@@ -223,6 +223,56 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
     }
 
 
+    public Collection<VideogiocoBean> doRetrieveAllByVideogameName(String name) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        Collection<VideogiocoBean> videogiocoBeanCollection = new LinkedList<>();
+
+        String sqlStatement = "SELECT * FROM " +VideogiocoDAO.TABLE_NAME+" as V INNER JOIN "+VideogiocoDAO.SUPER_TABLE_NAME+" as P ON V.prodotto = P.barcode WHERE P.nome = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, name);
+
+            //Eseguo la query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            //Salvo il risultato della query nei bean
+            while (resultSet.next()) {
+                VideogiocoBean videogiocoBean = new VideogiocoBean();
+                videogiocoBean.setBarcode(resultSet.getString("barcode"));
+                videogiocoBean.setNome(resultSet.getString("nome"));
+                videogiocoBean.setPrezzo(resultSet.getFloat("prezzo"));
+                videogiocoBean.setSconto(resultSet.getInt("sconto"));
+                videogiocoBean.setPiattaforma(resultSet.getString("piattaforma"));
+                videogiocoBean.setDescrizione(resultSet.getString("descrizione"));
+                videogiocoBean.setDataRilascio(resultSet.getDate("dataRilascio"));
+                videogiocoBean.setCondizioni(resultSet.getString("condizioni"));
+                videogiocoBean.setNumeroGiocatori(resultSet.getString("numeroGiocatori"));
+                videogiocoBean.setEtaPegi(resultSet.getInt("etaPEGI"));
+                videogiocoBean.setCategoria(resultSet.getString("categoria"));
+                videogiocoBean.setEdizione(resultSet.getString("edizione"));
+                videogiocoBeanCollection.add(videogiocoBean);
+            }
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return videogiocoBeanCollection;
+    }
+
+
     private static java.sql.Date toSqlDate(Date data) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(data);
