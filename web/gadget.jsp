@@ -7,6 +7,7 @@
 <head>
   <title>Prodotto</title>
   <link rel="stylesheet" href="static/styles/styles.css">
+  <script src="static/scripts/product.js"></script>
 </head>
 <body>
 <header>
@@ -21,6 +22,8 @@
   <h1><%=prodotto.getNome()%></h1> <br>
   <h1><%=prodotto.getPrezzo()%> €</h1> <br>
 </div>
+
+<button class="carrello" onclick="addToCart(<%=prodotto.getBarcode()%>)">Aggiungi al carrello</button>
 
 <footer>
   <%@include file="static/footer.jsp"%>

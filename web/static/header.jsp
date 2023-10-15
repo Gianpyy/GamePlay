@@ -8,15 +8,13 @@
 <body>
     <div style="background-color: indianred">
 
-            <img class="logo" src="./static/img/logo_placeholder.png" alt="cool logo">
+            <img class="logo" src="./static/img/logo_placeholder.png" alt="cool logo" onclick="window.location.replace('index.jsp')">
 
         <form method="post" action="#">
             <input class="searchbar" type="text" placeholder="BARRA DI RICERCA">
         </form>
 
-        <form method="post" action="#">
-            <input type="button" value="Carrello">
-        </form>
+        <input type="button" value="Carrello" onclick="location.href = 'carrello.jsp'">
 
         <%
             Boolean isLogged = (Boolean) session.getAttribute("isLogged");
