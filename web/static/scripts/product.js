@@ -29,24 +29,3 @@ function redirectToProductPage (id) {
         }
     })
 }
-
-
-function addToCart (id) {
-    console.log("function addToCart with id: "+id);
-
-    //Formatto i dati per la request
-    let data = {productId: id.toString()};
-    console.log(JSON.stringify(data))
-
-    //Creo la richiesta POST
-    fetch("Carrello", {
-        method: "POST",
-        headers: {
-            'Accept': "application/json",
-            'Content-Type': "application/json"},
-        body: JSON.stringify(data)
-    }).then(res => {
-        console.log("Request complete! response: ", res)
-        window.location.href = "carrello.jsp"
-    })
-}

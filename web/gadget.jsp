@@ -16,6 +16,7 @@
 <%
   GadgetBean prodotto;
   prodotto = (GadgetBean) session.getAttribute("prodotto");
+  session.setAttribute("productId", prodotto.getBarcode());
 
 %>
 <div>
@@ -23,7 +24,9 @@
   <h1><%=prodotto.getPrezzo()%> €</h1> <br>
 </div>
 
-<button class="carrello" onclick="addToCart(<%=prodotto.getBarcode()%>)">Aggiungi al carrello</button>
+<form method="post" action="Carrello">
+  <input type="submit" class="carrello" value="Aggiungi al carrello">
+</form>
 
 <footer>
   <%@include file="static/footer.jsp"%>

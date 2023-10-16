@@ -2,7 +2,6 @@ package control.servlet;
 
 import control.dao.ProdottoDAO;
 import model.ProdottoBean;
-import org.json.JSONObject;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,7 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -33,34 +31,8 @@ public class CarrelloServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //Leggo il corpo della request
-        StringBuilder requestBody = new StringBuilder();
-        try {
-            BufferedReader reader = req.getReader();
-            String line;
-            if (reader != null) {
-                while ((line = reader.readLine()) != null) {
-                    requestBody.append(line);
-                }
-            }
-            else {
-                LOGGER.log(Level.SEVERE, "reader was null");
-            }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.toString());
-        }
-        LOGGER.log(Level.INFO, "Received json: {0}", requestBody);
-
-        //Analizzo il JSON della request
-        JSONObject json = new JSONObject(requestBody.toString());
-
-        //Recupero l'id del prodotto dal json
-        String productId = "";
-        try {
-            productId = (String) json.get("productId");
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.toString());
-        }
+        //Recupero l'id del prodotto
+        String productId = (String) req.getSession().getAttribute("productId");
 
         //Recupero il prodotto da inserire nel carrello
         ProdottoBean prodottoDaAggiungere = new ProdottoBean();

@@ -8,7 +8,6 @@
 <head>
     <title>Prodotto</title>
     <link rel="stylesheet" href="static/styles/styles.css">
-    <script src="static/scripts/product.js"></script>
 </head>
 <body>
 <header>
@@ -18,6 +17,7 @@
     //Dati da visualizzare nella pagina
     ProdottoBean prodotto = (ProdottoBean) session.getAttribute("prodotto");
     List<ConsoleBean> edizioniPiattaforme = (List<ConsoleBean>) session.getAttribute("edizioni-piattaforme");
+    session.setAttribute("productId", prodotto.getBarcode());
 %>
 
 <div>
@@ -35,7 +35,9 @@
     %>
 </div>
 
-<button class="carrello" onclick="addToCart(<%=prodotto.getBarcode()%>)">Aggiungi al carrello</button>
+<form method="post" action="Carrello">
+    <input type="submit" class="carrello" value="Aggiungi al carrello">
+</form>
 
 <footer>
     <%@include file="static/footer.jsp"%>
