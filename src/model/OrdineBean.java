@@ -1,27 +1,35 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class OrdineBean implements Serializable {
     /*
         VARIABILI DI CLASSE
      */
-    private String numeroOrdine;
+    private int numeroOrdine;
     private Date data;
     private float totale;
     private float acconto;
     private String metodoPagamento;
     private String stato;
     private String indirizzo;
+    private List<ProdottoBean> prodotti;
+    private List<Integer> quantitaProdotti;
+    private int userID;
 
     /*
         COSTRUTTORI
      */
 
-    public OrdineBean() {}
+    public OrdineBean() {
+        prodotti = new ArrayList<>();
+        quantitaProdotti = new ArrayList<>();
+    }
 
-    public OrdineBean(String numeroOrdine, Date data, float totale, float acconto, String metodoPagamento, String stato, String indirizzo) {
+    public OrdineBean(int numeroOrdine, Date data, float totale, float acconto, String metodoPagamento, String stato, String indirizzo, List<ProdottoBean> prodotti, List<Integer> quantitaProdotti, int userID) {
         this.numeroOrdine = numeroOrdine;
         this.data = data;
         this.totale = totale;
@@ -29,9 +37,12 @@ public class OrdineBean implements Serializable {
         this.metodoPagamento = metodoPagamento;
         this.stato = stato;
         this.indirizzo = indirizzo;
+        this.prodotti = prodotti;
+        this.quantitaProdotti = quantitaProdotti;
+        this.userID = userID;
     }
 
-    public OrdineBean(String numeroOrdine, Date data, float totale, String metodoPagamento, String indirizzo) {
+    public OrdineBean(int numeroOrdine, Date data, float totale, String metodoPagamento, String indirizzo, List<ProdottoBean> prodotti, List<Integer> quantitaProdotti, int userID) {
         this.numeroOrdine = numeroOrdine;
         this.data = data;
         this.totale = totale;
@@ -39,12 +50,15 @@ public class OrdineBean implements Serializable {
         this.indirizzo = indirizzo;
         acconto = -1;
         stato = null;
+        this.prodotti = prodotti;
+        this.quantitaProdotti = quantitaProdotti;
+        this.userID = userID;
     }
 
     /*
         GETTERS
      */
-    public String getNumeroOrdine() {
+    public int getNumeroOrdine() {
         return numeroOrdine;
     }
 
@@ -72,10 +86,22 @@ public class OrdineBean implements Serializable {
         return indirizzo;
     }
 
+    public List<ProdottoBean> getProdotti() {
+        return prodotti;
+    }
+
+    public List<Integer> getQuantitaProdotti() {
+        return quantitaProdotti;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
     /*
-        SETTERS
-     */
-    public void setNumeroOrdine(String numeroOrdine) {
+                SETTERS
+             */
+    public void setNumeroOrdine(int numeroOrdine) {
         this.numeroOrdine = numeroOrdine;
     }
 
@@ -101,5 +127,23 @@ public class OrdineBean implements Serializable {
 
     public void setIndirizzo(String indirizzo) {
         this.indirizzo = indirizzo;
+    }
+
+    public void setProdotti(List<ProdottoBean> prodotti) {
+        this.prodotti = prodotti;
+    }
+
+    public void setQuantitaProdotti(List<Integer> quantitaProdotti) {
+        this.quantitaProdotti = quantitaProdotti;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    //Altri metodi
+    public void addProdotto(ProdottoBean prodotto, int quantita) {
+        prodotti.add(prodotto);
+        quantitaProdotti.add(quantita);
     }
 }

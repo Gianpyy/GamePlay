@@ -13,12 +13,25 @@
     <%@include file="static/header.jsp"%>
 </header>
 <%
+    List<String> errors = (List<String>) request.getAttribute("errors");
+    if(errors != null) {
+        for (String error : errors) { %>
+<%=error%> <br>
+<%
+        }
+     %>
+
+        <br> <br>
+<%
+    }
+%>
+<%
     Boolean isCarrelloEmpty = (Boolean) request.getSession().getAttribute("isCarrelloEmpty");
     List<ProdottoBean> carrello;
     HashMap<String, Integer> prodottiCounter;
 
     //Se c'è un carrello con dei prodotti, procedo a visualizzarli
-    if(isCarrelloEmpty != null) {
+    if(Boolean.FALSE.equals(isCarrelloEmpty)) {
         //Recupero il carrello e il contatore dei prodotti dalla sessione
         carrello = (List<ProdottoBean>) request.getSession().getAttribute("carrello");
         prodottiCounter = (HashMap<String, Integer>) request.getSession().getAttribute("prodottiCounter");
@@ -49,14 +62,19 @@
     }
 
     //Altrimenti, visualizzo che il carrello è vuoto
-    else { %>
+    else {
+     request.getSession().setAttribute("isCarrelloEmpty", Boolean.TRUE);%>
         Carrello vuoto
 <%
     }
 %>
 </h2>
 
-<button class="carrello">Prosegui al checkout</button>
+<form method="post" action="Checkout">
+    <input type="submit" class="carrello" value="Procedi al checkout">
+    <input type="hidden" name="actionType" value="checkoutButton">
+</form>
+
 <footer>
     <%@include file="static/footer.jsp"%>
 </footer>

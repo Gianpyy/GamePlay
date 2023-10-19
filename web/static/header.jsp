@@ -19,6 +19,7 @@
         <%
             Boolean isLogged = (Boolean) session.getAttribute("isLogged");
             if(isLogged == null || !isLogged) {
+                session.setAttribute("isLogged", Boolean.FALSE);
         %>
         <form method="post" action="login.jsp">
             <input type="submit" value="Login">
