@@ -231,4 +231,39 @@ public class UtenteDAO implements IBeanDAO<UtenteBean, Integer>{
 
         return utenteBean;
     }
+
+    public boolean doUpdatePassword(int code, String newPassword) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        int result;
+
+        String sqlStatement = "UPDATE " +UtenteDAO.TABLE_NAME+" SET psw = ? WHERE codice = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, newPassword);
+            preparedStatement.setInt(2, code);
+
+
+            //Eseguo la query
+            result = preparedStatement.executeUpdate();
+            connection.commit();
+            //Chiudo la connessione
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return (result != 0);
+    }
 }

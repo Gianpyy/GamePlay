@@ -38,7 +38,7 @@
         <%
                 }
         %>
-        <%=session.getAttribute("username")%>
+        <a href="profile.jsp"><%=session.getAttribute("username")%></a>
 
         <form method="post" action="Logout">
             <input type="submit" value="Logout">
