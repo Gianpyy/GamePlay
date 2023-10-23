@@ -12,7 +12,6 @@ public class OrdineBean implements Serializable {
     private int numeroOrdine;
     private Date data;
     private float totale;
-    private float acconto;
     private String metodoPagamento;
     private String stato;
     private String indirizzo;
@@ -29,11 +28,10 @@ public class OrdineBean implements Serializable {
         quantitaProdotti = new ArrayList<>();
     }
 
-    public OrdineBean(int numeroOrdine, Date data, float totale, float acconto, String metodoPagamento, String stato, String indirizzo, List<ProdottoBean> prodotti, List<Integer> quantitaProdotti, int userID) {
+    public OrdineBean(int numeroOrdine, Date data, float totale, String metodoPagamento, String stato, String indirizzo, List<ProdottoBean> prodotti, List<Integer> quantitaProdotti, int userID) {
         this.numeroOrdine = numeroOrdine;
         this.data = data;
         this.totale = totale;
-        this.acconto = acconto;
         this.metodoPagamento = metodoPagamento;
         this.stato = stato;
         this.indirizzo = indirizzo;
@@ -48,7 +46,6 @@ public class OrdineBean implements Serializable {
         this.totale = totale;
         this.metodoPagamento = metodoPagamento;
         this.indirizzo = indirizzo;
-        acconto = -1;
         stato = null;
         this.prodotti = prodotti;
         this.quantitaProdotti = quantitaProdotti;
@@ -68,10 +65,6 @@ public class OrdineBean implements Serializable {
 
     public float getTotale() {
         return totale;
-    }
-
-    public float getAcconto() {
-        return acconto;
     }
 
     public String getMetodoPagamento() {
@@ -111,10 +104,6 @@ public class OrdineBean implements Serializable {
 
     public void setTotale(float totale) {
         this.totale = totale;
-    }
-
-    public void setAcconto(float acconto) {
-        this.acconto = acconto;
     }
 
     public void setMetodoPagamento(String metodoPagamento) {

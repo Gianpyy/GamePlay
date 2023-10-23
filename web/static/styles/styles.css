@@ -48,6 +48,11 @@ footer {
     width: 28px;
 }
 
+.ordine {
+    border: dotted 1px black;
+    margin-top: 20px;
+}
+
 .carrello {
     display: block;
     width: 100%;

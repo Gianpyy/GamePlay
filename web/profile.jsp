@@ -20,7 +20,7 @@
     <input type="submit" value="Modifica profilo">
 </form>
 
-<form method="post" action="#">
+<form method="post" action="cronologia_ordini.jsp">
     <input type="submit" value="Cronologia ordini">
 </form>
 

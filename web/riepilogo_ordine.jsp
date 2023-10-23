@@ -20,11 +20,16 @@
 Importo totale: <%=ordine.getTotale()%> € <br>
 Indirizzo spedizione: <%=ordine.getIndirizzo()%> <br>
 Prodotti acquistati:
-<ol>
-    <% for (int i = 0; i < ordine.getProdotti().size(); i++) { %>
-            <li><%=ordine.getProdotti().get(i).getNome()%> (qta <%=ordine.getQuantitaProdotti().get(i)%> )</li>
+<ul>
+    <% for (int i = 0; i < ordine.getProdotti().size(); i++) {
+        String productName = ordine.getProdotti().get(i).getNome();
+        int quantitaProdotti = ordine.getQuantitaProdotti().get(i);
+        Float productPrice = ordine.getProdotti().get(i).getPrezzo() * quantitaProdotti;
+
+    %>
+            <li><%=productName%>(x<%=quantitaProdotti%>)    <%=productPrice%>€</li>
     <% } %>
-</ol>
+</ul>
 
 <br>
 

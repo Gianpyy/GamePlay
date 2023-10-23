@@ -10,13 +10,17 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
+    private static final Logger LOGGER = Logger.getLogger(OrdineDAO.class.getName());
     private static DataSource dataSource;
 
     private static final String ORDINE_TABLE_NAME = "ordine";
     private static final String CONTIENE_TABLE_NAME = "contiene";
     private static final String EFFETTUTATO_TABLE_NAME = "effettuato_da";
+    private static final String UTENTE_TABLE_NAME = "utente";
 
     //Ottengo la risorsa tramite lookup
     static {
@@ -114,6 +118,97 @@ public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
     @Override
     public Collection<OrdineBean> doRetrieveAll(String order) throws SQLException {
         return null;
+    }
+
+    public Collection<OrdineBean> doRetrieveByUserId(int userid) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        Collection<OrdineBean> ordineBeanCollection = new LinkedList<>();
+
+        String sqlStatement = "SELECT o.*, c.* FROM "+UTENTE_TABLE_NAME+ " as u INNER JOIN " +
+                EFFETTUTATO_TABLE_NAME+" AS ed ON u.codice = ed.utente INNER JOIN "+ORDINE_TABLE_NAME+" AS o ON ed.ordine = o.numeroOrdine INNER JOIN " +
+                CONTIENE_TABLE_NAME+" AS c ON o.numeroOrdine = c.ordine WHERE u.codice = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1, userid);
+
+            //Eseguo la query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            //Salvo il risultato della query nel bean
+            int prevOrderId = 0; //Inizializzato a 0 perché il primo ordine deve essere sempre diverso dal precedente
+            boolean isFirst = true; //Serve a far andare avanti il ciclo
+            OrdineBean ordineBean = new OrdineBean();
+            while (resultSet.next()) {
+                //Recupero l'id dell'ordine
+                int orderID = resultSet.getInt("numeroOrdine");
+                LOGGER.log(Level.INFO, "Current orderID: {0}", orderID);
+
+                //Se l'id dell'ordine corrente è uguale all'id dell'ordine precedente, l'ordine conteneva più prodotti
+                //quindi non devo creare un nuovo ordine ma solo aggiungere il prodotto
+                if (orderID == prevOrderId) {
+                    LOGGER.info("Same id as previous row");
+                    //Aggiungo i dati del prodotto all'ordine
+                    ProdottoBean prodottoBean = new ProdottoBean();
+                    prodottoBean.setBarcode(resultSet.getString("prodotto"));
+                    prodottoBean.setNome(resultSet.getString("nome"));
+                    prodottoBean.setPrezzo(resultSet.getFloat("prezzo"));
+                    ordineBean.addProdotto(prodottoBean, resultSet.getInt("quantita"));
+                }
+                //Invece, se l'id è diverso, devo creare un nuovo ordine da aggiungere alla lista degli ordini
+                else {
+                    //Non è più il primo ordine, posso aggiungere alla collection
+                    if (!isFirst) {
+                        ordineBeanCollection.add(ordineBean);
+                        LOGGER.log(Level.INFO, "Added order {0} to collection", ordineBean.getNumeroOrdine());
+                    }
+
+                    //Aggiungo i dati dell'ordine
+                    ordineBean = new OrdineBean();
+                    ordineBean.setNumeroOrdine(orderID);
+                    ordineBean.setData(resultSet.getDate("dataAcquisto"));
+                    ordineBean.setMetodoPagamento(resultSet.getString("metodoPagamento"));
+                    ordineBean.setTotale(resultSet.getFloat("importoTotale"));
+                    ordineBean.setStato(resultSet.getString("stato"));
+                    ordineBean.setIndirizzo(resultSet.getString("indirizzoSpedizione"));
+
+                    //Aggiungo i dati del prodotto all'ordine
+                    ProdottoBean prodottoBean = new ProdottoBean();
+                    prodottoBean.setBarcode(resultSet.getString("prodotto"));
+                    prodottoBean.setNome(resultSet.getString("nome"));
+                    prodottoBean.setPrezzo(resultSet.getFloat("prezzo"));
+                    ordineBean.addProdotto(prodottoBean, resultSet.getInt("quantita"));
+
+                    //Setto la flag a false, se arrivo qui sono necessariamente nel primo ordine
+                    isFirst = false;
+
+                    //Salvo l'id dell'ordine in prevOrderId
+                    prevOrderId = orderID;
+                }
+            }
+            LOGGER.info("End of while");
+            //Se isFirst è true vuol dire che non è stato trovato alcun ordine
+            if (!isFirst) {
+                ordineBeanCollection.add(ordineBean);
+            }
+            LOGGER.log(Level.INFO, "Added order {0} to collection", ordineBean.getNumeroOrdine());
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return ordineBeanCollection;
     }
 
 
