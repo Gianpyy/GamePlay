@@ -1,3 +1,4 @@
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it">
@@ -9,6 +10,15 @@
 <header>
   <%@include file="static/header.jsp"%>
 </header>
+<%
+    List<String> errors = (List<String>) request.getAttribute("errors");
+    if(errors != null) {
+        for (String error : errors) { %>
+            <%=error%> <br>
+<%
+        }
+    }
+%>
 
 <h1>Checkout</h1>
 <form method="post" action="Checkout">

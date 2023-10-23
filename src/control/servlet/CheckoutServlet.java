@@ -68,14 +68,36 @@ public class CheckoutServlet extends HttpServlet {
             resp.sendRedirect("checkout.jsp");
         }
         else if (action.equals("checkout")) {
+            //Controllo che indirizzo di spedizione e metodo di pagamento siano stati selezionati
+            List<String> errors = new ArrayList<>();
+            String indirizzo = req.getParameter("indirizzo");
+            String pagamento = req.getParameter("pagamento");
+
+            if (indirizzo == null || indirizzo.trim().isEmpty()) {
+                errors.add("Il campo indirizzo non può essere vuoto");
+            }
+            if (pagamento == null || pagamento.trim().isEmpty()) {
+                errors.add("Seleziona un metodo di pagamento");
+            }
+
+            //Se ci sono errori, rispedisco alla pagina del checkout
+            if(!errors.isEmpty()) {
+                req.setAttribute("errors", errors);
+                try {
+                    RequestDispatcher requestDispatcher = req.getRequestDispatcher("checkout.jsp");
+                    requestDispatcher.forward(req,resp);
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE, e.toString());
+                }
+
+                return;
+            }
+
+
             //Recupero carrello e contatore prodotti dalla sessione
             List<ProdottoBean> carrello = (List<ProdottoBean>) req.getSession().getAttribute("carrello");
             HashMap<String, Integer> prodottiCounter = (HashMap<String, Integer>) req.getSession().getAttribute("prodottiCounter");
 
-
-            //Recupero i dati dell'ordine dalla request
-            String indirizzo = req.getParameter("indirizzo");
-            String pagamento = req.getParameter("pagamento");
 
             //Creo il bean dell'ordine
             OrdineBean ordine = new OrdineBean();
@@ -101,13 +123,19 @@ public class CheckoutServlet extends HttpServlet {
                 LOGGER.log(Level.SEVERE, e.toString());
             }
 
-            //Svuoto carrello e contatore prodotti
+            //Svuoto carrello e contatore prodotti e li rimuovo dalla sessione
             carrello.clear();
+            req.getSession().removeAttribute("carrello");
             prodottiCounter.clear();
+            req.getSession().removeAttribute("prodottiCounter");
+            req.getSession().setAttribute("isCarrelloEmpty", Boolean.TRUE);
 
-            //Reindirizzo alla homepage (per ora)
+            //Aggiungo le informazioni dell'ordine alla sessione
+            req.getSession().setAttribute("ordine", ordine);
+
+            //Reindirizzo alla pagina di riepilogo dell'ordine
             try {
-                resp.sendRedirect("index.jsp");
+                resp.sendRedirect("riepilogo_ordine.jsp");
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, e.toString());
             }

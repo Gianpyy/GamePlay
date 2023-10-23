@@ -15,7 +15,6 @@ public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
     private static DataSource dataSource;
 
     private static final String ORDINE_TABLE_NAME = "ordine";
-    private static final String PRODOTTO_TABLE_NAME = "prodottoacquistato";
     private static final String CONTIENE_TABLE_NAME = "contiene";
     private static final String EFFETTUTATO_TABLE_NAME = "effettuato_da";
 
@@ -38,9 +37,8 @@ public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
-        String inserimentoOrdine = "INSERT INTO "+ORDINE_TABLE_NAME+" (dataAcquisto, metodoPagamento, importoTotale, indirizzoSpedizione) VALUES (?,?,?,?)";
-        String inserimentoProdottoAcquistato = "INSERT INTO "+PRODOTTO_TABLE_NAME+" (prodotto, nome, prezzo) VALUES (?,?,?)";
-        String inserimentoContiene = "INSERT INTO "+CONTIENE_TABLE_NAME+" (prodotto, ordine, quantita) VALUES (?,?,?)";
+        String inserimentoOrdine = "INSERT INTO "+ORDINE_TABLE_NAME+" (dataAcquisto, metodoPagamento, importoTotale, indirizzoSpedizione, stato) VALUES (?,?,?,?,?)";
+        String inserimentoContiene = "INSERT INTO "+CONTIENE_TABLE_NAME+" (prodotto, ordine, quantita, nome, prezzo) VALUES (?,?,?,?,?)";
         String inserimentoEffettuatoDa = "INSERT INTO "+EFFETTUTATO_TABLE_NAME+" (ordine, utente) VALUES (?,?)";
 
         try{
@@ -54,6 +52,7 @@ public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
             preparedStatement.setString(2, item.getMetodoPagamento());
             preparedStatement.setFloat(3, item.getTotale());
             preparedStatement.setString(4, item.getIndirizzo());
+            preparedStatement.setString(5, "Pagamento ricevuto");
 
 
             //Eseguo la query
@@ -66,17 +65,6 @@ public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
                 orderID = generatedKeys.getInt(1);
             }
 
-            //Preparo le query per i prodotti acquistati
-            for (ProdottoBean p : item.getProdotti()) {
-                preparedStatement = connection.prepareStatement(inserimentoProdottoAcquistato);
-                preparedStatement.setString(1, p.getBarcode());
-                preparedStatement.setString(2, p.getNome());
-                preparedStatement.setFloat(3, p.getPrezzo());
-
-                //Eseguo la query
-                preparedStatement.executeUpdate();
-            }
-
             //Preparo le query per la tabella contiene
             List<ProdottoBean> prodotti = item.getProdotti();
             List<Integer> quantitaProdotti = item.getQuantitaProdotti();
@@ -85,6 +73,8 @@ public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
                 preparedStatement.setString(1, prodotti.get(i).getBarcode());
                 preparedStatement.setInt(2, orderID);
                 preparedStatement.setInt(3, quantitaProdotti.get(i));
+                preparedStatement.setString(4, prodotti.get(i).getNome());
+                preparedStatement.setFloat(5, prodotti.get(i).getPrezzo());
                 preparedStatement.executeUpdate();
             }
 
