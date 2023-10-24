@@ -25,6 +25,7 @@
 </div>
 
 <form method="post" action="Carrello">
+  <input type="hidden" name="actionType" value="addProduct">
   <input type="submit" class="carrello" value="Aggiungi al carrello">
 </form>
 

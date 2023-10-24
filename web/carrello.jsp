@@ -7,6 +7,7 @@
 <head>
     <title>Carrello</title>
     <link rel="stylesheet" href="static/styles/styles.css">
+    <script src="static/scripts/product.js"></script>
 </head>
 <body>
 <header>
@@ -54,26 +55,42 @@
             String productName = p.getNome();
             Integer productCount = prodottiCounter.get(p.getBarcode());
         %>
-            <%=productName%> (qta <%=productCount%>) <br>
-     <%
+            <%=productName%> <select name="<%=productName%>productCount" id="<%=productName%>productCount">
+                                <option value="1" <% if (productCount == 1 ) { %> selected <% }%>>1</option>
+                                <option value="2" <% if (productCount == 2 ) { %> selected <% }%>>2</option>
+                                <option value="3" <% if (productCount == 3 ) { %> selected <% }%>>3</option>
+                                <option value="4" <% if (productCount == 4 ) { %> selected <% }%>>4</option>
+                                <option value="5" <% if (productCount == 5 ) { %> selected <% }%>>5</option>
+                                <option value="6" <% if (productCount == 6 ) { %> selected <% }%>>6</option>
+                                <option value="7" <% if (productCount == 7 ) { %> selected <% }%>>7</option>
+                                <option value="8" <% if (productCount == 8 ) { %> selected <% }%>>8</option>
+                                <option value="9" <% if (productCount == 9 ) { %> selected <% }%>>9</option>
+                            </select>
+        <button onclick="removeProductFromCart(<%=p.getBarcode()%>)">Rimuovi prodotto</button>
+            <br>
+<%
              visualizzato.put(p.getBarcode(), true);
              }
          }
+%>
+
+    <button onclick="emptyCart()">Svuota carrello</button>
+        <br>
+        <form method="post" action="Checkout">
+            <input type="submit" class="carrello" value="Procedi al checkout">
+            <input type="hidden" name="actionType" value="checkoutButton">
+        </form>
+<%
     }
 
     //Altrimenti, visualizzo che il carrello è vuoto
     else {
      request.getSession().setAttribute("isCarrelloEmpty", Boolean.TRUE);%>
-        Carrello vuoto
+            <h2> Carrello vuoto </h2>
 <%
     }
 %>
 </h2>
-
-<form method="post" action="Checkout">
-    <input type="submit" class="carrello" value="Procedi al checkout">
-    <input type="hidden" name="actionType" value="checkoutButton">
-</form>
 
 <footer>
     <%@include file="static/footer.jsp"%>

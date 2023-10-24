@@ -27,7 +27,7 @@
         <div class="ordine">
             <b>Numero ordine: </b> <%=ordine.getNumeroOrdine()%> <br>
             <b>Effettuato il: </b> <%=ordine.getData()%> <br>
-            <b>Totale: </b> <%=ordine.getTotale()%> <br>
+            <b>Totale: </b> <%=ordine.getTotale()%> €<br>
             <b>Stato dell'ordine: </b> <%=ordine.getStato()%> <br>
             <b>Indirizzo di spedizione: </b> <%=ordine.getIndirizzo()%> <br>
             <b>Prodotti acquistati</b>

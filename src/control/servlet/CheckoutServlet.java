@@ -65,7 +65,11 @@ public class CheckoutServlet extends HttpServlet {
             }
 
             //Reindirizzo alla pagina del checkout
-            resp.sendRedirect("checkout.jsp");
+            try {
+                resp.sendRedirect("checkout.jsp");
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, e.toString());
+            }
         }
         else if (action.equals("checkout")) {
             //Controllo che indirizzo di spedizione e metodo di pagamento siano stati selezionati
