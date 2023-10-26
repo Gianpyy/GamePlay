@@ -53,6 +53,11 @@ footer {
     margin-top: 20px;
 }
 
+.totale {
+    border: dotted 1px black;
+    float: right;
+}
+
 .carrello {
     display: block;
     width: 100%;

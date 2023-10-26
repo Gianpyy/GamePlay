@@ -30,6 +30,25 @@ function redirectToProductPage (id) {
     })
 }
 
+function addProduct() {
+    console.log("function addProduct")
+    //Formatto i dati per la request
+    let data = {actionType: "addProduct"};
+    console.log(JSON.stringify(data))
+
+    //Creo la richiesta POST.
+    fetch("Carrello", {
+        method: "POST",
+        headers: {
+            'Accept': "application/json",
+            'Content-Type': "application/json"},
+        body: JSON.stringify(data)
+    }).then(res => {
+        console.log("Request complete! response: ", res)
+        window.location.href = "carrello.jsp"
+    })
+}
+
 function removeProductFromCart (id) {
     console.log("function removeProductFromCart with id: "+id);
 
@@ -63,6 +82,31 @@ function emptyCart () {
         body: JSON.stringify({
             actionType: "emptyCart",
         })
+    }).then(res => {
+        console.log("Request complete! response: ", res)
+        window.location.href = "carrello.jsp"
+    })
+}
+
+function updateProductQuantity (id) {
+    console.log("function updateProductQuantity")
+
+    //Recupero il valore dell'opzione della select
+    const selectId = "#"+id+"productCount"
+    let newProductQuantity = $(selectId).val()
+    console.log("New quantity: "+newProductQuantity)
+
+    //Formatto i dati per la request
+    let data = {actionType: "updateProductQuantity", productId: id.toString(), newQuantity: newProductQuantity};
+    console.log(JSON.stringify(data))
+
+    //Creo la richiesta POST
+    fetch("Carrello", {
+        method: "POST",
+        headers: {
+            'Accept': "application/json",
+            'Content-Type': "application/json"},
+        body: JSON.stringify(data)
     }).then(res => {
         console.log("Request complete! response: ", res)
         window.location.href = "carrello.jsp"

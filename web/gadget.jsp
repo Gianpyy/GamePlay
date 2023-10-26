@@ -24,10 +24,7 @@
   <h1><%=prodotto.getPrezzo()%> €</h1> <br>
 </div>
 
-<form method="post" action="Carrello">
-  <input type="hidden" name="actionType" value="addProduct">
-  <input type="submit" class="carrello" value="Aggiungi al carrello">
-</form>
+<button type="submit" class="carrello" onclick="addProduct()">Aggiungi al carrello</button>
 
 <footer>
   <%@include file="static/footer.jsp"%>
