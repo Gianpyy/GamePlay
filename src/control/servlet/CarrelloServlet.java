@@ -31,25 +31,21 @@ public class CarrelloServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //Recupero il requestBody dalla request
+        StringBuilder requestBody = getRequestBody(req);
+
+        //Analizzo il JSON della request
+        JSONObject json = new JSONObject(requestBody.toString());
+
         //Recupero il tipo di azione dalla request
-        String action = req.getParameter("actionType");
-        JSONObject json = new JSONObject();
-        if (action == null) {
-            //Recupero il requestBody dalla reqyest
-            StringBuilder requestBody = getRequestBody(req);
-
-            //Analizzo il JSON della request
-            json = new JSONObject(requestBody.toString());
-
-            //Recupero il tipo di azione dalla request
-            try {
-                action = json.getString("actionType");
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, e.toString());
-            }
+        String action = " ";
+        try {
+            action = json.getString("actionType");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.toString());
         }
 
-        switch (Objects.requireNonNull(action)) {
+        switch (action) {
             case "addProduct" -> {
                 LOGGER.info("Switch case: addProduct");
 
@@ -58,54 +54,61 @@ public class CarrelloServlet extends HttpServlet {
 
                 //Recupero il prodotto da inserire nel carrello
                 ProdottoBean prodottoDaAggiungere = new ProdottoBean();
-                try {
-                    prodottoDaAggiungere = new ProdottoDAO().doRetrieveByKey(productId);
-                    LOGGER.log(Level.INFO, "Product retrieved");
-                } catch (SQLException e) {
-                    LOGGER.log(Level.SEVERE, e.toString());
+                if (productId != null) { //Controllo se il productId è null per evitare di reinserire lo stesso prodotto in caso di refresh forzato della pagina
+                    try {
+                        prodottoDaAggiungere = new ProdottoDAO().doRetrieveByKey(productId);
+                        LOGGER.log(Level.INFO, "Product retrieved");
+                    } catch (SQLException e) {
+                        LOGGER.log(Level.SEVERE, e.toString());
+                    }
                 }
 
-                //Recupero la flag del carrello
-                Boolean isCarrelloEmpty = (Boolean) req.getSession().getAttribute("isCarrelloEmpty");
+                if (prodottoDaAggiungere.getBarcode() != null) { //Controllo se il productId è null per evitare di reinserire lo stesso prodotto in caso di refresh forzato della pagina
+                    //Recupero la flag del carrello
+                    Boolean isCarrelloEmpty = (Boolean) req.getSession().getAttribute("isCarrelloEmpty");
 
-                //Se è già presente un carrello, aggiungo il prodotto al carrello dell'utente
-                if(Boolean.FALSE.equals(isCarrelloEmpty)) {
-                    //Recupero carrello e contatore prodotti
-                    List<ProdottoBean> carrello = (List<ProdottoBean>) req.getSession().getAttribute("carrello");
-                    HashMap<String, Integer> prodottiCounter = (HashMap<String, Integer>) req.getSession().getAttribute("prodottiCounter");
+                    //Se è già presente un carrello, aggiungo il prodotto al carrello dell'utente
+                    if(Boolean.FALSE.equals(isCarrelloEmpty)) {
+                        //Recupero carrello e contatore prodotti
+                        List<ProdottoBean> carrello = (List<ProdottoBean>) req.getSession().getAttribute("carrello");
+                        HashMap<String, Integer> prodottiCounter = (HashMap<String, Integer>) req.getSession().getAttribute("prodottiCounter");
 
-                    //Aggiungo il prodotto e incremento il contatore
-                    //Se il prodotto è già presente, devo solo aggiornare il contatore dei prodotti, altrimenti devo anche aggiungere il prodotto alla lista dei prodotti
-                    final String prodottoDaAggiungereBarcode = prodottoDaAggiungere.getBarcode();
-                    boolean isAlreadyPresent = carrello.stream().anyMatch(prodottoBean -> prodottoBean.getBarcode().equals(prodottoDaAggiungereBarcode));
-                    if (isAlreadyPresent) {
-                        prodottiCounter.merge(prodottoDaAggiungere.getBarcode(), 1, Integer::sum);
-                    }
-                    else {
+                        //Aggiungo il prodotto e incremento il contatore
+                        //Se il prodotto è già presente, devo solo aggiornare il contatore dei prodotti, altrimenti devo anche aggiungere il prodotto alla lista dei prodotti
+                        final String prodottoDaAggiungereBarcode = prodottoDaAggiungere.getBarcode();
+                        boolean isAlreadyPresent = carrello.stream().anyMatch(prodottoBean -> prodottoBean.getBarcode().equals(prodottoDaAggiungereBarcode));
+                        if (isAlreadyPresent) {
+                            prodottiCounter.merge(prodottoDaAggiungere.getBarcode(), 1, Integer::sum);
+                        }
+                        else {
+                            carrello.add(prodottoDaAggiungere);
+                            prodottiCounter.put(prodottoDaAggiungere.getBarcode(), 1);
+                        }
+
+                        //Aggiungo carrello e contatore alla sessione
+                        req.getSession().setAttribute("carrello", carrello);
+                        req.getSession().setAttribute("prodottiCounter", prodottiCounter);
+
+                        //Altrimenti, creo il carrello e aggiungo il primo prodotto
+                    } else {
+                        //Setto la flag del carrello
+                        req.getSession().setAttribute("isCarrelloEmpty", Boolean.FALSE);
+
+                        //Creo il carrello e il contatore dei prodotti
+                        List<ProdottoBean> carrello = new LinkedList<>();
+                        HashMap<String, Integer> prodottiCounter = new HashMap<>();
+
+                        //Aggiungo il prodotto e incremento il contatore
                         carrello.add(prodottoDaAggiungere);
                         prodottiCounter.put(prodottoDaAggiungere.getBarcode(), 1);
+
+                        //Aggiungo carrello e contatore alla sessione
+                        req.getSession().setAttribute("carrello", carrello);
+                        req.getSession().setAttribute("prodottiCounter", prodottiCounter);
+
+                        //Rimuovo l'id del prodotto dalla sesisone
+                        req.getSession().removeAttribute("productId");
                     }
-
-                    //Aggiungo carrello e contatore alla sessione
-                    req.getSession().setAttribute("carrello", carrello);
-                    req.getSession().setAttribute("prodottiCounter", prodottiCounter);
-
-                    //Altrimenti, creo il carrello e aggiungo il primo prodotto
-                } else {
-                    //Setto la flag del carrello
-                    req.getSession().setAttribute("isCarrelloEmpty", Boolean.FALSE);
-
-                    //Creo il carrello e il contatore dei prodotti
-                    List<ProdottoBean> carrello = new LinkedList<>();
-                    HashMap<String, Integer> prodottiCounter = new HashMap<>();
-
-                    //Aggiungo il prodotto e incremento il contatore
-                    carrello.add(prodottoDaAggiungere);
-                    prodottiCounter.put(prodottoDaAggiungere.getBarcode(), 1);
-
-                    //Aggiungo carrello e contatore alla sessione
-                    req.getSession().setAttribute("carrello", carrello);
-                    req.getSession().setAttribute("prodottiCounter", prodottiCounter);
                 }
             }
 
@@ -144,8 +147,33 @@ public class CarrelloServlet extends HttpServlet {
                 }
             }
 
-            case "updateCart?????" -> {
+            case "updateProductQuantity" -> {
                 LOGGER.info("Switch case: updateCart");
+
+                //Recupero l'id del prodotto dal JSON
+                String productId = null;
+                try {
+                    productId = json.getString("productId");
+                    LOGGER.log(Level.INFO, "Retrieved producId: {0}", productId);
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE, e.toString());
+                }
+
+                //Recupero la nuova quantità del prodotto
+                Integer newQuantity = null;
+                try {
+                    newQuantity = json.getInt("newQuantity");
+                    LOGGER.log(Level.INFO, "New quantity to set: {0}", newQuantity);
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE, e.toString());
+                }
+
+                //Recupero il contatore prodotti
+                HashMap<String, Integer> prodottiCounter = (HashMap<String, Integer>) req.getSession().getAttribute("prodottiCounter");
+
+                //Aggiorno la quantità del prodotto
+                prodottiCounter.put(productId, newQuantity);
+                LOGGER.log(Level.INFO, "New quantity of product set to {0}", prodottiCounter.get(productId));
             }
 
             default -> {

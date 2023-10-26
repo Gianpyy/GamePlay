@@ -7,7 +7,6 @@
 <head>
     <title>Carrello</title>
     <link rel="stylesheet" href="static/styles/styles.css">
-    <script src="static/scripts/product.js"></script>
 </head>
 <body>
 <header>
@@ -49,13 +48,15 @@
 <h2>
     <%
         HashMap<String, Boolean> visualizzato = new HashMap<>();
+        Float totale = 0f;
         for (ProdottoBean p : carrello) {
             if (Boolean.FALSE.equals(visualizzato.getOrDefault(p.getBarcode(), Boolean.FALSE))) {
 
             String productName = p.getNome();
+            String productId = p.getBarcode();
             Integer productCount = prodottiCounter.get(p.getBarcode());
         %>
-            <%=productName%> <select name="<%=productName%>productCount" id="<%=productName%>productCount">
+            <%=productName%> <select id="<%=productId%>productCount" onchange="updateProductQuantity(<%=productId%>)">
                                 <option value="1" <% if (productCount == 1 ) { %> selected <% }%>>1</option>
                                 <option value="2" <% if (productCount == 2 ) { %> selected <% }%>>2</option>
                                 <option value="3" <% if (productCount == 3 ) { %> selected <% }%>>3</option>
@@ -66,13 +67,20 @@
                                 <option value="8" <% if (productCount == 8 ) { %> selected <% }%>>8</option>
                                 <option value="9" <% if (productCount == 9 ) { %> selected <% }%>>9</option>
                             </select>
-        <button onclick="removeProductFromCart(<%=p.getBarcode()%>)">Rimuovi prodotto</button>
+        <button onclick="removeProductFromCart(<%=productId%>)">Rimuovi prodotto</button>
             <br>
 <%
-             visualizzato.put(p.getBarcode(), true);
+             visualizzato.put(productId, true);
+             totale += p.getPrezzo() * productCount;
              }
          }
 %>
+    <div class="totale">
+        <h2>
+            Totale: <br>
+            <%=totale%> € <br>
+        </h2>
+    </div>
 
     <button onclick="emptyCart()">Svuota carrello</button>
         <br>
@@ -95,5 +103,8 @@
 <footer>
     <%@include file="static/footer.jsp"%>
 </footer>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="static/scripts/product.js"></script>
 </body>
 </html>

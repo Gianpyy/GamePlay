@@ -17,7 +17,7 @@ public class ProdottoBean implements Serializable {
     /*
         COSTRUTTORI
      */
-    public ProdottoBean() {}
+    public ProdottoBean() { this.barcode = null; }
 
     public ProdottoBean(String barcode, String nome, float prezzo, int sconto, String tipo) {
         this.barcode = barcode;

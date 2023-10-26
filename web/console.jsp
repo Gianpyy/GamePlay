@@ -8,6 +8,7 @@
 <head>
     <title>Prodotto</title>
     <link rel="stylesheet" href="static/styles/styles.css">
+    <script src="static/scripts/product.js"></script>
 </head>
 <body>
 <header>
@@ -35,10 +36,7 @@
     %>
 </div>
 
-<form method="post" action="Carrello">
-    <input type="hidden" name="actionType" value="addProduct">
-    <input type="submit" class="carrello" value="Aggiungi al carrello">
-</form>
+<button type="submit" class="carrello" onclick="addProduct()">Aggiungi al carrello</button>
 
 <footer>
     <%@include file="static/footer.jsp"%>
