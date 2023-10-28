@@ -16,13 +16,23 @@
     <input type="submit" value="Modifica password">
 </form>
 
-<form method="post" action="#">
-    <input type="submit" value="Modifica profilo">
-</form>
-
 <form method="post" action="cronologia_ordini.jsp">
     <input type="submit" value="Cronologia ordini">
 </form>
+
+<%
+    Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+    if (isAdmin) { %>
+<form method="post" action="#">
+    <input type="submit" value="Gestione prodotti">
+</form>
+
+<form method="post" action="#">
+    <input type="submit" value="Gestione ordini">
+</form>
+<%
+    }
+%>
 
 <footer>
     <%@include file="static/footer.jsp"%>

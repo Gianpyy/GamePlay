@@ -1,5 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
 footer {
     clear: both;
+}
+
+header {
+    background-color: indianred;
+}
+
+hr {
+    margin-bottom: 20px;
+}
+
+
+.logo {
+    height: 128px;
 }
 
 .filters {
@@ -74,4 +89,16 @@ footer {
 .carrello:hover {
     background-color: #ddd;
     color: black;
+}
+
+#cartHeading {
+    margin-top: 20px;
+}
+
+.remove {
+    font-size: medium;
+    text-decoration: none;
+}
+.container {
+    font-family: 'Rubik', sans-serif;
 }
