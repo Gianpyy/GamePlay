@@ -2,6 +2,7 @@ package control.servlet;
 
 import control.dao.UtenteDAO;
 import model.UtenteBean;
+import org.json.JSONObject;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -31,23 +32,28 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //Recupero il requestBody dalla request
+        StringBuilder requestBody = Utilities.getRequestBody(req);
+
+        //Inizializzo l'oggetto JSON
+        JSONObject json = new JSONObject(requestBody.toString());
+
         //Recupero username e password dalla request
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
-        List<String> errors = new ArrayList<>();
+        String username = "";
+        String password = "";
+        try {
+            username = json.getString("username");
+            password = json.getString("password");
+        } catch (Exception e) {
+            LOGGER.severe(e.toString());
+        }
         RequestDispatcher dispatcherToLoginPage = req.getRequestDispatcher("login.jsp");
 
         //Controllo che username e password non siano vuoti
-        if(username == null || username.trim().isEmpty()) {
-            errors.add("Il campo username non può essere vuoto");
-        }
-        if(password == null || password.trim().isEmpty()) {
-            errors.add("Il campo password non può essere vuoto");
-        }
-
-        //Se ci sono errori, spedisco gli errori alla pagina di login
-        if(!errors.isEmpty()) {
-            req.setAttribute("errors", errors);
+        if(username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()){
+            //Se sono vuoti, rispedisco alla pagina di login visualizzando l'errore
+//            req.setAttribute("error", "Inserisci un username e/o una password.");
+            resp.addHeader("OPERATION-RESULT", "error");
             try {
                 dispatcherToLoginPage.forward(req,resp);
             } catch (Exception e) {
@@ -69,8 +75,8 @@ public class LoginServlet extends HttpServlet {
         //Se l'utente è null, non è stato trovato nulla
         if (user.getUsername() == null) {
             //Rispedisco alla pagina di login
-            errors.add("Username e/o password non validi");
-            req.setAttribute("errors", errors);
+//            req.setAttribute("error", "L'username e/o la password inseriti non sono corretti.");
+            resp.addHeader("OPERATION-RESULT", "noUserFound");
             try {
                 dispatcherToLoginPage.forward(req, resp);
             } catch (Exception e) {
@@ -78,6 +84,7 @@ public class LoginServlet extends HttpServlet {
             }
 
         } else {
+            resp.addHeader("OPERATION-RESULT", "success");
             req.getSession().setAttribute("isLogged", Boolean.TRUE);
             req.getSession().setAttribute("userid", user.getCodice());
             req.getSession().setAttribute("username", user.getUsername());
@@ -90,7 +97,7 @@ public class LoginServlet extends HttpServlet {
             }
             LOGGER.info("User successfully logged in.");
             try {
-                resp.sendRedirect("index.jsp");
+                dispatcherToLoginPage.forward(req,resp);
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, e.toString());
             }

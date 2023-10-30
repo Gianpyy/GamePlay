@@ -20,6 +20,11 @@
     <input type="submit" value="Cronologia ordini">
 </form>
 
+<!-- DA RIMUOVERE APPENA RIESCO A FARE IL MENU A TENDINA PER L'UTENTE NELL'HEADER -->
+<form method="post" action="Logout">
+    <input type="submit" value="Logout">
+</form>
+
 <%
     Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
     if (isAdmin) { %>
