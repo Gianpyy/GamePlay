@@ -8,7 +8,8 @@ $("input").blur(function () {
 
         //Rendo visibile il div con il messaggio di errore
         let inputId = "#" + $(this).attr("name") + "Invalid"
-        $(inputId).removeAttr("hidden")
+        console.log("visible: "+inputId)
+        $(inputId).show()
     }
     else {
         //Se è stato inserito qualcosa, rendo valido il campo input inserendo la classe is-valid di bootstrap
@@ -17,7 +18,8 @@ $("input").blur(function () {
 
         //Rendo invisibile il div con il messaggio di errore
         let inputId = "#" + $(this).attr("name") + "Invalid"
-        $(inputId).attr("hidden")
+        console.log("hidden: "+inputId)
+        $(inputId).hide()
     }
 })
 
@@ -36,7 +38,7 @@ $("#loginForm").submit(function (event) {
             $(this).removeClass("is-valid")
             $(this).addClass("is-invalid")
             let inputId = "#" + $(this).attr("name") + "Invalid"
-            $(inputId).removeAttr("hidden")
+            $(inputId).show()
         }
         else {
             //Se il valore è valido, rendo valido il campo input inserendo la classe is-valid di bootstrap
@@ -45,7 +47,7 @@ $("#loginForm").submit(function (event) {
 
             //Rendo invisibile il div con il messaggio di errore
             let inputId = "#" + $(this).attr("name") + "Invalid"
-            $(inputId).attr("hidden")
+            $(inputId).hide()
 
             //Aggiungo il valore del campo ai dati da mandare alla request
             let inputField = $(this).attr("name")
@@ -74,10 +76,22 @@ $("#loginForm").submit(function (event) {
                 case "error":
                     $("#error div").html("Inserisci un username e/o una password.")
                     $("#error").removeAttr("hidden")
+
+                    //Aggiungo la classe is-invalid agli elementi del form
+                    $("#loginForm").find(".form-control").each(function () {
+                        $(this).removeClass("is-valid")
+                        $(this).addClass("is-invalid")
+                    })
                     break
                 case "noUserFound":
                     $("#error div").html("L'username e/o la password inseriti non sono corretti.")
                     $("#error").removeAttr("hidden")
+
+                    //Aggiungo la classe is-invalid agli elementi del form
+                    $("#loginForm").find(".form-control").each(function () {
+                        $(this).removeClass("is-valid")
+                        $(this).addClass("is-invalid")
+                    })
                     break
                 case "success":
                     window.location.replace("index.jsp")
@@ -85,6 +99,20 @@ $("#loginForm").submit(function (event) {
             }
         })
     }
+})
+
+//Quando clicko il bottone per mostrare la password, rendo visibile la password e il bottone per nascondere la password
+$("#passwordShow").click(function () {
+    $("#floatingPassword").attr("type", "text")
+    $("#passwordHide").show()
+    $("#passwordShow").hide()
+})
+
+//Quando clicko il bottone per nascondere la password, rendo visibile la password e il bottone per mostrare la password
+$("#passwordHide").click(function () {
+    $("#floatingPassword").attr("type", "password")
+    $("#passwordShow").show()
+    $("#passwordHide").hide()
 })
 
 $("#registerButton").click(function () {

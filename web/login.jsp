@@ -27,7 +27,7 @@
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="floatingUser" placeholder="username" name="username">
             <label for="floatingUser">Username</label>
-            <div class="invalid-feedback" id="usernameInvalid" hidden>
+            <div class="invalid-feedback" id="usernameInvalid">
                 Inserisci un username
             </div>
         </div>
@@ -35,9 +35,17 @@
         <div class="form-floating mb-3">
             <input type="password" class="form-control" id="floatingPassword" placeholder="password" name="password">
             <label for="floatingPassword">Password</label>
-            <div class="invalid-feedback" id="passwordInvalid" hidden>
+            <div class="invalid-feedback" id="passwordInvalid">
                 Inserisci una password
             </div>
+            <button class="password-toggle" type="button" id="passwordShow">
+                <i class="bi bi-eye"></i>
+                Mostra password
+            </button>
+            <button class="password-toggle" type="button" id="passwordHide">
+                <i class="bi bi-eye-slash"></i>
+                Nascondi password
+            </button>
         </div>
         <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
     </form>

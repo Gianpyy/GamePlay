@@ -111,13 +111,11 @@ hr {
   margin-right: 10px;
 }
 
-#passwordInputDiv {
-  position: relative;
+.password-toggle {
+  border: none;
+  background: none;
 }
 
-//#toggleShowPassword, #toggleHidePassword {
-//  position: absolute;
-//  right: 35px;
-//  top: 60%;
-//  transform: translateY(-50%);
-//}
+#passwordHide, #usernameInvalid, #passwordInvalid{
+  display: none;
+}
