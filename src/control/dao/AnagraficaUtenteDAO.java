@@ -49,7 +49,7 @@ public class AnagraficaUtenteDAO implements IBeanDAO<AnagraficaUtenteBean, Strin
             preparedStatement.setString(2, item.getNome());
             preparedStatement.setString(3, item.getCognome());
             preparedStatement.setString(4, item.getSesso());
-            preparedStatement.setDate(5, AnagraficaUtenteDAO.toSqlDate(item.getDataDiNascita()));
+            preparedStatement.setDate(5, Utilities.toSqlDate(item.getDataDiNascita()));
             preparedStatement.setInt(6, item.getCodiceUtente());
 
             //Eseguo la query
@@ -196,14 +196,45 @@ public class AnagraficaUtenteDAO implements IBeanDAO<AnagraficaUtenteBean, Strin
         return anagraficaUtenteBeanCollection;
     }
 
-    private static java.sql.Date toSqlDate(Date data) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(data);
-        calendar.set(Calendar.HOUR, 1);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
 
-        return new java.sql.Date(calendar.getTimeInMillis());
+    public AnagraficaUtenteBean doRetrieveByUserID(int userid) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        AnagraficaUtenteBean anagraficaUtenteBean = new AnagraficaUtenteBean();
+
+        String sqlStatement = "SELECT * FROM "+AnagraficaUtenteDAO.TABLE_NAME+" WHERE codice = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1, userid);
+
+            //Eseguo la query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            //Salvo il risultato della query nel bean
+            while (resultSet.next()) {
+                anagraficaUtenteBean.setCodiceFiscale(resultSet.getString("codiceFiscale"));
+                anagraficaUtenteBean.setNome(resultSet.getString("nome"));
+                anagraficaUtenteBean.setCognome(resultSet.getString("cognome"));
+                anagraficaUtenteBean.setSesso(resultSet.getString("sesso"));
+                anagraficaUtenteBean.setDataDiNascita(resultSet.getDate("dataDiNascita"));
+                anagraficaUtenteBean.setCodiceUtente(resultSet.getInt("codice"));
+            }//Chiudo la connessione
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return anagraficaUtenteBean;
     }
 }

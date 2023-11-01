@@ -28,21 +28,21 @@
             <input type="text" class="form-control" id="floatingUser" placeholder="username" name="username">
             <label for="floatingUser">Username</label>
             <div class="invalid-feedback" id="usernameInvalid">
-                Inserisci un username
+                La lunghezza dell'username deve essere compresa tra i 4 e i 20 caratteri
             </div>
         </div>
 
-        <div class="form-floating mb-3">
+        <div class="form-floating">
             <input type="password" class="form-control" id="floatingPassword" placeholder="password" name="password">
             <label for="floatingPassword">Password</label>
             <div class="invalid-feedback" id="passwordInvalid">
                 Inserisci una password
             </div>
-            <button class="password-toggle" type="button" id="passwordShow">
+            <button class="password-toggle my-3" type="button" id="passwordShow">
                 <i class="bi bi-eye"></i>
                 Mostra password
             </button>
-            <button class="password-toggle" type="button" id="passwordHide">
+            <button class="password-toggle my-3" type="button" id="passwordHide">
                 <i class="bi bi-eye-slash"></i>
                 Nascondi password
             </button>
@@ -55,6 +55,7 @@
 </main>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="static/scripts/validate.js"></script>
 <script src="static/scripts/form.js"></script>
 </body>
 </html>

@@ -2,6 +2,8 @@ package control.servlet;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,4 +36,16 @@ class Utilities {
 
         return requestBody;
     }
+
+    static java.util.Date stringToDate(String date) {
+        String format = "yyyy-MM-dd";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        try {
+            return dateFormat.parse(date);
+        } catch (ParseException e) {
+            LOGGER.severe(e.toString());
+            return null;
+        }
+    }
+
 }

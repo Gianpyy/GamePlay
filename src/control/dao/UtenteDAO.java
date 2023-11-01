@@ -6,10 +6,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -33,7 +30,7 @@ public class UtenteDAO implements IBeanDAO<UtenteBean, Integer>{
     public UtenteDAO() { /* Costruttore di default senza parametri*/ }
 
     @Override
-    public synchronized void doSave(UtenteBean item) throws SQLException {
+    public void doSave(UtenteBean item) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -65,6 +62,49 @@ public class UtenteDAO implements IBeanDAO<UtenteBean, Integer>{
                     connection.close();
             }
         }
+    }
+
+    public int doSaveAndReturnKey(UtenteBean item) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        int userID = -1;
+
+        String sqlStatement = "INSERT INTO " + UtenteDAO.TABLE_NAME + " (username, psw, amministratore) VALUES (?, ?, ?)";
+
+        try{
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, item.getUsername());
+            preparedStatement.setString(2, item.getPassword());
+            preparedStatement.setBoolean(3, false);
+
+            //Eseguo la query
+            preparedStatement.executeUpdate();
+            connection.commit();
+
+            //Recupero l'id autogenerato
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                userID = generatedKeys.getInt(1);
+            }
+
+            //Chiudo la connessione
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            }
+            finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return userID;
     }
 
     @Override

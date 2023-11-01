@@ -116,6 +116,11 @@ hr {
   background: none;
 }
 
-#passwordHide, #usernameInvalid, #passwordInvalid{
+#passwordHide, #usernameInvalid, #passwordInvalid, #sessoInvalid {
   display: none;
+}
+
+#sessoRegister {
+  background: none;
+  border: none;
 }

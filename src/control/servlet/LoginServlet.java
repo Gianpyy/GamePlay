@@ -52,7 +52,6 @@ public class LoginServlet extends HttpServlet {
         //Controllo che username e password non siano vuoti
         if(username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()){
             //Se sono vuoti, rispedisco alla pagina di login visualizzando l'errore
-//            req.setAttribute("error", "Inserisci un username e/o una password.");
             resp.addHeader("OPERATION-RESULT", "error");
             try {
                 dispatcherToLoginPage.forward(req,resp);
