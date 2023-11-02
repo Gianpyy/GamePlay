@@ -1,5 +1,6 @@
 package control.servlet;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,9 +25,11 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Boolean isLogged = (Boolean) req.getSession().getAttribute("isLogged");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("index.jsp");
+
         if(isLogged == null) {
             try {
-                resp.sendRedirect("index.jsp");
+                requestDispatcher.forward(req,resp);
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, e.toString());
             }
@@ -36,7 +39,7 @@ public class LogoutServlet extends HttpServlet {
         req.getSession().invalidate();
         LOGGER.info("Session invalidated");
         try {
-            resp.sendRedirect("index.jsp");
+            requestDispatcher.forward(req,resp);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.toString());
         }
