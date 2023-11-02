@@ -229,3 +229,15 @@ function submitCheckout(data) {
         }
     })
 }
+
+function submitLogout() {
+    fetch("Logout", {
+        method: "POST",
+        headers: {
+            'Accept': "application/json",
+            'Content-Type': "application/json"},
+    }).then(res => {
+        console.log("Request complete! response: ", res)
+        window.location.href = "index.jsp"
+    })
+}

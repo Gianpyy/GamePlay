@@ -1,8 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<!DOCTYPE>
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <link rel="stylesheet" href="./static/styles/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <%-- Bootstrap icons   --%>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <title>Header</title>
@@ -35,12 +36,27 @@
     <% }
     else {
         String username = (String) session.getAttribute("username"); %>
-    <button type="submit" class="btn btn-primary" onclick="window.location.href = 'profile.jsp'">
-        <i class="bi bi-person-circle"></i> <%=username%>
-    </button>
+    <div class="dropdown">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true">
+            <i class="bi bi-person-circle"></i> <%=username%>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="edit_password.jsp">Modifica password</a></li>
+            <li><a class="dropdown-item" href="cronologia_ordini.jsp">Cronologia ordini</a></li>
+            <%  Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+                if(isAdmin) { %>
+            <li><a class="dropdown-item" href="#">Gestione ordini</a></li>
+            <li><a class="dropdown-item" href="#">Gestione catalogo</a></li>
+            <%
+                }
+            %>
+            <li><a class="dropdown-item" onclick="submitLogout()">Logout</a></li>
+        </ul>
+    </div>
     <%
         }
     %>
 </div>
+<script src="static/scripts/form.js"></script>
 </body>
 </html>
