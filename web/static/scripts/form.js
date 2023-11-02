@@ -59,11 +59,11 @@ $("form").submit(function (event) {
 
     //Controllo sul valore sesso (solo form register)
     if($(this).attr("id") === "registerForm") {
-        let sessoSelected = false
+        let selected = false
 
         //Se è stato selezionato un valore, lo aggiungo ai dati da inviare alla request
         if($("#sesso .sessoValue:checked").length > 0) {
-            sessoSelected = true
+            selected = true
 
             //Aggiungo il valore del campo ai dati da mandare alla request
             data["sesso"] = $("#sesso .sessoValue:checked").val()
@@ -73,13 +73,19 @@ $("form").submit(function (event) {
             $("#sessoInvalid").show()
         }
 
-        console.log("sesso: "+sessoSelected)
+        console.log("sesso: "+selected)
+    }
+
+    //Controllo valore metodo pagamento (solo form checkout)
+    if($(this).attr("id") === "checkoutForm") {
+        data["pagamento"] = $("input[name='paymentMethod']:checked").val()
     }
 
 
     //Se il form è valido, lo invio
     if (formValid) {
         console.log("Form valido")
+        console.log(data)
         let formId = $(this).attr("id")
         switch (formId) {
             case "loginForm":
@@ -87,6 +93,9 @@ $("form").submit(function (event) {
                 break
             case  "registerForm":
                 submitRegister(data)
+                break
+            case "checkoutForm":
+                submitCheckout(data)
                 break
         }
     }
@@ -114,6 +123,22 @@ $("#passwordHide").click(function (event) {
 $("#registerButton").click(function () {
     window.location.href = "register.jsp"
 })
+
+//Quando inserisco un valore nel campo cc-expiration, aggiungo automaticamente uno "/" dopo aver inserito i primi 2 caratteri
+// $("#cc-expiration").on("input", "input:text",  function () {
+//     console.log("Input event fired")
+//     let input = $(this).val()
+//     console.log("Expiration date current input: "+input)
+//
+//     //Rimuovo eventuali caratteri non numerici
+//     let numericValue = input.replace(/\D/g, "");
+//
+//     if (input.length >= 2) {
+//         // Formatto la data inserendo uno "/" dopo i primi due caratteri
+//         let formattedValue = numericValue.substring(0, 2) + "/" + numericValue.substring(2);
+//         input.val(formattedValue);
+//     }
+// })
 
 //Funzione che effettua il submit del form di login alla servlet
 function submitLogin(data) {
@@ -178,6 +203,29 @@ function submitRegister(data) {
             case "success":
                 window.location.replace("index.jsp")
                 break
+        }
+    })
+}
+
+function submitCheckout(data) {
+    data["actionType"] = "checkout"
+    fetch("Checkout", {
+        method: "POST",
+        headers: {
+            'Accept': "application/json",
+            'Content-Type': "application/json"},
+        body: JSON.stringify(data)
+    }).then(res => {
+        console.log("Request complete! response: ", res)
+        let operationResult = res.headers.get("OPERATION-RESULT")
+        console.log("OPERATION-RESULT: "+operationResult)
+        switch (operationResult) {
+            case "error":
+                window.location.replace("carrello.jsp")
+                alert("C'è stato un problema con la tua richiesta. Riprova.")
+                break
+            case "success":
+                window.location.href = "riepilogo_ordine.jsp"
         }
     })
 }

@@ -3,6 +3,7 @@ package control.servlet;
 import control.dao.OrdineDAO;
 import model.OrdineBean;
 import model.ProdottoBean;
+import org.json.JSONObject;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -34,61 +35,29 @@ public class CheckoutServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //Recupero il requestBody dalla request
+        StringBuilder requestBody = Utilities.getRequestBody(req);
+
+        //Inizializzo l'oggetto JSON
+        JSONObject json = new JSONObject(requestBody.toString());
+
         //Recupero il tipo di azione dalla request
-        String action = req.getParameter("actionType");
+        String action = "";
+        try {
+            action = json.getString("actionType");
+        } catch (Exception e) {
+            LOGGER.severe(e.toString());
+        }
 
         if (action.equals("checkoutButton")) {
             //Controllo che l'utente sia loggato e che il carrello non sia vuoto
-            List<String> errors = new ArrayList<>();
             Boolean isUserLogged = (Boolean) req.getSession().getAttribute("isLogged");
             Boolean isCartEmpty = (Boolean) req.getSession().getAttribute("isCarrelloEmpty");
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("carrello.jsp");
 
             if(Boolean.FALSE.equals(isUserLogged)) {
-                //Aggiungo l'errore alla lista degli errori
-                errors.add("Devi essere autenticato per effettuare un ordine.");
-            }
-
-            if (Boolean.TRUE.equals(isCartEmpty)) {
-                //Aggiungo l'errore alla lista degli errori
-                errors.add("Non è possibile effettuare un ordine con un carrello vuoto.");
-            }
-
-            //Se ci sono errori, rispedisco alla pagina del carrello e invio gli errori
-            if (Boolean.FALSE.equals(errors.isEmpty())) {
-                RequestDispatcher requestDispatcher = req.getRequestDispatcher("carrello.jsp");
-                req.setAttribute("errors", errors);
+                resp.addHeader("OPERATION-RESULT", "userNotLogged");
                 try {
-                    requestDispatcher.forward(req,resp);
-                } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE, e.toString());
-                }
-            }
-
-            //Reindirizzo alla pagina del checkout
-            try {
-                resp.sendRedirect("checkout.jsp");
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, e.toString());
-            }
-        }
-        else if (action.equals("checkout")) {
-            //Controllo che indirizzo di spedizione e metodo di pagamento siano stati selezionati
-            List<String> errors = new ArrayList<>();
-            String indirizzo = req.getParameter("indirizzo");
-            String pagamento = req.getParameter("pagamento");
-
-            if (indirizzo == null || indirizzo.trim().isEmpty()) {
-                errors.add("Il campo indirizzo non può essere vuoto");
-            }
-            if (pagamento == null || pagamento.trim().isEmpty()) {
-                errors.add("Seleziona un metodo di pagamento");
-            }
-
-            //Se ci sono errori, rispedisco alla pagina del checkout
-            if(!errors.isEmpty()) {
-                req.setAttribute("errors", errors);
-                try {
-                    RequestDispatcher requestDispatcher = req.getRequestDispatcher("checkout.jsp");
                     requestDispatcher.forward(req,resp);
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, e.toString());
@@ -97,6 +66,58 @@ public class CheckoutServlet extends HttpServlet {
                 return;
             }
 
+            if (Boolean.TRUE.equals(isCartEmpty)) {
+                resp.addHeader("OPERATION-RESULT", "cartEmpty");
+                try {
+                    requestDispatcher.forward(req,resp);
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE, e.toString());
+                }
+
+                return;
+            }
+
+            //Reindirizzo alla pagina del checkout
+            try {
+                resp.addHeader("OPERATION-RESULT", "success");
+                requestDispatcher.forward(req,resp);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, e.toString());
+            }
+        }
+        else if (action.equals("checkout")) {
+            //Controllo che indirizzo di spedizione e metodo di pagamento siano stati selezionati
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("checkout.jsp");
+            String indirizzo = "";
+            String pagamento = "";
+            try {
+//                indirizzo = json.getString("citta") + "(" + json.getString("provincia") +")" + json.getString("indirizzo") + json.getString("cap");
+                indirizzo = json.getString("indirizzo");
+                pagamento = json.getString("pagamento");
+            } catch (Exception e) {
+                LOGGER.severe(e.toString());
+            }
+
+            if (indirizzo.trim().isEmpty()) {
+                resp.addHeader("OPERATION-RESULT", "error");
+                try {
+                    requestDispatcher.forward(req,resp);
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE, e.toString());
+                }
+
+                return;
+            }
+            if (pagamento.trim().isEmpty()) {
+                resp.addHeader("OPERATION-RESULT", "error");
+                try {
+                    requestDispatcher.forward(req,resp);
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE, e.toString());
+                }
+
+                return;
+            }
 
             //Recupero carrello e contatore prodotti dalla sessione
             List<ProdottoBean> carrello = (List<ProdottoBean>) req.getSession().getAttribute("carrello");
@@ -139,7 +160,9 @@ public class CheckoutServlet extends HttpServlet {
 
             //Reindirizzo alla pagina di riepilogo dell'ordine
             try {
-                resp.sendRedirect("riepilogo_ordine.jsp");
+                requestDispatcher = req.getRequestDispatcher("riepilogo_ordine.jsp");
+                resp.addHeader("OPERATION-RESULT", "success");
+                requestDispatcher.forward(req,resp);
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, e.toString());
             }
