@@ -81,6 +81,21 @@ $("form").submit(function (event) {
         data["pagamento"] = $("input[name='paymentMethod']:checked").val()
     }
 
+    //Controllo che il valore della nuova password sia uguale in entrambi i campi del form (solo form modifica password)
+    if ($(this).attr("id") === "editPasswordForm") {
+        let newPassword = $("#floatingNewPassword").val()
+        let newPasswordRepeat = $("#floatingNewPasswordRepeat").val()
+
+        if(newPassword.trim() !== newPasswordRepeat.trim()) {
+            formValid = false
+            $("#floatingNewPassword").removeClass("is-valid")
+            $("#floatingNewPasswordRepeat").removeClass("is-valid")
+            $("#floatingNewPassword").addClass("is-invalid")
+            $("#floatingNewPasswordRepeat").addClass("is-invalid")
+            $("#newPasswordInvalid").show()
+        }
+    }
+
 
     //Se il form è valido, lo invio
     if (formValid) {
@@ -97,6 +112,9 @@ $("form").submit(function (event) {
             case "checkoutForm":
                 submitCheckout(data)
                 break
+            case "editPasswordForm":
+                submitEditPassword(data)
+                break
         }
     }
 })
@@ -107,6 +125,8 @@ $("form").submit(function (event) {
 $("#passwordShow").click(function (event) {
     event.preventDefault()
     $("#floatingPassword").attr("type", "text")
+    // $("#floatingNewPassword").attr("type", "text")
+    // $("#floatingNewPasswordRepeat").attr("type", "text")
     $("#passwordHide").show()
     $("#passwordShow").hide()
 })
@@ -115,8 +135,25 @@ $("#passwordShow").click(function (event) {
 $("#passwordHide").click(function (event) {
     event.preventDefault()
     $("#floatingPassword").attr("type", "password")
+    // $("#floatingNewPassword").attr("type", "password")
+    // $("#floatingNewPasswordRepeat").attr("type", "password")
     $("#passwordShow").show()
     $("#passwordHide").hide()
+})
+
+
+$("#floatingNewPasswordRepeat").blur(function () {
+    let newPassword = $("#floatingNewPassword").val()
+    let newPasswordRepeat = $("#floatingNewPasswordRepeat").val()
+
+    if(newPassword.trim() !== newPasswordRepeat.trim()) {
+        formValid = false
+        $("#floatingNewPassword").removeClass("is-valid")
+        $("#floatingNewPasswordRepeat").removeClass("is-valid")
+        $("#floatingNewPassword").addClass("is-invalid")
+        $("#floatingNewPasswordRepeat").addClass("is-invalid")
+        $("#newPasswordInvalid").show()
+    }
 })
 
 //Quando clicko il bottone per registrarsi nella pagina del login
@@ -239,5 +276,46 @@ function submitLogout() {
     }).then(res => {
         console.log("Request complete! response: ", res)
         window.location.href = "index.jsp"
+        window.location.reload()
     })
 }
+
+
+function submitEditPassword(data) {
+    fetch("EditPassword", {
+        method: "POST",
+        headers: {
+            'Accept': "application/json",
+            'Content-Type': "application/json"},
+        body: JSON.stringify(data)
+    }).then(res => {
+        console.log("Request complete! response: ", res)
+        let operationResult = res.headers.get("OPERATION-RESULT")
+        console.log("OPERATION-RESULT: "+operationResult)
+        switch (operationResult) {
+            case "error":
+                alert("C'è stato un errore nell'operazione da te richiesta. Riprova")
+                break
+            case "newPasswordNotSame":
+                $("#error div").html("Le nuove password non corrispondono.")
+                $("#error").removeAttr("hidden")
+                $("#floatingNewPassword").removeClass("is-valid")
+                $("#floatingNewPasswordRepeat").removeClass("is-valid")
+                $("#floatingNewPassword").addClass("is-invalid")
+                $("#floatingNewPasswordRepeat").addClass("is-invalid")
+                break
+            case "oldPasswordError":
+                $("#error div").html("La password che hai inserito non è corretta.")
+                $("#error").removeAttr("hidden")
+                $("#floatingPassword").removeClass("is-valid")
+                $("#floatingPassword").addClass("is-invalid")
+                break
+            case "success":
+                $("#passwordEdited").modal("show")
+        }
+    })
+}
+
+// $(document).ready(function () {
+//     $("#passwordHide").hide()
+// })

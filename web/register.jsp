@@ -4,18 +4,20 @@
 <html lang="it">
 <head>
     <title>Registrati</title>
+    <link rel="stylesheet" href="static/styles/styles.scss">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <%-- Bootstrap core   --%>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <%-- Bootstrap icons   --%>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="static/styles/styles.scss">
 </head>
 <body class="container d-flex align-items-center justify-content-center flex-column py-4">
 <main class="form-signin w-100 mx-auto">
     <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="registerForm">
-        <img class="logo mb-4 text-center" src="./static/img/logo_placeholder.png" alt="cool logo" onclick="window.location.href = 'index.jsp'">
+        <div class="text-center">
+            <img class="logo mb-4" src="./static/img/logo_placeholder.png" alt="cool logo" onclick="window.location.href = 'index.jsp'">
+        </div>
         <h1 class="h3 mb-3 fw-normal">Dati anagrafici</h1>
         <div class="row">
             <div class="col">
