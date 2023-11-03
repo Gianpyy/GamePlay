@@ -52,7 +52,7 @@
             <input type="date" class="form-control" name="dataNascita" id="floatingDataNascita">
             <label for="floatingDataNascita">Data di nascita</label>
             <div class="invalid-feedback" id="dataNascitaInvalid">
-                Inserisci una data di nascita valida
+                Devi avere almeno 13 anni per iscriverti
             </div>
         </div>
 

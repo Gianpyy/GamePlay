@@ -123,7 +123,7 @@
                             <label for="cap" class="form-label">CAP</label>
                             <input type="text" class="form-control" id="cap" name="cap" placeholder="">
                             <div class="invalid-feedback" id="capInvalid">
-                                Il CAP è obbligatorio.
+                                Inserisci un cap valido.
                             </div>
                         </div>
                     </div>
@@ -155,7 +155,7 @@
                             <input type="text" class="form-control" id="cc-name" name="cc-name" placeholder="">
                             <small class="text-body-secondary">Nome completo come appare sulla carta</small>
                             <div class="invalid-feedback" id="cc-nameInvalid">
-                                Il nome sulla carta è obbligatorio
+                                Inserisci un nome valido.
                             </div>
                         </div>
 
@@ -163,7 +163,7 @@
                             <label for="cc-number" class="form-label">Numero della carta di credito</label>
                             <input type="text" class="form-control" id="cc-number" name="cc-number" placeholder="">
                             <div class="invalid-feedback" id="cc-numberInvalid">
-                                Il numero della carta di credito è obbligatorio
+                                Inserisci un numero di carta valido.
                             </div>
                         </div>
 
@@ -171,7 +171,7 @@
                             <label for="cc-expiration" class="form-label">Scadenza</label>
                             <input type="text" class="form-control" id="cc-expiration" maxlength="5" name="cc-expiration" placeholder="mm/aa">
                             <div class="invalid-feedback" id="cc-expirationInvalid">
-                                Data di scadenza obbligatoria
+                                Inserisci una data di scadenza valida.
                             </div>
                         </div>
 
@@ -179,7 +179,7 @@
                             <label for="cc-cvv" class="form-label">CVV</label>
                             <input type="text" class="form-control" id="cc-cvv" name="cc-cvv" maxlength="3" placeholder="">
                             <div class="invalid-feedback" id="cc-cvvInvalid">
-                                Codice di sicurezza obbligatorio
+                                Inserisci un codice di sicurezza valido.
                             </div>
                         </div>
                     </div>
