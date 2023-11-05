@@ -57,6 +57,31 @@ $("form").submit(function (event) {
         console.log($(this).attr("name")+": "+formValid)
     })
 
+    //Controllo se i valori inseriti nei campi select sono corretti
+    $(this).find(".form-select").each(function () {
+        if ($(this).val() === "notSelected") {
+            //Se il valore non è valido, aggiungo la classe is-invalid di bootstrap al campo e visualizzo il div con il messaggio di errore
+            formValid = false
+            $(this).removeClass("is-valid")
+            $(this).addClass("is-invalid")
+            let inputId = "#" + $(this).attr("name") + "Invalid"
+            $(inputId).show()
+        }
+        else {
+            //Se il valore è valido, rendo valido il campo input inserendo la classe is-valid di bootstrap
+            $(this).removeClass("is-invalid")
+            $(this).addClass("is-valid")
+
+            //Rendo invisibile il div con il messaggio di errore
+            let inputId = "#" + $(this).attr("name") + "Invalid"
+            $(inputId).hide()
+
+            //Aggiungo il valore del campo ai dati da mandare alla request
+            let inputField = $(this).attr("name")
+            data[inputField] = $(this).val()
+        }
+    })
+
     //Controllo sul valore sesso (solo form register)
     if($(this).attr("id") === "registerForm") {
         let selected = false
@@ -115,6 +140,10 @@ $("form").submit(function (event) {
             case "editPasswordForm":
                 submitEditPassword(data)
                 break
+            case "addVideogiocoForm":
+                data["tipo"] = "videogioco"
+                sumbitAddVideogioco(data)
+                break
         }
     }
 })
@@ -159,6 +188,25 @@ $("#floatingNewPasswordRepeat").blur(function () {
 //Quando clicko il bottone per registrarsi nella pagina del login
 $("#registerButton").click(function () {
     window.location.href = "register.jsp"
+})
+
+$(".sessoValue").change(function () {
+    console.log("tipo changed")
+    let selectedValue = $('input[name=tipo]:checked').val();
+    switch (selectedValue) {
+        case "V":
+            let videogameCollapse = new bootstrap.Collapse(document.querySelector('#collapseVideogioco'), {toggle: false})
+            videogameCollapse.slideDown()
+            break
+        case "G":
+            let gadgetCollapse = new bootstrap.Collapse(document.querySelector('#collapseGadget'), {toggle: false})
+            gadgetCollapse.slideDown()
+            break
+        case "C":
+            let consoleCollapse = new bootstrap.Collapse(document.querySelector('#collapseConsole'), {toggle: false})
+            consoleCollapse.slideDown()
+            break
+    }
 })
 
 //Quando inserisco un valore nel campo cc-expiration, aggiungo automaticamente uno "/" dopo aver inserito i primi 2 caratteri
@@ -314,6 +362,11 @@ function submitEditPassword(data) {
                 $("#passwordEdited").modal("show")
         }
     })
+}
+
+
+function sumbitAddVideogioco(data) {
+    console.log("Form submitted!")
 }
 
 // $(document).ready(function () {

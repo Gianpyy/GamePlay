@@ -18,6 +18,10 @@ function validateInput(inputToValidate, inputType) {
         case "cognome":
         case "citta":
         case "cc-name":
+        case "edizione":
+        case "famiglia":
+        case "produttore":
+        case "serie":
             return validateCognome(inputToValidate)
 
         case "email":
@@ -40,6 +44,18 @@ function validateInput(inputToValidate, inputType) {
 
         case "cc-cvv":
             return validateCVV(inputToValidate)
+
+        case "nomeProdotto":
+            return validateNomeProdotto(inputToValidate)
+
+        case "prezzo":
+            return validatePrezzo(inputToValidate)
+
+        case "descrizione":
+            return validateDescrizione(inputToValidate)
+
+        case "annoRilascio":
+            return validateAnnoRilascio(inputToValidate)
 
         default:
             return true
@@ -153,6 +169,30 @@ function validateScadenza(stringToValidate) {
 
 function validateCVV(stringToValidate) {
     let regex = /^\d{3}$/
+    console.log(stringToValidate+": "+regex.test(stringToValidate))
+    return regex.test(stringToValidate)
+}
+
+function validateNomeProdotto(stringToValidate) {
+    let regex = /^\S[\S\s]{1,79}$/
+    console.log(stringToValidate+": "+regex.test(stringToValidate))
+    return regex.test(stringToValidate)
+}
+
+function validatePrezzo(stringToValidate) {
+    let regex = /^[\d,.]+$/
+    console.log(stringToValidate+": "+regex.test(stringToValidate))
+    return regex.test(stringToValidate)
+}
+
+function validateDescrizione(stringToValidate) {
+    let regex = /^\S[\S\s]{1,249}$/
+    console.log(stringToValidate+": "+regex.test(stringToValidate))
+    return regex.test(stringToValidate)
+}
+
+function validateAnnoRilascio(stringToValidate) {
+    let regex = /^\d{4}$/
     console.log(stringToValidate+": "+regex.test(stringToValidate))
     return regex.test(stringToValidate)
 }

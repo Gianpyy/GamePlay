@@ -46,7 +46,7 @@
             <%  Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
                 if(isAdmin) { %>
             <li><a class="dropdown-item" href="#">Gestione ordini</a></li>
-            <li><a class="dropdown-item" href="#">Gestione catalogo</a></li>
+            <li><a class="dropdown-item" href="gestione_catalogo.jsp">Gestione catalogo</a></li>
             <%
                 }
             %>

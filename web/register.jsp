@@ -59,7 +59,7 @@
         <div class="sesso" id="sesso">
             Sesso:
             <div class="form-check form-check-inline mb-3">
-                <input class="form-check-inline sessoValue" type="radio" name="sesso" value="M" id="floatingSessoM">
+                <input class="form-check-inline sessoValue" type="radio" name="sesso" value="M" id="floatingSessoM" checked="">
                 <label class="form-check-label" for="floatingSessoM">M</label>
             </div>
 

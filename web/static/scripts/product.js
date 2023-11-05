@@ -112,3 +112,7 @@ function updateProductQuantity (id) {
         window.location.href = "carrello.jsp"
     })
 }
+
+function deleteProduct (id) {
+
+}
