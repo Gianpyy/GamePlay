@@ -114,5 +114,28 @@ function updateProductQuantity (id) {
 }
 
 function deleteProduct (id) {
+    let data = {productId: id.toString()}
 
+    fetch("DeleteProduct", {
+        method: "POST",
+        headers: {
+            'Accept': "application/json",
+            'Content-Type': "application/json"},
+        body: JSON.stringify(data)
+    }).then(res => {
+        console.log("Request complete! response: ", res)
+        let operationResult = res.headers.get("OPERATION-RESULT")
+        console.log("OPERATION-RESULT: "+operationResult)
+        switch (operationResult) {
+            case "error":
+                alert("C'è stato un errore nell'operazione. Riprova")
+                break
+            case "unauthorized":
+                alert("Non sei autorizzato ad eseguire questa operazione.")
+                break
+            case "success":
+                alert("Operazione eseguita con successo.")
+                location.reload()
+        }
+    })
 }
