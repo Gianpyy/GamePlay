@@ -1,9 +1,15 @@
 package control.servlet;
 
+import control.dao.ProdottoDAO;
+import model.ProdottoBean;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
+import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,4 +54,21 @@ class Utilities {
         }
     }
 
+    static String generateBarcode() throws SQLException {
+        ProdottoDAO prodottoDAO = new ProdottoDAO();
+        List<ProdottoBean> prodottoBeanList = (List<ProdottoBean>) prodottoDAO.doRetrieveAll("");
+
+        LOGGER.log(Level.INFO, "Retrieved {0} products", prodottoBeanList.size());
+        for (ProdottoBean p : prodottoBeanList) {
+            LOGGER.log(Level.INFO, "{0}", p.getBarcode());
+        }
+
+        long lastBarcode = (Long.parseLong(prodottoBeanList.get(prodottoBeanList.size()-1).getBarcode()));
+        long barcodeToGenerate = lastBarcode +1;
+        LOGGER.log(Level.INFO, "Generated barcode {0}", barcodeToGenerate);
+
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        numberFormat.setGroupingUsed(false);
+        return numberFormat.format(barcodeToGenerate);
+    }
 }

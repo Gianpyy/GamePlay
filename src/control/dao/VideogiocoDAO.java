@@ -39,7 +39,7 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
         PreparedStatement preparedStatement = null;
 
         String inserimentoProdotto = "INSERT INTO " + VideogiocoDAO.SUPER_TABLE_NAME + " (barcode, nome, prezzo, sconto, tipo) VALUES (?, ?, ?, ?, ?)";
-        String inserimentoVideogioco = "INSERT INTO "+ VideogiocoDAO.TABLE_NAME +"(prodotto, piattaforma, descrizione, dataRilascio, condizioni, numeroGiocatori, etaPEGI, categoria, edizione, categoria) VALUES  (?,?,?,?,?,?,?,?,?,?)";
+        String inserimentoVideogioco = "INSERT INTO "+ VideogiocoDAO.TABLE_NAME +"(prodotto, piattaforma, descrizione, dataRilascio, condizioni, numeroGiocatori, etaPEGI, categoria, edizione) VALUES  (?,?,?,?,?,?,?,?,?)";
 
         try {
             //Ottengo la connessione
@@ -68,7 +68,6 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
             preparedStatement.setInt(7, item.getEtaPegi());
             preparedStatement.setString(8, item.getCategoria());
             preparedStatement.setString(9, item.getEdizione());
-            preparedStatement.setString(10, item.getCategoria());
 
             //Eseguo la seconda query
             preparedStatement.executeUpdate();

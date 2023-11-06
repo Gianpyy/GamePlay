@@ -18,11 +18,13 @@ function validateInput(inputToValidate, inputType) {
         case "cognome":
         case "citta":
         case "cc-name":
-        case "edizione":
-        case "famiglia":
-        case "produttore":
-        case "serie":
             return validateCognome(inputToValidate)
+
+        case "edizione":
+        case "serie":
+        case "produttore":
+        case "famiglia":
+            return validateEdizione(inputToValidate)
 
         case "email":
             return validateEmail(inputToValidate)
@@ -193,6 +195,12 @@ function validateDescrizione(stringToValidate) {
 
 function validateAnnoRilascio(stringToValidate) {
     let regex = /^\d{4}$/
+    console.log(stringToValidate+": "+regex.test(stringToValidate))
+    return regex.test(stringToValidate)
+}
+
+function validateEdizione(stringToValidate) {
+    let regex = /^\S[\S\s]+$/
     console.log(stringToValidate+": "+regex.test(stringToValidate))
     return regex.test(stringToValidate)
 }

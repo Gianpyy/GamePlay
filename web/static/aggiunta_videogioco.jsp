@@ -116,7 +116,7 @@
     </div>
     <div class="col">
       <div class="form-floating mb-3">
-        <select class="form-select form-control" name="minimo" id="floatingMassimo">
+        <select class="form-select form-control" name="massimo" id="floatingMassimo">
           <option selected value="notSelected">Seleziona...</option>
           <option value="1">1</option>
           <option value="2">2</option>

@@ -5,8 +5,8 @@
   <title>Title</title>
 </head>
 <body>
-<form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="addVideogiocoForm">
-  <h1 class="h3 mb-3 fw-normal">Dati videogioco</h1>
+<form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="addConsoleForm">
+  <h1 class="h3 mb-3 fw-normal">Dati console</h1>
   <div class="form-floating mb-3">
     <input type="text" class="form-control" name="nomeProdotto" id="floatingNome" placeholder="Nome">
     <label for="floatingNome">Nome</label>
@@ -45,14 +45,14 @@
   </div>
 
   <div class="form-floating mb-3">
-    <input type="text" class="form-control" name="annoRilascio" id="floatingAnnoRilascio" placeholder="Nome">
+    <input type="text" class="form-control" name="annoRilascio" id="floatingAnnoRilascio" placeholder="Anno" maxlength="4">
     <label for="floatingAnnoRilascio">Anno rilascio</label>
     <div class="invalid-feedback" id="annoRilascioInvalid">
       Inserisci un anno di rilascio valido
     </div>
   </div>
 
-  <button class="w-100 btn btn-lg btn-primary" type="submit" id="videogiocoSubmit">Aggiungi videogioco</button>
+  <button class="w-100 btn btn-lg btn-primary" type="submit" id="consoleSubmit">Aggiungi console</button>
 </form>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </body>
