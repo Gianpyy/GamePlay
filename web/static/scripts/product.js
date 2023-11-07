@@ -139,3 +139,36 @@ function deleteProduct (id) {
         }
     })
 }
+
+function redirectToEditPage(id, productType) {
+    let data = {productId: id.toString(), productType: productType.toString()}
+    fetch("RedirectToEditPage", {
+        method: "POST",
+        headers: {
+            'Accept': "application/json",
+            'Content-Type': "application/json"},
+        body: JSON.stringify(data)
+    }).then(res => {
+        console.log("Request complete! response: ", res)
+        let operationResult = res.headers.get("OPERATION-RESULT")
+        console.log("OPERATION-RESULT: "+operationResult)
+        switch (operationResult) {
+            case "error":
+                alert("C'è stato un errore nell'operazione. Riprova")
+                break
+            case "unauthorized":
+                alert("Non sei autorizzato ad eseguire questa operazione.")
+                break
+            case "videogioco":
+                window.location.href = "edit_videogioco.jsp"
+                break
+            case "gadget":
+                window.location.href = "edit_gadget.jsp"
+                break
+            case "console":
+                window.location.href = "edit_console.jsp"
+                break
+        }
+
+    })
+}

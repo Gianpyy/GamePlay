@@ -49,13 +49,23 @@
 <% ProdottoDAO prodottoDAO = new ProdottoDAO();
     List<ProdottoBean> prodotti = (List<ProdottoBean>) prodottoDAO.doRetrieveAll("");
     for (ProdottoBean p : prodotti) { %>
-            <div class="bg-body-secondary rounded-3 d-flex justify-content-between my-3">
-                <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgRecap" alt="img not found">
-                <h5><%=p.getNome()%></h5>
-                <h5><%=p.getPrezzo()%></h5>
-                <div class="order-last">
-                    <button class="btn btn-danger" onclick="deleteProduct(<%=p.getBarcode()%>)">Elimina prodotto</button>
-                    <button class="btn btn btn-primary">Modifica prodotto</button>
+            <div class="bg-body-secondary rounded-3 my-3">
+                <div class="row">
+                    <div class="col-2">
+                        <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgRecap" alt="img not found">
+                    </div>
+                    <div class="col-7 d-flex flex-column align-items-start">
+                        <div>
+                            <h2><%=p.getNome()%></h2>
+                        </div>
+                        <div>
+                            <span class="price"><%=p.getPrezzo()%> €</span>
+                        </div>
+                    </div>
+                    <div class="col-3 d-flex flex-column order-last align-self-center">
+                        <button class="btn btn-primary my-1" id="modificaProdotto" onclick="redirectToEditPage(<%=p.getBarcode()%>, '<%=p.getTipo()%>')">Modifica prodotto</button>
+                        <button class="btn btn-danger" onclick="deleteProduct(<%=p.getBarcode()%>)">Elimina prodotto</button>
+                    </div>
                 </div>
             </div>
 <% } %>

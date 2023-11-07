@@ -196,4 +196,41 @@ public class GadgetDAO implements IBeanDAO<GadgetBean, String> {
         }
         return gadgetBeanCollection;
     }
+
+    public void doUpdate(GadgetBean item) throws SQLException{
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        String gadgetUpdate = "UPDATE "+TABLE_NAME+" SET produttore = ?, serie = ? WHERE prodotto = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            ///Eseguo l'update della tabella prodotto
+            ProdottoDAO prodottoDAO = new ProdottoDAO();
+            prodottoDAO.doUpdate(item);
+
+            //Preparo il PreparedStatement per l'update della tabella videogioco
+            preparedStatement = connection.prepareStatement(gadgetUpdate);
+            preparedStatement.setString(1, item.getProduttore());
+            preparedStatement.setString(2, item.getSerie());
+            preparedStatement.setString(3, item.getBarcode());
+
+            //Eseguo l'update della tabella videogioco
+            preparedStatement.executeUpdate();
+
+            //Eseguo il commit degli update
+            connection.commit();
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+    }
 }

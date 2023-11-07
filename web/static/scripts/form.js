@@ -152,6 +152,21 @@ $("form").submit(function (event) {
                 data["tipo"] = "gadget"
                 submitAddProduct(data)
                 break
+
+            case "updateVideogiocoForm":
+                data["tipo"] = "videogioco"
+                submitUpdateProduct(data)
+                break
+
+            case "updateGadgetForm":
+                data["tipo"] = "gadget"
+                submitUpdateProduct(data)
+                break
+
+            case "updateConsoleForm":
+                data["tipo"] = "console"
+                submitUpdateProduct(data)
+                break
         }
     }
 })
@@ -394,6 +409,32 @@ function submitAddProduct(data) {
             case "success":
                 alert("Operazione eseguita con successo.")
                 location.reload()
+        }
+    })
+}
+
+
+function submitUpdateProduct(data) {
+    fetch("UpdateProduct", {
+        method: "POST",
+        headers: {
+            'Accept': "application/json",
+            'Content-Type': "application/json"},
+        body: JSON.stringify(data)
+    }).then(res => {
+        console.log("Request complete! response: ", res)
+        let operationResult = res.headers.get("OPERATION-RESULT")
+        console.log("OPERATION-RESULT: "+operationResult)
+        switch (operationResult) {
+            case "error":
+                alert("C'è stato un errore nell'operazione. Riprova")
+                break
+            case "unauthorized":
+                alert("Non sei autorizzato ad eseguire questa operazione.")
+                break
+            case "success":
+                alert("Operazione eseguita con successo.")
+                window.location.href = "gestione_catalogo.jsp"
         }
     })
 }

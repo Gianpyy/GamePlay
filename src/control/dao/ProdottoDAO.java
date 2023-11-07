@@ -229,4 +229,40 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean, String> {
 
         return productType;
     }
+
+    public void doUpdate(ProdottoBean item) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        String prodottoUpdate = "UPDATE "+TABLE_NAME+" SET nome = ?, prezzo = ? WHERE barcode = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement per l'update della tabella prodotto
+            preparedStatement = connection.prepareStatement(prodottoUpdate);
+            preparedStatement.setString(1, item.getNome());
+            preparedStatement.setFloat(2, item.getPrezzo());
+            preparedStatement.setString(3, item.getBarcode());
+
+            //Eseguo l'update della tabella prodotto
+            preparedStatement.executeUpdate();
+
+            //Eseguo il commit
+            connection.commit();
+
+        //Chiudo la connessione
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+    }
 }

@@ -1,6 +1,7 @@
 package control.dao;
 
 import model.ConsoleBean;
+import model.VideogiocoBean;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -251,5 +252,44 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
         }
 
         return consoleBeanCollection;
+    }
+
+    public void doUpdate(ConsoleBean item) throws SQLException{
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        String consoleUpdate = "UPDATE "+TABLE_NAME+" SET famiglia = ?, annoRilascio = ?, edizione = ? WHERE prodotto = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Eseguo l'update della tabella prodotto
+            ProdottoDAO prodottoDAO = new ProdottoDAO();
+            prodottoDAO.doUpdate(item);
+
+            //Preparo il PreparedStatement per l'update della tabella videogioco
+            preparedStatement = connection.prepareStatement(consoleUpdate);
+            preparedStatement.setString(1, item.getFamiglia());
+            preparedStatement.setInt(2, item.getAnnoRilascio());
+            preparedStatement.setString(3, item.getEdizione());
+            preparedStatement.setString(4, item.getBarcode());
+
+
+            //Eseguo l'update della tabella videogioco
+            preparedStatement.executeUpdate();
+
+            //Eseguo il commit degli update
+            connection.commit();
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
     }
 }

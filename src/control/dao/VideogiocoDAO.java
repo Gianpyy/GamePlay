@@ -271,6 +271,51 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
         return videogiocoBeanCollection;
     }
 
+    public void doUpdate(VideogiocoBean item) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        String videogiocoUpdate = "UPDATE "+TABLE_NAME+
+                " SET piattaforma = ?, descrizione = ?, dataRilascio = ?, condizioni = ?, numeroGiocatori = ?, etaPEGI = ?, edizione = ?, categoria = ?" +
+                " WHERE prodotto = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Eseguo l'update della tabella prodotto
+            ProdottoDAO prodottoDAO = new ProdottoDAO();
+            prodottoDAO.doUpdate(item);
+
+            //Preparo il PreparedStatement per l'update della tabella videogioco
+            preparedStatement = connection.prepareStatement(videogiocoUpdate);
+            preparedStatement.setString(1, item.getPiattaforma());
+            preparedStatement.setString(2, item.getDescrizione());
+            preparedStatement.setDate(3, Utilities.toSqlDate(item.getDataRilascio()));
+            preparedStatement.setString(4, item.getCondizioni());
+            preparedStatement.setString(5, item.getNumeroGiocatori());
+            preparedStatement.setInt(6, item.getEtaPegi());
+            preparedStatement.setString(7, item.getEdizione());
+            preparedStatement.setString(8, item.getCategoria());
+            preparedStatement.setString(9, item.getBarcode());
+
+            //Eseguo l'update della tabella videogioco
+            preparedStatement.executeUpdate();
+
+            //Eseguo il commit degli update
+            connection.commit();
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+    }
+
 
     private static java.sql.Date toSqlDate(Date data) {
         Calendar calendar = new GregorianCalendar();
