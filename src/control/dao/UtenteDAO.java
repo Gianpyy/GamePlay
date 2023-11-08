@@ -235,7 +235,7 @@ public class UtenteDAO implements IBeanDAO<UtenteBean, Integer>{
         PreparedStatement preparedStatement = null;
         UtenteBean utenteBean = new UtenteBean();
 
-        String sqlStatement = "SELECT * FROM " + UtenteDAO.TABLE_NAME +" WHERE username = ? AND psw = ?";
+        String sqlStatement = "SELECT * FROM " + UtenteDAO.TABLE_NAME +" WHERE BINARY(username) = BINARY(?) AND BINARY(psw) = BINARY(?)";
 
         try {
             //Ottengo la connessione
