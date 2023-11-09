@@ -45,7 +45,7 @@
             <li><a class="dropdown-item" href="cronologia_ordini.jsp">Cronologia ordini</a></li>
             <%  Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
                 if(isAdmin) { %>
-            <li><a class="dropdown-item" href="#">Gestione ordini</a></li>
+            <li><a class="dropdown-item" href="gestione_ordini.jsp">Gestione ordini</a></li>
             <li><a class="dropdown-item" href="gestione_catalogo.jsp">Gestione catalogo</a></li>
             <%
                 }

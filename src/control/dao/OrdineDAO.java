@@ -9,7 +9,6 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,7 +51,7 @@ public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
 
             //Preparo la query per la tabella ordine
             preparedStatement = connection.prepareStatement(inserimentoOrdine, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setDate(1, toSqlDate(item.getData()));
+            preparedStatement.setDate(1, Utilities.toSqlDate(item.getData()));
             preparedStatement.setString(2, item.getMetodoPagamento());
             preparedStatement.setFloat(3, item.getTotale());
             preparedStatement.setString(4, item.getIndirizzo());
@@ -117,7 +116,45 @@ public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
 
     @Override
     public Collection<OrdineBean> doRetrieveAll(String order) throws SQLException {
-        return null;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        Collection<OrdineBean> ordineBeanCollection = new LinkedList<>();
+
+        String sqlStatement = "SELECT * FROM "+ORDINE_TABLE_NAME;
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Eseguo la query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            //Salvo il risultato nella query nella lista di bean
+            while (resultSet.next()){
+                OrdineBean ordineBean = new OrdineBean();
+                ordineBean.setNumeroOrdine(resultSet.getInt("numeroOrdine"));
+                ordineBean.setData(resultSet.getDate("dataAcquisto"));
+                ordineBean.setMetodoPagamento(resultSet.getString("metodoPagamento"));
+                ordineBean.setTotale(resultSet.getFloat("importoTotale"));
+                ordineBean.setStato(resultSet.getString("stato"));
+                ordineBean.setIndirizzo(resultSet.getString("indirizzoSpedizione"));
+                ordineBeanCollection.add(ordineBean);
+            }
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return ordineBeanCollection;
     }
 
     public Collection<OrdineBean> doRetrieveByUserId(int userid) throws SQLException {
@@ -211,15 +248,38 @@ public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
         return ordineBeanCollection;
     }
 
+    public boolean doUpdateOrderStatus(Integer orderId, String orderStatus) throws SQLException{
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        int result;
 
-    private static java.sql.Date toSqlDate(Date data) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(data);
-        calendar.set(Calendar.HOUR, 1);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+        String sqlStatement = "UPDATE ordine SET stato = ? WHERE numeroOrdine = ?";
 
-        return new java.sql.Date(calendar.getTimeInMillis());
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, orderStatus);
+            preparedStatement.setInt(2, orderId);
+
+            //Eseguo la query
+            result = preparedStatement.executeUpdate();
+            connection.commit();
+
+            //Chiudo la connessione
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return (result != 0);
     }
 }
