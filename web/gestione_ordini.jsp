@@ -31,45 +31,48 @@
       <div class="row g-3 align-items-center justify-content-center my-3">
         <button class="btn btn-primary col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltroUtente" aria-expanded="false" aria-controls="collapseFiltroUtente">Filtra ordini per utente</button>
         <button class="btn btn-primary col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltroData" aria-expanded="false" aria-controls="collapseFiltroData">Filtra ordini per data</button>
-        <div class="collapse col-12" id="collapseVideogioco">
-          todo
+        <button class="btn btn-primary col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltroID" aria-expanded="false" aria-controls="collapseFiltroID">Filtra ordini per numero ordine</button>
+        <div class="collapse col-12" id="collapseFiltroUtente">
+          <img src="https://mokoko.info/assets/img/emotes/emoji_a_32.png" alt="notfound">
         </div>
-        <div class="collapse col-12" id="collapseConsole">
-          todo
+        <div class="collapse col-12" id="collapseFiltroData">
+          <img src="https://mokoko.info/assets/img/emotes/emoji_a_32.png" alt="notfound">
         </div>
-        <form class="col-12 mb-3 mb-lg-0 me-lg-3" role="search">
-          <input type="search" class="form-control" placeholder="Cerca un prodotto..." aria-label="Search">
-        </form>
+        <div class="collapse col-12" id="collapseFiltroID">
+          <img src="https://mokoko.info/assets/img/emotes/emoji_a_32.png" alt="notfound">
+        </div>
       </div>
 
+      <div id="ordiniContainer">
       <% OrdineDAO ordineDAO = new OrdineDAO();
         List<OrdineBean> ordini = (List<OrdineBean>) ordineDAO.doRetrieveAll("");
         for (OrdineBean o : ordini) { %>
-      <div class="bg-body-secondary rounded-3 my-3">
-        <div class="row">
-          <div class="col-2">
-            <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgRecap" alt="img not found">
-          </div>
-          <div class="col-7 d-flex flex-column align-items-start">
-            <div>
-              <h4>Numero ordine: <%=o.getNumeroOrdine()%></h4>
+        <div class="bg-body-secondary rounded-3 my-3">
+          <div class="row">
+            <div class="col-2">
+              <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgRecap" alt="img not found">
             </div>
-            <div>
-              <h4>Effettuato il: <%=o.getData()%></h4>
+            <div class="col-7 d-flex flex-column align-items-start">
+              <div>
+                <h4>Numero ordine: <%=o.getNumeroOrdine()%></h4>
+              </div>
+              <div>
+                <h4>Effettuato il: <%=o.getData()%></h4>
+              </div>
+              <div>
+                <select class="form-select" name="statoOrdine" id="statoOrdine<%=o.getNumeroOrdine()%>" onchange="changeOrderStatus('<%=o.getNumeroOrdine()%>')">
+                  <option value="Pagamento ricevuto" <% if (o.getStato().equals("Pagamento ricevuto")) { %> selected <% } %>>Pagamento ricevuto</option>
+                  <option value="In preparazione alla spedizione" <% if (o.getStato().equals("In preparazione alla spedizione")) { %> selected <% } %>>In preparazione alla spedizione</option>
+                  <option value="Spedito" <% if (o.getStato().equals("Spedito")) { %> selected <% } %>>Spedito</option>
+                  <option value="In Consegna" <% if (o.getStato().equals("In Consegna")) { %> selected <% } %>>In Consegna</option>
+                  <option value="Consegnato" <% if (o.getStato().equals("Consegnato")) { %> selected <% } %>>Consegnato</option>
+                </select>
+              </div>
             </div>
-            <div>
-              <select class="form-select" name="statoOrdine" id="statoOrdine<%=o.getNumeroOrdine()%>" onchange="changeOrderStatus('<%=o.getNumeroOrdine()%>')">
-                <option value="Pagamento ricevuto" <% if (o.getStato().equals("Pagamento ricevuto")) { %> selected <% } %>>Pagamento ricevuto</option>
-                <option value="In preparazione alla spedizione" <% if (o.getStato().equals("In preparazione alla spedizione")) { %> selected <% } %>>In preparazione alla spedizione</option>
-                <option value="Spedito" <% if (o.getStato().equals("Spedito")) { %> selected <% } %>>Spedito</option>
-                <option value="In Consegna" <% if (o.getStato().equals("In Consegna")) { %> selected <% } %>>In Consegna</option>
-                <option value="Consegnato" <% if (o.getStato().equals("Consegnato")) { %> selected <% } %>>Consegnato</option>
-              </select>
+            <div class="col-3 d-flex flex-column order-last align-self-center">
+              <button class="btn btn-primary my-1" id="modificaProdotto">Visualizza dettagli ordine</button>
+              <button class="btn btn-danger" onclick="deleteOrder(<%=o.getNumeroOrdine()%>)">Elimina ordine</button>
             </div>
-          </div>
-          <div class="col-3 d-flex flex-column order-last align-self-center">
-            <button class="btn btn-primary my-1" id="modificaProdotto">Visualizza dettagli ordine</button>
-            <button class="btn btn-danger">Elimina ordine</button>
           </div>
         </div>
       </div>

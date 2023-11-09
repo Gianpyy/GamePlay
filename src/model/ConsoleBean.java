@@ -17,7 +17,7 @@ public class ConsoleBean extends ProdottoBean implements Serializable {
     public ConsoleBean() {
     }
 
-    public ConsoleBean(String barcode, String nome, float prezzo, int sconto, String famiglia, int annoRilascio, String edizione) {
+    public ConsoleBean(String barcode, String nome, float prezzo, String famiglia, int annoRilascio, String edizione) {
         super(barcode, nome, prezzo, "console");
         this.famiglia = famiglia;
         this.annoRilascio = annoRilascio;

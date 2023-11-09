@@ -469,6 +469,35 @@ function changeOrderStatus(id) {
     })
 }
 
+function deleteOrder(id) {
+    //Recupero i dati da inviare alla form
+    let data = {orderId: id}
+
+    //Invio la richiesta
+    fetch("DeleteOrder", {
+        method: "POST",
+        headers: {
+            'Accept': "application/json",
+            'Content-Type': "application/json"},
+        body: JSON.stringify(data)
+    }).then(res => {
+        console.log("Request complete! response: ", res)
+        let operationResult = res.headers.get("OPERATION-RESULT")
+        console.log("OPERATION-RESULT: "+operationResult)
+        switch (operationResult) {
+            case "error":
+                alert("C'è stato un errore nell'operazione. Riprova")
+                break
+            case "unauthorized":
+                location.href = "../error_pages/unauthorized.jsp"
+                break
+            case "success":
+                alert("Operazione eseguita con successo.")
+                location.reload()
+        }
+    })
+}
+
 // $(document).ready(function () {
 //     $("#passwordHide").hide()
 // })

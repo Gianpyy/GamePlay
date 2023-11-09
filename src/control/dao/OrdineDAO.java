@@ -106,7 +106,36 @@ public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
 
     @Override
     public boolean doDelete(Integer code) throws SQLException {
-        return false;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        int result;
+
+        String sqlStatement = "DELETE FROM " +ORDINE_TABLE_NAME+" WHERE numeroOrdine = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1, code);
+
+            //Eseguo la query
+            result = preparedStatement.executeUpdate();
+            connection.commit();
+            //Chiudo la connessione
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return (result != 0);
     }
 
     @Override

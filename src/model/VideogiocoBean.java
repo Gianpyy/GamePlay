@@ -24,7 +24,7 @@ public class VideogiocoBean extends ProdottoBean implements Serializable {
         super();
     }
 
-    public VideogiocoBean(String barcode, String nome, float prezzo, int sconto, String piattaforma, String descrizione, String condizioni, String numeroGiocatori, Date dataRilascio,
+    public VideogiocoBean(String barcode, String nome, float prezzo, String piattaforma, String descrizione, String condizioni, String numeroGiocatori, Date dataRilascio,
                           String categoria,int etaPegi, String edizione) {
         super(barcode, nome, prezzo, "videogioco");
         this.piattaforma = piattaforma;

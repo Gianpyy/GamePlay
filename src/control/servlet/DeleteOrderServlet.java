@@ -13,13 +13,13 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@WebServlet("/UpdateOrderStatus")
-public class UpdateOrderStatusServlet extends HttpServlet {
-    private static final Logger LOGGER = Logger.getLogger(UpdateOrderStatusServlet.class.getName());
+@WebServlet("/DeleteOrder")
+public class DeleteOrderServlet extends HttpServlet {
+    private static final Logger LOGGER = Logger.getLogger(DeleteOrderServlet.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
+        doPost(req,resp);
     }
 
     @Override
@@ -33,13 +33,12 @@ public class UpdateOrderStatusServlet extends HttpServlet {
         JSONObject json = new JSONObject(requestBody.toString());
 
         try {
-            //Recupero l'id dell'ordine e il nuovo stato
+            //Recupero l'id dell'ordine da cancellare
             Integer orderId = json.getInt("orderId");
-            String newStatus = json.getString("newStatus");
 
             //Aggiorno lo stato dell'ordine nel database
             OrdineDAO ordineDAO = new OrdineDAO();
-            boolean operationResult = ordineDAO.doUpdateOrderStatus(orderId, newStatus);
+            boolean operationResult = ordineDAO.doDelete(orderId);
 
             LOGGER.log(Level.INFO, "Operation result: {0}", operationResult);
             if (operationResult) {
@@ -58,5 +57,8 @@ public class UpdateOrderStatusServlet extends HttpServlet {
             resp.addHeader("OPERATION-RESULT", "error");
             requestDispatcher.forward(req,resp);
         }
+
+        //Ritorno alla pagina di gestione catalogo
+        requestDispatcher.forward(req, resp);
     }
 }

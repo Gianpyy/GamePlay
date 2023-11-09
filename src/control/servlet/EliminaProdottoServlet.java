@@ -29,38 +29,30 @@ public class EliminaProdottoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //Controllo se l'utente è amministratore
-        Boolean isAdmin = (Boolean) req.getSession().getAttribute("isAdmin");
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("gestione_catalogo.jsp");
 
-        if(Boolean.TRUE.equals(isAdmin)) {
-            //Recupero il requestBody dalla request
-            StringBuilder requestBody = Utilities.getRequestBody(req);
+        //Recupero il requestBody dalla request
+        StringBuilder requestBody = Utilities.getRequestBody(req);
 
-            //Inizializzo l'oggetto JSON
-            JSONObject json = new JSONObject(requestBody.toString());
+        //Inizializzo l'oggetto JSON
+        JSONObject json = new JSONObject(requestBody.toString());
 
-            //Recupero l'id del prodotto da eliminare
-            try {
-                String productId = json.getString("productId");
+        //Recupero l'id del prodotto da eliminare
+        try {
+            String productId = json.getString("productId");
 
-                //Elimino il prodotto associato all'id
-                ProdottoDAO prodottoDAO = new ProdottoDAO();
-                prodottoDAO.doDelete(productId);
-            } catch (Exception e) {
-                resp.addHeader("OPERATION-RESULT", "error");
-                requestDispatcher.forward(req, resp);
-                return;
-            }
-
-            //Ritorno alla pagina di gestione catalogo
-            resp.addHeader("OPERATION-RESULT", "success");
+            //Elimino il prodotto associato all'id
+            ProdottoDAO prodottoDAO = new ProdottoDAO();
+            prodottoDAO.doDelete(productId);
+        } catch (Exception e) {
+            resp.addHeader("OPERATION-RESULT", "error");
             requestDispatcher.forward(req, resp);
+            return;
         }
-        else {
-            resp.addHeader("OPERATION-RESULT", "unauthorized");
-            requestDispatcher.forward(req,resp);
-        }
+
+        //Ritorno alla pagina di gestione catalogo
+        resp.addHeader("OPERATION-RESULT", "success");
+        requestDispatcher.forward(req, resp);
     }
 }
 

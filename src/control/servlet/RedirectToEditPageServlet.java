@@ -26,76 +26,68 @@ public class RedirectToEditPageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //Controllo se l'utente è amministratore
-        Boolean isAdmin = (Boolean) req.getSession().getAttribute("isAdmin");
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("gestione_catalogo.jsp");
 
-        if(Boolean.TRUE.equals(isAdmin)) {
-            //Recupero il requestBody dalla request
-            StringBuilder requestBody = Utilities.getRequestBody(req);
+        //Recupero il requestBody dalla request
+        StringBuilder requestBody = Utilities.getRequestBody(req);
 
-            //Inizializzo l'oggetto JSON
-            JSONObject json = new JSONObject(requestBody.toString());
+        //Inizializzo l'oggetto JSON
+        JSONObject json = new JSONObject(requestBody.toString());
 
-            //Recupero l'id del prodotto da eliminare
-            try {
-                String productId = json.getString("productId");
+        //Recupero l'id del prodotto da eliminare
+        try {
+            String productId = json.getString("productId");
 
-                //Recupero il prodotto dal database
-                String productType = json.getString("productType");
-                switch (productType) {
-                    case "videogioco" -> {
-                        VideogiocoDAO videogiocoDAO = new VideogiocoDAO();
-                        VideogiocoBean videogiocoBean = videogiocoDAO.doRetrieveByKey(productId);
+            //Recupero il prodotto dal database
+            String productType = json.getString("productType");
+            switch (productType) {
+                case "videogioco" -> {
+                    VideogiocoDAO videogiocoDAO = new VideogiocoDAO();
+                    VideogiocoBean videogiocoBean = videogiocoDAO.doRetrieveByKey(productId);
 
-                        //Aggiungo il prodotto alla sessione
-                        req.getSession().setAttribute("product", videogiocoBean);
+                    //Aggiungo il prodotto alla sessione
+                    req.getSession().setAttribute("product", videogiocoBean);
 
-                        //Aggiungo il tipo di prodotto all'header della risposta
-                        resp.addHeader("OPERATION-RESULT", productType);
-                    }
-
-                    case "console" -> {
-                        ConsoleDAO consoleDAO = new ConsoleDAO();
-                        ConsoleBean consoleBean = consoleDAO.doRetrieveByKey(productId);
-
-                        //Aggiungo il prodotto alla sessione
-                        req.getSession().setAttribute("product", consoleBean);
-
-                        //Aggiungo il tipo di prodotto all'header della risposta
-                        resp.addHeader("OPERATION-RESULT", productType);
-                    }
-
-                    case "gadget" -> {
-                        GadgetDAO gadgetDAO = new GadgetDAO();
-                        GadgetBean gadgetBean = gadgetDAO.doRetrieveByKey(productId);
-
-                        //Aggiungo il prodotto alla sessione
-                        req.getSession().setAttribute("product", gadgetBean);
-
-                        //Aggiungo il tipo di prodotto all'header della risposta
-                        resp.addHeader("OPERATION-RESULT", productType);
-
-                    }
-
-                    default -> {
-                        resp.addHeader("OPERATION-RESULT", "error");
-                        requestDispatcher.forward(req, resp);
-                        return;
-                    }
+                    //Aggiungo il tipo di prodotto all'header della risposta
+                    resp.addHeader("OPERATION-RESULT", productType);
                 }
-            } catch (Exception e) {
-                resp.addHeader("OPERATION-RESULT", "error");
-                requestDispatcher.forward(req, resp);
-                return;
-            }
 
-            //Ritorno alla pagina di gestione catalogo
+                case "console" -> {
+                    ConsoleDAO consoleDAO = new ConsoleDAO();
+                    ConsoleBean consoleBean = consoleDAO.doRetrieveByKey(productId);
+
+                    //Aggiungo il prodotto alla sessione
+                    req.getSession().setAttribute("product", consoleBean);
+
+                    //Aggiungo il tipo di prodotto all'header della risposta
+                    resp.addHeader("OPERATION-RESULT", productType);
+                }
+
+                case "gadget" -> {
+                    GadgetDAO gadgetDAO = new GadgetDAO();
+                    GadgetBean gadgetBean = gadgetDAO.doRetrieveByKey(productId);
+
+                    //Aggiungo il prodotto alla sessione
+                    req.getSession().setAttribute("product", gadgetBean);
+
+                    //Aggiungo il tipo di prodotto all'header della risposta
+                    resp.addHeader("OPERATION-RESULT", productType);
+
+                }
+
+                default -> {
+                    resp.addHeader("OPERATION-RESULT", "error");
+                    requestDispatcher.forward(req, resp);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            resp.addHeader("OPERATION-RESULT", "error");
             requestDispatcher.forward(req, resp);
+            return;
         }
-        else {
-            resp.addHeader("OPERATION-RESULT", "unauthorized");
-            requestDispatcher.forward(req,resp);
-        }
+
+        //Ritorno alla pagina di gestione catalogo
+        requestDispatcher.forward(req, resp);
     }
 }
