@@ -37,7 +37,7 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean, String> {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
-        String sqlStatement = "INSERT INTO " + ProdottoDAO.TABLE_NAME + " (barcode, nome, prezzo, sconto, tipo) VALUES (?, ?, ?, ?, ?)";
+        String sqlStatement = "INSERT INTO " + ProdottoDAO.TABLE_NAME + " (barcode, nome, prezzo, tipo) VALUES (?, ?, ?, ?)";
 
         try{
             //Ottengo la connessione
@@ -49,8 +49,7 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean, String> {
             preparedStatement.setString(1, item.getBarcode());
             preparedStatement.setString(2, item.getNome());
             preparedStatement.setFloat(3, item.getPrezzo());
-            preparedStatement.setInt(4, item.getSconto());
-            preparedStatement.setString(5, item.getTipo());
+            preparedStatement.setString(4, item.getTipo());
 
             //Eseguo la query
             preparedStatement.executeUpdate();
@@ -128,7 +127,6 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean, String> {
                 prodottoBean.setNome(resultSet.getString("nome"));
                 prodottoBean.setBarcode(resultSet.getString("barcode"));
                 prodottoBean.setPrezzo(resultSet.getFloat("prezzo"));
-                prodottoBean.setSconto(resultSet.getInt("sconto"));
                 prodottoBean.setTipo(resultSet.getString("tipo"));
             }
             //Chiudo la connessione
@@ -175,7 +173,6 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean, String> {
                 prodottoBean.setNome(resultSet.getString("nome"));
                 prodottoBean.setBarcode(resultSet.getString("barcode"));
                 prodottoBean.setPrezzo(resultSet.getFloat("prezzo"));
-                prodottoBean.setSconto(resultSet.getInt("sconto"));
                 prodottoBean.setTipo(resultSet.getString("tipo"));
                 prodottoBeanCollection.add(prodottoBean);
             }
