@@ -38,7 +38,6 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
-        String inserimentoProdotto = "INSERT INTO " + VideogiocoDAO.SUPER_TABLE_NAME + " (barcode, nome, prezzo, sconto, tipo) VALUES (?, ?, ?, ?, ?)";
         String inserimentoVideogioco = "INSERT INTO "+ VideogiocoDAO.TABLE_NAME +"(prodotto, piattaforma, descrizione, dataRilascio, condizioni, numeroGiocatori, etaPEGI, categoria, edizione) VALUES  (?,?,?,?,?,?,?,?,?)";
 
         try {
@@ -46,16 +45,9 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
             connection = dataSource.getConnection();
             connection.setAutoCommit(false);
 
-            //Preparo l'inserimento nella tabella prodotto
-            preparedStatement = connection.prepareStatement(inserimentoProdotto);
-            preparedStatement.setString(1, item.getBarcode());
-            preparedStatement.setString(2, item.getNome());
-            preparedStatement.setFloat(3, item.getPrezzo());
-            preparedStatement.setInt(4, item.getSconto());
-            preparedStatement.setString(5, item.getTipo());
-
-            //Eseguo la prima query
-            preparedStatement.executeUpdate();
+            //Inserisco le informazioni nella tabella prodotto
+            ProdottoDAO prodottoDAO = new ProdottoDAO();
+            prodottoDAO.doSave(item);
 
             //Preparo l'inserimento nella tabella videogioco
             preparedStatement = connection.prepareStatement(inserimentoVideogioco);
@@ -145,7 +137,6 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
                 videogiocoBean.setBarcode(resultSet.getString("barcode"));
                 videogiocoBean.setNome(resultSet.getString("nome"));
                 videogiocoBean.setPrezzo(resultSet.getFloat("prezzo"));
-                videogiocoBean.setSconto(resultSet.getInt("sconto"));
                 videogiocoBean.setPiattaforma(resultSet.getString("piattaforma"));
                 videogiocoBean.setDescrizione(resultSet.getString("descrizione"));
                 videogiocoBean.setDataRilascio(resultSet.getDate("dataRilascio"));
@@ -197,7 +188,6 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
                 videogiocoBean.setBarcode(resultSet.getString("barcode"));
                 videogiocoBean.setNome(resultSet.getString("nome"));
                 videogiocoBean.setPrezzo(resultSet.getFloat("prezzo"));
-                videogiocoBean.setSconto(resultSet.getInt("sconto"));
                 videogiocoBean.setPiattaforma(resultSet.getString("piattaforma"));
                 videogiocoBean.setDescrizione(resultSet.getString("descrizione"));
                 videogiocoBean.setDataRilascio(resultSet.getDate("dataRilascio"));
@@ -247,7 +237,6 @@ public class VideogiocoDAO implements IBeanDAO<VideogiocoBean, String>{
                 videogiocoBean.setBarcode(resultSet.getString("barcode"));
                 videogiocoBean.setNome(resultSet.getString("nome"));
                 videogiocoBean.setPrezzo(resultSet.getFloat("prezzo"));
-                videogiocoBean.setSconto(resultSet.getInt("sconto"));
                 videogiocoBean.setPiattaforma(resultSet.getString("piattaforma"));
                 videogiocoBean.setDescrizione(resultSet.getString("descrizione"));
                 videogiocoBean.setDataRilascio(resultSet.getDate("dataRilascio"));

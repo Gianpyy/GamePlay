@@ -17,7 +17,7 @@ public class GadgetBean extends ProdottoBean implements Serializable {
     }
 
     public GadgetBean(String barcode, String nome, float prezzo, int sconto, String produttore, String serie) {
-        super(barcode, nome, prezzo, sconto, "gadget");
+        super(barcode, nome, prezzo, "gadget");
         this.produttore = produttore;
         this.serie = serie;
     }

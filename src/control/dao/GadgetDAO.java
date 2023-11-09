@@ -39,7 +39,6 @@ public class GadgetDAO implements IBeanDAO<GadgetBean, String> {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
-        String inserimentoProdotto = "INSERT INTO " + GadgetDAO.SUPER_TABLE_NAME + " (barcode, nome, prezzo, sconto, tipo) VALUES (?, ?, ?, ?, ?)";
         String inserimentoGadget = "INSERT INTO " + GadgetDAO.TABLE_NAME + "(prodotto, produttore, serie) VALUES  (?,?,?)";
 
         try {
@@ -47,18 +46,11 @@ public class GadgetDAO implements IBeanDAO<GadgetBean, String> {
             connection = dataSource.getConnection();
             connection.setAutoCommit(false);
 
-            //Preparo l'inserimento nella tabella prodotto
-            preparedStatement = connection.prepareStatement(inserimentoProdotto);
-            preparedStatement.setString(1, item.getBarcode());
-            preparedStatement.setString(2, item.getNome());
-            preparedStatement.setFloat(3, item.getPrezzo());
-            preparedStatement.setInt(4, item.getSconto());
-            preparedStatement.setString(5, item.getTipo());
+            //Inserisco le informazioni nella tabella prodotto
+            ProdottoDAO prodottoDAO = new ProdottoDAO();
+            prodottoDAO.doSave(item);
 
-            //Eseguo la prima query
-            preparedStatement.executeUpdate();
-
-            //Preparo l'inserimento nella tabella videogioco
+            //Preparo l'inserimento nella tabella gadget
             preparedStatement = connection.prepareStatement(inserimentoGadget);
             preparedStatement.setString(1, item.getBarcode());
             preparedStatement.setString(2, item.getProduttore());
@@ -139,7 +131,6 @@ public class GadgetDAO implements IBeanDAO<GadgetBean, String> {
                 gadgetBean.setBarcode(resultSet.getString("barcode"));
                 gadgetBean.setNome(resultSet.getString("nome"));
                 gadgetBean.setPrezzo(resultSet.getFloat("prezzo"));
-                gadgetBean.setSconto(resultSet.getInt("sconto"));
                 gadgetBean.setProduttore(resultSet.getString("produttore"));
                 gadgetBean.setSerie(resultSet.getString("serie"));
             }
@@ -180,7 +171,6 @@ public class GadgetDAO implements IBeanDAO<GadgetBean, String> {
                 gadgetBean.setBarcode(resultSet.getString("barcode"));
                 gadgetBean.setNome(resultSet.getString("nome"));
                 gadgetBean.setPrezzo(resultSet.getFloat("prezzo"));
-                gadgetBean.setSconto(resultSet.getInt("sconto"));
                 gadgetBean.setProduttore(resultSet.getString("produttore"));
                 gadgetBean.setSerie(resultSet.getString("serie"));
                 gadgetBeanCollection.add(gadgetBean);

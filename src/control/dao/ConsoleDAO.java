@@ -40,7 +40,6 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
-        String inserimentoProdotto = "INSERT INTO " + ConsoleDAO.SUPER_TABLE_NAME + " (barcode, nome, prezzo, sconto, tipo) VALUES (?, ?, ?, ?, ?)";
         String inserimentoConsole = "INSERT INTO " +ConsoleDAO.TABLE_NAME+ " (prodotto, famiglia, annoRilascio, edizione) VALUES (?,?,?,?)";
 
         try {
@@ -48,19 +47,11 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
             connection = dataSource.getConnection();
             connection.setAutoCommit(false);
 
-            //Preparo l'inserimento nella tabella prodotto
-            preparedStatement = connection.prepareStatement(inserimentoProdotto);
-            preparedStatement.setString(1, item.getBarcode());
-            preparedStatement.setString(2, item.getNome());
-            preparedStatement.setFloat(3, item.getPrezzo());
-            preparedStatement.setInt(4, item.getSconto());
-            preparedStatement.setString(5, item.getTipo());
+            //Inserisco le informazioni nella tabella prodotto
+            ProdottoDAO prodottoDAO = new ProdottoDAO();
+            prodottoDAO.doSave(item);
 
-
-            //Eseguo la prima query
-            preparedStatement.executeUpdate();
-
-            //Preparo l'inserimento nella tabella videogioco
+            //Preparo l'inserimento nella tabella console
             preparedStatement = connection.prepareStatement(inserimentoConsole);
             preparedStatement.setString(1,item.getBarcode());
             preparedStatement.setString(2, item.getFamiglia());
@@ -143,7 +134,6 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
                 consoleBean.setBarcode(resultSet.getString("barcode"));
                 consoleBean.setNome(resultSet.getString("nome"));
                 consoleBean.setPrezzo(resultSet.getFloat("prezzo"));
-                consoleBean.setSconto(resultSet.getInt("sconto"));
                 consoleBean.setFamiglia(resultSet.getString("famiglia"));
                 consoleBean.setAnnoRilascio(resultSet.getInt("annoRilascio"));
                 consoleBean.setEdizione(resultSet.getString("edizione"));
@@ -190,7 +180,6 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
                 consoleBean.setBarcode(resultSet.getString("barcode"));
                 consoleBean.setNome(resultSet.getString("nome"));
                 consoleBean.setPrezzo(resultSet.getFloat("prezzo"));
-                consoleBean.setSconto(resultSet.getInt("sconto"));
                 consoleBean.setFamiglia(resultSet.getString("famiglia"));
                 consoleBean.setAnnoRilascio(resultSet.getInt("annoRilascio"));
                 consoleBean.setEdizione(resultSet.getString("edizione"));
@@ -235,7 +224,6 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
                 consoleBean.setBarcode(resultSet.getString("barcode"));
                 consoleBean.setNome(resultSet.getString("nome"));
                 consoleBean.setPrezzo(resultSet.getFloat("prezzo"));
-                consoleBean.setSconto(resultSet.getInt("sconto"));
                 consoleBean.setFamiglia(resultSet.getString("famiglia"));
                 consoleBean.setAnnoRilascio(resultSet.getInt("annoRilascio"));
                 consoleBean.setEdizione(resultSet.getString("edizione"));

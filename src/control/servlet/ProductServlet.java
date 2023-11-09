@@ -38,24 +38,10 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //Leggo il corpo della request
-        StringBuilder requestBody = new StringBuilder();
-        try {
-            BufferedReader reader = req.getReader();
-            String line;
-            if (reader != null) {
-                while ((line = reader.readLine()) != null) {
-                    requestBody.append(line);
-                }
-            }
-            else {
-                LOGGER.log(Level.SEVERE, "reader was null");
-            }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.toString());
-        }
+        //Recupero il requestBody dalla request
+        StringBuilder requestBody = Utilities.getRequestBody(req);
 
-        //Analizzo il JSON della request
+        //Inizializzo l'oggetto JSON
         JSONObject json = new JSONObject(requestBody.toString());
 
         //Recupero l'id del prodotto dal json
