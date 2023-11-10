@@ -9,6 +9,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -310,5 +311,49 @@ public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
         }
 
         return (result != 0);
+    }
+
+    public Collection<OrdineBean> doRetrieveByDatePeriod(Date from, Date to) throws SQLException{
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        Collection<OrdineBean> ordineBeanCollection = new LinkedList<>();
+
+        String sqlStatement = "SELECT * FROM "+ORDINE_TABLE_NAME+" WHERE dataAcquisto BETWEEN ? AND ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setDate(1, Utilities.toSqlDate(from));
+            preparedStatement.setDate(2, Utilities.toSqlDate(to));
+
+            //Eseguo la query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            //Salvo il risultato nella query nella lista di bean
+            while (resultSet.next()){
+                OrdineBean ordineBean = new OrdineBean();
+                ordineBean.setNumeroOrdine(resultSet.getInt("numeroOrdine"));
+                ordineBean.setData(resultSet.getDate("dataAcquisto"));
+                ordineBean.setMetodoPagamento(resultSet.getString("metodoPagamento"));
+                ordineBean.setTotale(resultSet.getFloat("importoTotale"));
+                ordineBean.setStato(resultSet.getString("stato"));
+                ordineBean.setIndirizzo(resultSet.getString("indirizzoSpedizione"));
+                ordineBeanCollection.add(ordineBean);
+            }
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return ordineBeanCollection;
     }
 }

@@ -167,6 +167,11 @@ $("form").submit(function (event) {
                 data["tipo"] = "console"
                 submitUpdateProduct(data)
                 break
+
+            case "filtroData":
+                data["filterType"] = "data"
+                submitOrderFilter(data)
+                break
         }
     }
 })
@@ -315,6 +320,7 @@ function submitRegister(data) {
     })
 }
 
+//Funzione che effettua il submit del form di checkout alla servlet
 function submitCheckout(data) {
     data["actionType"] = "checkout"
     fetch("Checkout", {
@@ -338,6 +344,7 @@ function submitCheckout(data) {
     })
 }
 
+//Funzione che effettua il submit del form di logout alla servlet
 function submitLogout() {
     fetch("Logout", {
         method: "POST",
@@ -352,6 +359,7 @@ function submitLogout() {
 }
 
 
+//Funzione che effettua il submit del form di modifica password alla servlet
 function submitEditPassword(data) {
     fetch("EditPassword", {
         method: "POST",
@@ -388,6 +396,7 @@ function submitEditPassword(data) {
 }
 
 
+//Funzione che effettua il submit del form di aggiunta del prodotto alla servlet
 function submitAddProduct(data) {
     fetch("AddProduct", {
         method: "POST",
@@ -414,6 +423,7 @@ function submitAddProduct(data) {
 }
 
 
+//Funzione che effettua il submit del form di modifica del prodotto alla servlet
 function submitUpdateProduct(data) {
     fetch("UpdateProduct", {
         method: "POST",
@@ -439,6 +449,7 @@ function submitUpdateProduct(data) {
     })
 }
 
+//Funzione che effettua il submit del form di cambio stato dell'ordine alla servlet
 function changeOrderStatus(id) {
     //Recupero i dati da inviare alla form
     let selectVal = $("#statoOrdine"+id).val()
@@ -469,6 +480,7 @@ function changeOrderStatus(id) {
     })
 }
 
+//Funzione che effettua il submit del form di cancellazione di un ordine alla servlet
 function deleteOrder(id) {
     //Recupero i dati da inviare alla form
     let data = {orderId: id}
@@ -495,6 +507,66 @@ function deleteOrder(id) {
                 alert("Operazione eseguita con successo.")
                 location.reload()
         }
+    })
+}
+
+
+//Funzione che effettua la richiesta alla servlet di filtro per gli ordini
+function submitOrderFilter(requestData) {
+    fetch("OrderFilter", {
+        method: "POST",
+        headers: {
+            'Accept': "application/json",
+            'Content-Type': "application/json"},
+        body: JSON.stringify(requestData)
+    }).then(res => {
+        if(!res.ok) {
+            throw new Error("Errore nella richiesta"+res.statusText)
+        }
+        return res.json()
+    }).then(responseData => {
+        updateOrdini(responseData)
+    })
+}
+
+//Aggiorna il div contente gli ordini nella pagina
+function updateOrdini(data) {
+    const ordiniContainer = $("#ordiniContainer");
+    ordiniContainer.empty(); // Svuoto il contenuto attuale del div
+
+    $.each(data, function (index, ordine) {
+        const ordineDiv = $("<div>").addClass("row");
+        ordineDiv.html(`
+        <div class="bg-body-secondary rounded-3 my-3">
+            <div class="row">
+                <div class="col-2">
+                    <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgRecap" alt="img not found">
+                </div>
+                <div class="col-7 d-flex flex-column align-items-start">
+                    <div>
+                        <h4>Numero ordine: ${ordine.numeroOrdine}</h4>
+                    </div>
+                    <div>
+                        <h4>Effettuato il: ${ordine.data}</h4>
+                    </div>
+                    <div>
+                        <select class="form-select" name="statoOrdine" id="statoOrdine${ordine.numeroOrdine}" onchange="changeOrderStatus('${ordine.numeroOrdine}')">
+                            <option value="Pagamento ricevuto" ${ordine.stato === 'Pagamento Ricevuto' ? 'selected' : ''}>Pagamento ricevuto</option>
+                            <option value="In preparazione alla spedizione" ${ordine.stato === 'In preparazione alla spedizione' ? 'selected' : ''}>In preparazione alla spedizione</option>
+                            <option value="Spedito" ${ordine.stato === 'Spedito' ? 'selected' : ''}>Spedito</option>
+                            <option value="In Consegna" ${ordine.stato === 'In consegna' ? 'selected' : ''}>In Consegna</option>
+                            <option value="Consegnato" ${ordine.stato === 'Consegnato' ? 'selected' : ''}>Consegnato</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-3 d-flex flex-column order-last align-self-center">
+                      <button class="btn btn-primary my-1" id="modificaProdotto">Visualizza dettagli ordine</button>
+                      <button class="btn btn-danger" onclick="deleteOrder(${ordine.numeroOrdine})">Elimina ordine</button>
+                </div>
+            </div>
+        </div>
+    `);
+        ordiniContainer.append(ordineDiv);
     })
 }
 

@@ -35,8 +35,26 @@
         <div class="collapse col-12" id="collapseFiltroUtente">
           <img src="https://mokoko.info/assets/img/emotes/emoji_a_32.png" alt="notfound">
         </div>
-        <div class="collapse col-12" id="collapseFiltroData">
-          <img src="https://mokoko.info/assets/img/emotes/emoji_a_32.png" alt="notfound">
+        <div class="collapse col-12 p-4 p-md-5 border rounded-3 bg-body-tertiary" id="collapseFiltroData">
+          <form class="" id="filtroData">
+            <div class="row g-1">
+              <div class="form-floating mb-3">
+                <input type="date" class="form-control col-8 col-md-3 mx-3" name="dataInizio" id="floatingDataInizio">
+                <label for="floatingDataInizio">Da</label>
+                <div class="invalid-feedback" id="dataInizioInvalid">
+                  Inserisci una data valida
+                </div>
+
+                <input type="date" class="form-control col-8 col-md-3 mx-3" name="dataFine" id="floatingDataFine">
+                <label for="floatingDataFine">A</label>
+                <div class="invalid-feedback" id="dataFineInvalid">
+                  Inserisci una data valida
+                </div>
+              </div>
+
+              <button class="btn btn-primary col-8 col-md-3 mx-3" type="submit">Filtra</button>
+            </div>
+          </form>
         </div>
         <div class="collapse col-12" id="collapseFiltroID">
           <img src="https://mokoko.info/assets/img/emotes/emoji_a_32.png" alt="notfound">
@@ -47,36 +65,38 @@
       <% OrdineDAO ordineDAO = new OrdineDAO();
         List<OrdineBean> ordini = (List<OrdineBean>) ordineDAO.doRetrieveAll("");
         for (OrdineBean o : ordini) { %>
-        <div class="bg-body-secondary rounded-3 my-3">
-          <div class="row">
-            <div class="col-2">
-              <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgRecap" alt="img not found">
-            </div>
-            <div class="col-7 d-flex flex-column align-items-start">
-              <div>
-                <h4>Numero ordine: <%=o.getNumeroOrdine()%></h4>
+        <div class="ordine<%=o.getNumeroOrdine()%>wrapper">
+          <div class="bg-body-secondary rounded-3 my-3">
+            <div class="row">
+              <div class="col-2">
+                <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgRecap" alt="img not found">
               </div>
-              <div>
-                <h4>Effettuato il: <%=o.getData()%></h4>
+              <div class="col-7 d-flex flex-column align-items-start">
+                <div>
+                  <h4>Numero ordine: <%=o.getNumeroOrdine()%></h4>
+                </div>
+                <div>
+                  <h4>Effettuato il: <%=o.getData()%></h4>
+                </div>
+                <div>
+                  <select class="form-select" name="statoOrdine" id="statoOrdine<%=o.getNumeroOrdine()%>" onchange="changeOrderStatus('<%=o.getNumeroOrdine()%>')">
+                    <option value="Pagamento ricevuto" <% if (o.getStato().equals("Pagamento ricevuto")) { %> selected <% } %>>Pagamento ricevuto</option>
+                    <option value="In preparazione alla spedizione" <% if (o.getStato().equals("In preparazione alla spedizione")) { %> selected <% } %>>In preparazione alla spedizione</option>
+                    <option value="Spedito" <% if (o.getStato().equals("Spedito")) { %> selected <% } %>>Spedito</option>
+                    <option value="In Consegna" <% if (o.getStato().equals("In Consegna")) { %> selected <% } %>>In Consegna</option>
+                    <option value="Consegnato" <% if (o.getStato().equals("Consegnato")) { %> selected <% } %>>Consegnato</option>
+                  </select>
+                </div>
               </div>
-              <div>
-                <select class="form-select" name="statoOrdine" id="statoOrdine<%=o.getNumeroOrdine()%>" onchange="changeOrderStatus('<%=o.getNumeroOrdine()%>')">
-                  <option value="Pagamento ricevuto" <% if (o.getStato().equals("Pagamento ricevuto")) { %> selected <% } %>>Pagamento ricevuto</option>
-                  <option value="In preparazione alla spedizione" <% if (o.getStato().equals("In preparazione alla spedizione")) { %> selected <% } %>>In preparazione alla spedizione</option>
-                  <option value="Spedito" <% if (o.getStato().equals("Spedito")) { %> selected <% } %>>Spedito</option>
-                  <option value="In Consegna" <% if (o.getStato().equals("In Consegna")) { %> selected <% } %>>In Consegna</option>
-                  <option value="Consegnato" <% if (o.getStato().equals("Consegnato")) { %> selected <% } %>>Consegnato</option>
-                </select>
+              <div class="col-3 d-flex flex-column order-last align-self-center">
+                <button class="btn btn-primary my-1" id="modificaProdotto">Visualizza dettagli ordine</button>
+                <button class="btn btn-danger" onclick="deleteOrder(<%=o.getNumeroOrdine()%>)">Elimina ordine</button>
               </div>
-            </div>
-            <div class="col-3 d-flex flex-column order-last align-self-center">
-              <button class="btn btn-primary my-1" id="modificaProdotto">Visualizza dettagli ordine</button>
-              <button class="btn btn-danger" onclick="deleteOrder(<%=o.getNumeroOrdine()%>)">Elimina ordine</button>
             </div>
           </div>
         </div>
-      </div>
       <% } %>
+      </div>
     </div>
     <% } %>
   </main>
