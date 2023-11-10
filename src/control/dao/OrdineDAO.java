@@ -141,7 +141,45 @@ public class OrdineDAO implements IBeanDAO<OrdineBean, Integer>{
 
     @Override
     public OrdineBean doRetrieveByKey(Integer code) throws SQLException {
-        return null;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        OrdineBean ordineBean = null;
+
+        String sqlStatement = "SELECT * FROM "+ORDINE_TABLE_NAME+" WHERE numeroOrdine = ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1, code);
+
+            //Eseguo la query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            //Salvo il risultato nella query nella lista di bean
+            while (resultSet.next()){
+                ordineBean = new OrdineBean();
+                ordineBean.setNumeroOrdine(resultSet.getInt("numeroOrdine"));
+                ordineBean.setData(resultSet.getDate("dataAcquisto"));
+                ordineBean.setMetodoPagamento(resultSet.getString("metodoPagamento"));
+                ordineBean.setTotale(resultSet.getFloat("importoTotale"));
+                ordineBean.setStato(resultSet.getString("stato"));
+                ordineBean.setIndirizzo(resultSet.getString("indirizzoSpedizione"));
+            }
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return ordineBean;
     }
 
     @Override

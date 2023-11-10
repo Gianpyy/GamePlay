@@ -172,6 +172,11 @@ $("form").submit(function (event) {
                 data["filterType"] = "data"
                 submitOrderFilter(data)
                 break
+
+            case "filtroID":
+                data["filterType"] = "ID"
+                submitOrderFilter(data)
+                break
         }
     }
 })

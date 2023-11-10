@@ -37,13 +37,9 @@ public class OrderFilterServlet extends HttpServlet {
         //Inizializzo l'oggetto JSON
         JSONObject json = new JSONObject(requestBody.toString());
 
-        //Recupero i dati dal requestBody
-        Date fromDate = null;
-        Date toDate = null;
+        //Recupero il tipo di filtro
         String filterType = "";
         try {
-            fromDate = Utilities.stringToDate(json.getString("dataInizio"));
-            toDate = Utilities.stringToDate(json.getString("dataFine"));
             filterType = json.getString("filterType");
         } catch (Exception e) {
             LOGGER.severe(e.toString());
@@ -56,10 +52,39 @@ public class OrderFilterServlet extends HttpServlet {
         List<OrdineBean> filteredOrders = new ArrayList<>();
         switch (filterType) {
             case "data" -> {
+                //Recupero i dati dal requestBody
+                Date fromDate = null;
+                Date toDate = null;
+
                 try {
+                    fromDate = Utilities.stringToDate(json.getString("dataInizio"));
+                    toDate = Utilities.stringToDate(json.getString("dataFine"));
+
+                    //Recupero gli ordini dal database
                     OrdineDAO ordineDAO = new OrdineDAO();
                     filteredOrders = (List<OrdineBean>) ordineDAO.doRetrieveByDatePeriod(fromDate, toDate);
                     LOGGER.log(Level.INFO, "Retrieved {0} orders", filteredOrders.size());
+                } catch (Exception e) {
+                    LOGGER.severe(e.toString());
+                    resp.addHeader("OPERATION-RESULT", "error");
+                    requestDispatcher.forward(req,resp);
+                    return;
+                }
+            }
+
+            case "ID" -> {
+                //Recupero i dati dal request body
+                int orderID = -1;
+                try {
+                    orderID = json.getInt("orderID");
+
+                    //Recupero gli ordini dal database
+                    OrdineDAO ordineDAO = new OrdineDAO();
+                    OrdineBean filtered = ordineDAO.doRetrieveByKey(orderID);
+
+                    if (filtered != null) {
+                        filteredOrders.add(filtered);
+                    }
                 } catch (Exception e) {
                     LOGGER.severe(e.toString());
                     resp.addHeader("OPERATION-RESULT", "error");
@@ -71,16 +96,19 @@ public class OrderFilterServlet extends HttpServlet {
 
         //Aggiungo gli ordini al JSON da inviare come risposta
         JSONArray ordiniResponse = new JSONArray();
-        for (OrdineBean ordine : filteredOrders) {
-            JSONObject jsonOrdine = new JSONObject();
-            jsonOrdine.put("numeroOrdine", ordine.getNumeroOrdine());
-            jsonOrdine.put("data", ordine.getData());
-            jsonOrdine.put("totale", ordine.getTotale());
-            jsonOrdine.put("metodoPagamento", ordine.getMetodoPagamento());
-            jsonOrdine.put("stato", ordine.getStato());
-            jsonOrdine.put("indirizzo", ordine.getIndirizzo());
+        if (!filteredOrders.isEmpty()) {
+            LOGGER.log(Level.INFO, "Orders in response: {0}", filteredOrders.size());
+            for (OrdineBean ordine : filteredOrders) {
+                JSONObject jsonOrdine = new JSONObject();
+                jsonOrdine.put("numeroOrdine", ordine.getNumeroOrdine());
+                jsonOrdine.put("data", ordine.getData());
+                jsonOrdine.put("totale", ordine.getTotale());
+                jsonOrdine.put("metodoPagamento", ordine.getMetodoPagamento());
+                jsonOrdine.put("stato", ordine.getStato());
+                jsonOrdine.put("indirizzo", ordine.getIndirizzo());
 
-            ordiniResponse.put(jsonOrdine);
+                ordiniResponse.put(jsonOrdine);
+            }
         }
 
         LOGGER.log(Level.INFO, "Response to send: {0}", ordiniResponse.toString());
