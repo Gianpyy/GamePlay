@@ -228,24 +228,6 @@ $("#registerButton").click(function () {
     window.location.href = "register.jsp"
 })
 
-$(".sessoValue").change(function () {
-    console.log("tipo changed")
-    let selectedValue = $('input[name=tipo]:checked').val();
-    switch (selectedValue) {
-        case "V":
-            let videogameCollapse = new bootstrap.Collapse(document.querySelector('#collapseVideogioco'), {toggle: false})
-            videogameCollapse.slideDown()
-            break
-        case "G":
-            let gadgetCollapse = new bootstrap.Collapse(document.querySelector('#collapseGadget'), {toggle: false})
-            gadgetCollapse.slideDown()
-            break
-        case "C":
-            let consoleCollapse = new bootstrap.Collapse(document.querySelector('#collapseConsole'), {toggle: false})
-            consoleCollapse.slideDown()
-            break
-    }
-})
 
 //Quando inserisco un valore nel campo cc-expiration, aggiungo automaticamente uno "/" dopo aver inserito i primi 2 caratteri
 // $("#cc-expiration").on("input", "input:text",  function () {
@@ -544,42 +526,47 @@ function updateOrdini(data) {
     const ordiniContainer = $("#ordiniContainer");
     ordiniContainer.empty(); // Svuoto il contenuto attuale del div
 
-    $.each(data, function (index, ordine) {
-        const ordineDiv = $("<div>").addClass("row");
-        ordineDiv.html(`
-        <div class="bg-body-secondary rounded-3 my-3">
-            <div class="row">
-                <div class="col-2">
-                    <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgRecap" alt="img not found">
-                </div>
-                <div class="col-7 d-flex flex-column align-items-start">
-                    <div>
-                        <h4>Numero ordine: ${ordine.numeroOrdine}</h4>
+    if (data.length === 0) {
+        const noResultDiv = $("<div>").addClass("no-result-message")
+        noResultDiv.text("Nessun ordine trovato")
+
+        ordiniContainer.append(noResultDiv)
+    }
+    else  {
+        $.each(data, function (index, ordine) {
+            const ordineDiv = $("<div>").addClass("row");
+            ordineDiv.html(`
+            <div class="bg-body-secondary rounded-3 my-3">
+                <div class="row">
+                    <div class="col-2">
+                        <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgRecap" alt="img not found">
                     </div>
-                    <div>
-                        <h4>Effettuato il: ${ordine.data}</h4>
+                    <div class="col-7 d-flex flex-column align-items-start">
+                        <div>
+                            <h4>Numero ordine: ${ordine.numeroOrdine}</h4>
+                        </div>
+                        <div>
+                            <h4>Effettuato il: ${ordine.data}</h4>
+                        </div>
+                        <div>
+                            <select class="form-select" name="statoOrdine" id="statoOrdine${ordine.numeroOrdine}" onchange="changeOrderStatus('${ordine.numeroOrdine}')">
+                                <option value="Pagamento ricevuto" ${ordine.stato === 'Pagamento Ricevuto' ? 'selected' : ''}>Pagamento ricevuto</option>
+                                <option value="In preparazione alla spedizione" ${ordine.stato === 'In preparazione alla spedizione' ? 'selected' : ''}>In preparazione alla spedizione</option>
+                                <option value="Spedito" ${ordine.stato === 'Spedito' ? 'selected' : ''}>Spedito</option>
+                                <option value="In Consegna" ${ordine.stato === 'In consegna' ? 'selected' : ''}>In Consegna</option>
+                                <option value="Consegnato" ${ordine.stato === 'Consegnato' ? 'selected' : ''}>Consegnato</option>
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <select class="form-select" name="statoOrdine" id="statoOrdine${ordine.numeroOrdine}" onchange="changeOrderStatus('${ordine.numeroOrdine}')">
-                            <option value="Pagamento ricevuto" ${ordine.stato === 'Pagamento Ricevuto' ? 'selected' : ''}>Pagamento ricevuto</option>
-                            <option value="In preparazione alla spedizione" ${ordine.stato === 'In preparazione alla spedizione' ? 'selected' : ''}>In preparazione alla spedizione</option>
-                            <option value="Spedito" ${ordine.stato === 'Spedito' ? 'selected' : ''}>Spedito</option>
-                            <option value="In Consegna" ${ordine.stato === 'In consegna' ? 'selected' : ''}>In Consegna</option>
-                            <option value="Consegnato" ${ordine.stato === 'Consegnato' ? 'selected' : ''}>Consegnato</option>
-                        </select>
+                    <div class="col-3 d-flex flex-column order-last align-self-center">
+                          <button class="btn btn-primary my-1" id="modificaProdotto">Visualizza dettagli ordine</button>
+                          <button class="btn btn-danger" onclick="deleteOrder(${ordine.numeroOrdine})">Elimina ordine</button>
                     </div>
-                </div>
-                <div class="col-3 d-flex flex-column order-last align-self-center">
-                      <button class="btn btn-primary my-1" id="modificaProdotto">Visualizza dettagli ordine</button>
-                      <button class="btn btn-danger" onclick="deleteOrder(${ordine.numeroOrdine})">Elimina ordine</button>
                 </div>
             </div>
-        </div>
-    `);
-        ordiniContainer.append(ordineDiv);
-    })
-}
+            `);
+            ordiniContainer.append(ordineDiv);
+        })
+    }
 
-// $(document).ready(function () {
-//     $("#passwordHide").hide()
-// })
+}

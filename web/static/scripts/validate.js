@@ -59,6 +59,10 @@ function validateInput(inputToValidate, inputType) {
         case "annoRilascio":
             return validateAnnoRilascio(inputToValidate)
 
+        case "orderID":
+        case "userId":
+            return validateIDs(inputToValidate)
+
         default:
             return true
     }
@@ -201,6 +205,12 @@ function validateAnnoRilascio(stringToValidate) {
 
 function validateEdizione(stringToValidate) {
     let regex = /^\S[\S\s]+$/
+    console.log(stringToValidate+": "+regex.test(stringToValidate))
+    return regex.test(stringToValidate)
+}
+
+function validateIDs(stringToValidate) {
+    let regex = /^\d+$/
     console.log(stringToValidate+": "+regex.test(stringToValidate))
     return regex.test(stringToValidate)
 }
