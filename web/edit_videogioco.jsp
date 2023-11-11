@@ -29,7 +29,7 @@
         int numeroGiocatoriMinimo = Integer.parseInt(numeri[0]);
         int numeroGiocatoriMassimo = Integer.parseInt(numeri[1]);
     %>
-    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="updateVideogiocoForm">
+    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="updateVideogiocoForm" enctype="multipart/form-data">
         <h1 class="h3 mb-3 fw-normal">Dati videogioco</h1>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" name="nomeProdotto" id="floatingNome" placeholder="Nome" value="<%=v.getNome()%>">
@@ -170,6 +170,13 @@
             <label for="floatingPegi">PEGI</label>
             <div class="invalid-feedback" id="pegiInvalid">
                 Seleziona un valore
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <input class="form-control" type="file" name="img" id="formFileMultiple" accept="image/*" multiple>
+            <div class="invalid-feedback" id="imgInvalid">
+                Inserisci delle immagini
             </div>
         </div>
         <button class="w-100 btn btn-lg btn-primary" type="submit" id="updateVideogiocoSubmit">Modifica videogioco</button>

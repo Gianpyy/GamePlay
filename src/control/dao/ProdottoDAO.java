@@ -1,5 +1,6 @@
 package control.dao;
 
+import model.PhotoBean;
 import model.ProdottoBean;
 
 import javax.naming.Context;
@@ -53,6 +54,8 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean, String> {
 
             //Eseguo la query
             preparedStatement.executeUpdate();
+
+            //Eseguo il commit
             connection.commit();
 
             //Chiudo la connessione

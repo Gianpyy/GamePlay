@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="addGadgetForm">
+<form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="addGadgetForm" enctype="multipart/form-data">
     <h1 class="h3 mb-3 fw-normal">Dati gadget</h1>
     <div class="form-floating mb-3">
         <input type="text" class="form-control" name="nomeProdotto" id="floatingNome" placeholder="Nome">
@@ -36,6 +36,13 @@
         <label for="floatingSerie">Serie</label>
         <div class="invalid-feedback" id="serieInvalid">
             Inserisci una serie valida
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <input class="form-control" type="file" name="img" id="formFileMultiple" accept="image/*" multiple>
+        <div class="invalid-feedback" id="imgInvalid">
+            Inserisci delle immagini
         </div>
     </div>
 

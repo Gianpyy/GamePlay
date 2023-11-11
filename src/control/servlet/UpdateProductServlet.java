@@ -44,12 +44,13 @@ public class UpdateProductServlet extends HttpServlet {
             LOGGER.severe(e.toString());
         }
 
+        String productId = "";
         switch (productType) {
             case "videogioco" -> {
                 try {
                     //Recupero l'id dalla sessione
                     VideogiocoBean videogiocoBean = (VideogiocoBean) req.getSession().getAttribute("product");
-                    String productId = videogiocoBean.getBarcode();
+                    productId = videogiocoBean.getBarcode();
 
                     //Creo il bean
                     VideogiocoBean newVideogame = new VideogiocoBean();
@@ -82,7 +83,7 @@ public class UpdateProductServlet extends HttpServlet {
                 try {
                     //Recupero l'id dalla sessione
                     ConsoleBean consoleBean = (ConsoleBean) req.getSession().getAttribute("product");
-                    String productId = consoleBean.getBarcode();
+                    productId = consoleBean.getBarcode();
 
                     //Creo il bean
                     ConsoleBean newConsole = new ConsoleBean();
@@ -109,7 +110,7 @@ public class UpdateProductServlet extends HttpServlet {
                 try {
                     //Recupero l'id dalla sessione
                     GadgetBean gadgetBean = (GadgetBean) req.getSession().getAttribute("product");
-                    String productId = gadgetBean.getBarcode();
+                    productId = gadgetBean.getBarcode();
 
                     //Creo il bean
                     GadgetBean newGadget = new GadgetBean();
@@ -140,6 +141,7 @@ public class UpdateProductServlet extends HttpServlet {
         //Ritorno alla pagina di gestione catalogo
         try {
             resp.addHeader("OPERATION-RESULT", "success");
+            resp.addHeader("PRODUCT-ID", productId);
             requestDispatcher.forward(req, resp);
         } catch (Exception e) {
             LOGGER.severe(e.toString());

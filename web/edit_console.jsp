@@ -24,7 +24,7 @@
         ConsoleBean c = (ConsoleBean) session.getAttribute("product");
     %>
 
-    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="updateConsoleForm">
+    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="updateConsoleForm" enctype="multipart/form-data">
         <h1 class="h3 mb-3 fw-normal">Dati console</h1>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" name="nomeProdotto" id="floatingNome" placeholder="Nome" value="<%=c.getNome()%>">
@@ -68,6 +68,13 @@
             <label for="floatingAnnoRilascio">Anno rilascio</label>
             <div class="invalid-feedback" id="annoRilascioInvalid">
                 Inserisci un anno di rilascio valido
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <input class="form-control" type="file" name="img" id="formFileMultiple" accept="image/*" multiple>
+            <div class="invalid-feedback" id="imgInvalid">
+                Inserisci delle immagini
             </div>
         </div>
 

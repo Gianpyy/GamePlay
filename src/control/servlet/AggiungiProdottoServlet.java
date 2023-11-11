@@ -47,13 +47,15 @@ public class AggiungiProdottoServlet extends HttpServlet {
             return;
         }
 
+        String barcode = "";
         switch (tipo) {
             case "videogioco" -> {
                 try {
+                    barcode = Utilities.generateBarcode();
                     //Creo il bean da inserire nel database
                     VideogiocoBean videogiocoBean = new VideogiocoBean();
                     videogiocoBean.setTipo("videogioco");
-                    videogiocoBean.setBarcode(Utilities.generateBarcode());
+                    videogiocoBean.setBarcode(barcode);
                     videogiocoBean.setNome(json.getString("nomeProdotto"));
                     videogiocoBean.setPrezzo(json.getFloat("prezzo"));
                     videogiocoBean.setPiattaforma(json.getString("piattaforma"));
@@ -82,7 +84,7 @@ public class AggiungiProdottoServlet extends HttpServlet {
                     //Creo il bean da inserire nel database
                     GadgetBean gadgetBean = new GadgetBean();
                     gadgetBean.setTipo("gadget");
-                    gadgetBean.setBarcode(Utilities.generateBarcode());
+                    gadgetBean.setBarcode(barcode);
                     gadgetBean.setNome(json.getString("nomeProdotto"));
                     gadgetBean.setPrezzo(json.getFloat("prezzo"));
                     gadgetBean.setProduttore(json.getString("produttore"));
@@ -104,7 +106,7 @@ public class AggiungiProdottoServlet extends HttpServlet {
                     //Creo il bean da inserire nel database
                     ConsoleBean consoleBean = new ConsoleBean();
                     consoleBean.setTipo("console");
-                    consoleBean.setBarcode(Utilities.generateBarcode());
+                    consoleBean.setBarcode(barcode);
                     consoleBean.setNome(json.getString("nomeProdotto"));
                     consoleBean.setPrezzo(json.getFloat("prezzo"));
                     consoleBean.setEdizione(json.getString("edizione"));
@@ -131,6 +133,7 @@ public class AggiungiProdottoServlet extends HttpServlet {
 
         //Ritorno alla pagina di gestione catalogo
         resp.addHeader("OPERATION-RESULT", "success");
+        resp.addHeader("PRODUCT-ID", barcode);
         requestDispatcher.forward(req,resp);
     }
 }

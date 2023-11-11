@@ -121,6 +121,21 @@ $("form").submit(function (event) {
         }
     }
 
+    //Recupero i file dal form (solo form aggiunta)
+    let formData = new FormData()
+    if($(this).attr("id") === "addVideogiocoForm" || $(this).attr("id") === "addConsoleForm" || $(this).attr("id") === "addGadgetForm" || $(this).attr("id") === "updateVideogiocoForm" || $(this).attr("id") === "updateGadgetForm" || $(this).attr("id") === "updateConsoleForm") {
+        //Aggiungo i file
+        let input = $("input[type=file]")[0]
+        $.each(input.files, function (index, file) {
+            if(file.type.startsWith("image/")) {
+                formData.append("img", file)
+            }
+            else {
+                console.warn("Il file "+file.name+" non è un'immagine e non verrà aggiunto")
+            }
+        })
+    }
+
 
     //Se il form è valido, lo invio
     if (formValid) {
@@ -142,30 +157,30 @@ $("form").submit(function (event) {
                 break
             case "addVideogiocoForm":
                 data["tipo"] = "videogioco"
-                submitAddProduct(data)
+                submitAddProduct(data, formData)
                 break
             case "addConsoleForm":
                 data["tipo"] = "console"
-                submitAddProduct(data)
+                submitAddProduct(data, formData)
                 break
             case "addGadgetForm":
                 data["tipo"] = "gadget"
-                submitAddProduct(data)
+                submitAddProduct(data, formData)
                 break
 
             case "updateVideogiocoForm":
                 data["tipo"] = "videogioco"
-                submitUpdateProduct(data)
+                submitUpdateProduct(data, formData)
                 break
 
             case "updateGadgetForm":
                 data["tipo"] = "gadget"
-                submitUpdateProduct(data)
+                submitUpdateProduct(data, formData)
                 break
 
             case "updateConsoleForm":
                 data["tipo"] = "console"
-                submitUpdateProduct(data)
+                submitUpdateProduct(data, formData)
                 break
 
             case "filtroData":
@@ -389,7 +404,7 @@ function submitEditPassword(data) {
 
 
 //Funzione che effettua il submit del form di aggiunta del prodotto alla servlet
-function submitAddProduct(data) {
+function submitAddProduct(data, formData) {
     fetch("AddProduct", {
         method: "POST",
         headers: {
@@ -398,6 +413,11 @@ function submitAddProduct(data) {
         body: JSON.stringify(data)
     }).then(res => {
         console.log("Request complete! response: ", res)
+        if (res.ok) {
+            let productId = res.headers.get("PRODUCT-ID")
+            formData.append("productId", productId)
+            submitAddImage(formData)
+        }
         let operationResult = res.headers.get("OPERATION-RESULT")
         console.log("OPERATION-RESULT: "+operationResult)
         switch (operationResult) {
@@ -415,8 +435,18 @@ function submitAddProduct(data) {
 }
 
 
+//Funzione che effettua il submit per l'aggiornamento delle immagini
+function submitAddImage(formData) {
+    fetch("UploadImage", {
+        method: "POST",
+        body: formData
+    }).then(res => {
+        console.log("Request complete! response: ", res)
+    })
+}
+
 //Funzione che effettua il submit del form di modifica del prodotto alla servlet
-function submitUpdateProduct(data) {
+function submitUpdateProduct(data, formData) {
     fetch("UpdateProduct", {
         method: "POST",
         headers: {
@@ -425,6 +455,11 @@ function submitUpdateProduct(data) {
         body: JSON.stringify(data)
     }).then(res => {
         console.log("Request complete! response: ", res)
+        if (res.ok) {
+            let productId = res.headers.get("PRODUCT-ID")
+            formData.append("productId", productId)
+            submitAddImage(formData)
+        }
         let operationResult = res.headers.get("OPERATION-RESULT")
         console.log("OPERATION-RESULT: "+operationResult)
         switch (operationResult) {

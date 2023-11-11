@@ -8,7 +8,7 @@ import java.io.IOException;
 
 @WebFilter(
         filterName = "AdminFilter",
-        urlPatterns = {"/DeleteOrder", "/UpdateOrderStatus", "/AddProduct", "/DeleteProduct", "/RedirectToEditPage", "/UpdateProduct", "/OrderFilter"}
+        urlPatterns = {"/DeleteOrder", "/UpdateOrderStatus", "/AddProduct", "/DeleteProduct", "/RedirectToEditPage", "/UpdateProduct", "/OrderFilter", "/UploadImage"}
 )
 public class AdminFilter implements Filter {
 

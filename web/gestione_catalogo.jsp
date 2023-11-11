@@ -1,6 +1,12 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.ProdottoBean" %>
 <%@ page import="control.dao.ProdottoDAO" %>
+<%@ page import="control.dao.PhotoDAO" %>
+<%@ page import="java.io.InputStream" %>
+<%@ page import="control.ImageUtilities" %>
+<%@ page import="static control.ImageUtilities.convertToBase64" %>
+<%@ page import="java.io.ByteArrayOutputStream" %>
+<%@ page import="java.util.Base64" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it">
@@ -51,9 +57,18 @@
     for (ProdottoBean p : prodotti) { %>
             <div class="bg-body-secondary rounded-3 my-3">
                 <div class="row">
+                    <%  PhotoDAO photoDAO = new PhotoDAO();
+                        InputStream coverImage = photoDAO.doRetrieveCoverImageForProduct(p.getBarcode());
+                        if (coverImage != null) { %>
+                        <div class="col-2">
+                            <img src="data:image/jpeg;base64, <%= ImageUtilities.convertToBase64(coverImage) %>" class="rounded float-start imgRecap" alt="Immagine non trovata">
+                        </div>
+                        <%
+                        } else { %>
                     <div class="col-2">
-                        <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgRecap" alt="img not found">
+                        <img src="static/img/videogame_cover_placeholder.png" class="rounded float-start imgRecap" alt="img not found">
                     </div>
+                    <% } %>
                     <div class="col-7 d-flex flex-column align-items-start">
                         <div>
                             <h2><%=p.getNome()%></h2>

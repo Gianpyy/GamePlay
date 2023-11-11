@@ -5,6 +5,10 @@ import model.ProdottoBean;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -42,6 +46,18 @@ class Utilities {
 
         return requestBody;
     }
+
+    static StringBuilder readFromInputStream(InputStream inputStream) throws IOException {
+        StringBuilder result = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.append(line);
+            }
+        }
+        return result;
+    }
+
 
     static java.util.Date stringToDate(String date) {
         String format = "yyyy-MM-dd";
