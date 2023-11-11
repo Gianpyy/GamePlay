@@ -99,7 +99,7 @@ function validateData(dataToValidate) {
     let age = today.getFullYear() - birthDate.getFullYear()
     let monthOffset = today.getMonth() - birthDate.getMonth()
 
-    //Se la differenza tra il mese di nascita e il mese corrente è <0 allora ancora devo compiere gli anni
+    //Se la differenza tra il mese di nascita e il mese corrente è < 0 allora ancora devo compiere gli anni
     //Se la differenza è 0 siamo nel mese del compleanno della persona ma devo controllare se effettivamente è passato il giorno del compleanno
     if (monthOffset < 0 || (monthOffset === 0 && today.getDate() < birthDate.getDate())) {
         age--

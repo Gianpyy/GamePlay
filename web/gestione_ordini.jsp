@@ -10,6 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%-- Bootstrap core   --%>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <%-- Bootstrap icons   --%>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
@@ -18,7 +19,7 @@
   <%@include file="static/header.jsp"%>
 </header>
 <div class="container align-items-center justify-content-center mb-3">
-  <main>
+  <main class="mx-auto">
     <% Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
       if (isAdmin == null || !isAdmin) { %>
     <div class="py-5 text-center">
@@ -32,41 +33,54 @@
         <button class="btn btn-primary col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltroUtente" aria-expanded="false" aria-controls="collapseFiltroUtente">Filtra ordini per utente</button>
         <button class="btn btn-primary col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltroData" aria-expanded="false" aria-controls="collapseFiltroData">Filtra ordini per data</button>
         <button class="btn btn-primary col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltroID" aria-expanded="false" aria-controls="collapseFiltroID">Filtra ordini per numero ordine</button>
-        <div class="collapse col-12" id="collapseFiltroUtente">
-          <img src="https://mokoko.info/assets/img/emotes/emoji_a_32.png" alt="notfound">
+        <div class="collapse col-12 p-2 p-md-3 border rounded-3 bg-body-tertiary filtroData" id="collapseFiltroUtente">
+          <form class="" id="filtroUtente">
+            <div class="row g-1">
+              <div class="form-floating mb-3 col-8 col-md-7 mx-3">
+                <input type="text" class="form-control" name="userId" id="floatingUserID" >
+                <label for="floatingUserID">ID</label>
+                <div class="invalid-feedback" id="userIDInvalid">
+                  Inserisci un ID valido
+                </div>
+              </div>
+
+              <button class="btn btn-xl btn-primary col-8 col-md-2 mx-3" type="submit">Filtra</button>
+            </div>
+          </form>
         </div>
-        <div class="collapse col-12 p-4 p-md-5 border rounded-3 bg-body-tertiary" id="collapseFiltroData">
+        <div class="collapse col-12 p-2 p-md-3 border rounded-3 bg-body-tertiary filtroData" id="collapseFiltroData">
           <form class="" id="filtroData">
             <div class="row g-1">
-              <div class="form-floating mb-3">
-                <input type="date" class="form-control col-8 col-md-3 mx-3" name="dataInizio" id="floatingDataInizio" placeholder="">
+              <div class="form-floating mb-3 col-8 col-md-5 mx-3">
+                <input type="date" class="form-control" name="dataInizio" id="floatingDataInizio" placeholder="">
                 <label for="floatingDataInizio">Da</label>
                 <div class="invalid-feedback" id="dataInizioInvalid">
                   Inserisci una data valida
                 </div>
               </div>
-              <div class="form-floating mb-3">
-                <input type="date" class="form-control col-8 col-md-3 mx-3" name="dataFine" id="floatingDataFine" placeholder="">
+              <div class="form-floating mb-3 col-8 col-md-5 mx-3">
+                <input type="date" class="form-control" name="dataFine" id="floatingDataFine" placeholder="">
                 <label for="floatingDataFine">A</label>
                 <div class="invalid-feedback" id="dataFineInvalid">
                   Inserisci una data valida
                 </div>
               </div>
-              <button class="btn btn-primary col-8 col-md-3 mx-3" type="submit">Filtra</button>
+              <button class="btn btn-primary col-8" type="submit">Filtra</button>
             </div>
           </form>
         </div>
-        <div class="collapse col-12  col-12 p-4 p-md-5 border rounded-3 bg-body-tertiary" id="collapseFiltroID">
+        <div class="collapse col-12 p-3 border rounded-3 bg-body-tertiary filtroData" id="collapseFiltroID">
           <form class="" id="filtroID">
             <div class="row g-1">
-              <div class="form-floating mb-3">
-                <input type="text" class="form-control col-8 col-md-7 mx-3" name="orderID" id="floatingOrderID" >
-                <label for="floatingDataInizio">ID</label>
+              <div class="form-floating mb-3 col-8 col-md-7 mx-3">
+                <input type="text" class="form-control" name="orderID" id="floatingOrderID" >
+                <label for="floatingOrderID">ID</label>
                 <div class="invalid-feedback" id="orderIDInvalid">
                   Inserisci un ID valido
                 </div>
               </div>
-              <button class="btn btn-primary col-8 col-md-3 mx-3" type="submit">Filtra</button>
+
+              <button class="btn btn-xl btn-primary col-8 col-md-2 mx-3" type="submit">Filtra</button>
             </div>
           </form>
         </div>

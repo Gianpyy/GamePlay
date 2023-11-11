@@ -174,7 +174,12 @@ $("form").submit(function (event) {
                 break
 
             case "filtroID":
-                data["filterType"] = "ID"
+                data["filterType"] = "orderID"
+                submitOrderFilter(data)
+                break
+
+            case "filtroUtente":
+                data["filterType"] = "userId"
                 submitOrderFilter(data)
                 break
         }

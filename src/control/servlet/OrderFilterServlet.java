@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +73,7 @@ public class OrderFilterServlet extends HttpServlet {
                 }
             }
 
-            case "ID" -> {
+            case "orderID" -> {
                 //Recupero i dati dal request body
                 int orderID = -1;
                 try {
@@ -85,6 +86,24 @@ public class OrderFilterServlet extends HttpServlet {
                     if (filtered != null) {
                         filteredOrders.add(filtered);
                     }
+                } catch (Exception e) {
+                    LOGGER.severe(e.toString());
+                    resp.addHeader("OPERATION-RESULT", "error");
+                    requestDispatcher.forward(req,resp);
+                    return;
+                }
+            }
+
+            case "userId" -> {
+                //Recupero i dati dal request body
+                int userID = -1;
+                try {
+                    userID = json.getInt("userId");
+
+                    //Recupero gli ordini dal database
+                    OrdineDAO ordineDAO = new OrdineDAO();
+                    filteredOrders = (List<OrdineBean>) ordineDAO.doRetrieveByUserId(userID);
+                    LOGGER.log(Level.INFO, "Retrieved {0} orders", filteredOrders.size());
                 } catch (Exception e) {
                     LOGGER.severe(e.toString());
                     resp.addHeader("OPERATION-RESULT", "error");

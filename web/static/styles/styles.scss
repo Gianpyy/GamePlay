@@ -154,3 +154,35 @@ hr {
   display: block;
   margin: 0 auto;
 }
+
+.filtroData {
+  text-align: center;
+}
+
+.filtroData .row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filtroData .form-floating {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.filtroData button {
+  display: inline-block;
+  margin: 10px 0;
+}
+
+.btn-xl {
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 10px;
+  vertical-align: middle;
+}
+
+.filtroData button.btn-xl {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
