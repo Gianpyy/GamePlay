@@ -204,7 +204,7 @@ public class ConsoleDAO implements IBeanDAO<ConsoleBean, String>{
         PreparedStatement preparedStatement = null;
         Collection<ConsoleBean> consoleBeanCollection = new LinkedList<>();
 
-        String sqlStatement = "SELECT * FROM " +ConsoleDAO.TABLE_NAME+" as C INNER JOIN "+ConsoleDAO.SUPER_TABLE_NAME+" as P ON P.nome = ?";
+        String sqlStatement = "SELECT * FROM " +ConsoleDAO.TABLE_NAME+" as C INNER JOIN "+ConsoleDAO.SUPER_TABLE_NAME+" as P ON C.prodotto = P.barcode WHERE P.nome = ?";
 
         try {
             //Ottengo la connessione
