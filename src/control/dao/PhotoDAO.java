@@ -1,7 +1,6 @@
 package control.dao;
 
 import model.PhotoBean;
-import model.ProdottoBean;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -11,15 +10,11 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Logger;
 
 public class PhotoDAO  {
-    private static final Logger LOGGER = Logger.getLogger(PhotoDAO.class.getName());
     private static DataSource dataSource;
 
     private static final String TABLE_NAME = "immagine";
-    private static final String PRODUCT_TABLE_NAME = "prodotto";
 
     //Ottengo la risorsa tramite lookup
     static {
@@ -72,11 +67,6 @@ public class PhotoDAO  {
     }
 
 
-    public boolean doDelete(String code) throws SQLException {
-        return false;
-    }
-
-
     public Collection<PhotoBean> doRetrieveAllImagesForProduct(String productId) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -124,6 +114,37 @@ public class PhotoDAO  {
         PreparedStatement preparedStatement = null;
 
         String sqlStatement = "SELECT img FROM " + TABLE_NAME + " WHERE prodotto = ? AND nome LIKE 'cover.%'";
+
+        try {
+            connection = dataSource.getConnection();
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, productId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getBinaryStream("img");
+            }
+        } finally {
+            //Chiudo la connessione
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return null; // Se l'immagine di copertina non è presente
+    }
+
+
+    public InputStream doRetrieveThumbnailImageForProduct(String productId) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        String sqlStatement = "SELECT img FROM " + TABLE_NAME + " WHERE prodotto = ? AND nome LIKE 'thumbnail.%'";
 
         try {
             connection = dataSource.getConnection();

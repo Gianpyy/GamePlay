@@ -58,12 +58,12 @@
                         InputStream coverImage = photoDAO.doRetrieveCoverImageForProduct(p.getBarcode());
                         if (coverImage != null) { %>
                         <div class="col-2">
-                            <img src="data:image/jpeg;base64, <%= ImageUtilities.convertToBase64(coverImage) %>" class="rounded float-start imgRecap" alt="Immagine non trovata">
+                            <img src="data:image/jpeg;base64, <%= ImageUtilities.convertToBase64(coverImage) %>" class="rounded float-start imgStandard" alt="Immagine non trovata">
                         </div>
                         <%
                         } else { %>
                     <div class="col-2">
-                        <img src="static/img/videogame_cover_placeholder.png" class="rounded float-start imgRecap" alt="img not found">
+                        <img src="static/img/videogame_cover_placeholder.png" class="rounded float-start imgStandard" alt="img not found">
                     </div>
                     <% } %>
                     <div class="col-7 d-flex flex-column align-items-start">

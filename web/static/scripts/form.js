@@ -574,7 +574,7 @@ function updateOrdini(data) {
             <div class="bg-body-secondary rounded-3 my-3">
                 <div class="row">
                     <div class="col-2">
-                        <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgRecap" alt="img not found">
+                        <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgStandard" alt="img not found">
                     </div>
                     <div class="col-7 d-flex flex-column align-items-start">
                         <div>
