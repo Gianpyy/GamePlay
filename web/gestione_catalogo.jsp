@@ -4,9 +4,6 @@
 <%@ page import="control.dao.PhotoDAO" %>
 <%@ page import="java.io.InputStream" %>
 <%@ page import="control.ImageUtilities" %>
-<%@ page import="static control.ImageUtilities.convertToBase64" %>
-<%@ page import="java.io.ByteArrayOutputStream" %>
-<%@ page import="java.util.Base64" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it">

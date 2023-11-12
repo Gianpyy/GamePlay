@@ -16,7 +16,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -24,8 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @WebServlet("/Product")
-public class ProductServlet extends HttpServlet {
-    private static final Logger LOGGER = Logger.getLogger(ProductServlet.class.getName());
+public class RedirectToProductPageServlet extends HttpServlet {
+    private static final Logger LOGGER = Logger.getLogger(RedirectToProductPageServlet.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -78,6 +77,7 @@ public class ProductServlet extends HttpServlet {
                 //Aggiungo il bean alla request
                 req.getSession().setAttribute("prodotto", requestedProduct);
                 req.getSession().setAttribute("edizioni-piattaforme", videogiocoBeans);
+                req.getSession().setAttribute("descrizione", videogiocoBeans.getFirst().getDescrizione());
 
                 //Aggiungo come header nella response il tipo di prodotto
                 resp.addHeader("PRODUCT-TYPE", "videogioco");
@@ -102,7 +102,7 @@ public class ProductServlet extends HttpServlet {
                 }
 
                 //Aggiungo il bean alla request
-                req.getSession().setAttribute("prodotto", consoleBeans);
+                req.getSession().setAttribute("prodotto", requestedProduct);
                 req.getSession().setAttribute("edizioni-piattaforme", consoleBeans);
 
                 //Aggiungo come header nella response il tipo di prodotto
@@ -140,11 +140,11 @@ public class ProductServlet extends HttpServlet {
                     LOGGER.log(Level.SEVERE, e.toString());
                 }
             }
-            default -> LOGGER.log(Level.SEVERE, "baseg");
-
-            //// TODO: 07/10/2023 Redirect a pagina di errore?
+            default -> {
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore interno del server");
+                LOGGER.log(Level.SEVERE, "Errore interno del server");
+            }
         }
-
 
     }
 }

@@ -73,16 +73,18 @@ public class CarrelloServlet extends HttpServlet {
                         List<ProdottoBean> carrello = (List<ProdottoBean>) req.getSession().getAttribute("carrello");
                         HashMap<String, Integer> prodottiCounter = (HashMap<String, Integer>) req.getSession().getAttribute("prodottiCounter");
 
+
                         //Aggiungo il prodotto e incremento il contatore
                         //Se il prodotto è già presente, devo solo aggiornare il contatore dei prodotti, altrimenti devo anche aggiungere il prodotto alla lista dei prodotti
                         final String prodottoDaAggiungereBarcode = prodottoDaAggiungere.getBarcode();
+                        int quantityToAdd = json.getInt("qta");
                         boolean isAlreadyPresent = carrello.stream().anyMatch(prodottoBean -> prodottoBean.getBarcode().equals(prodottoDaAggiungereBarcode));
                         if (isAlreadyPresent) {
-                            prodottiCounter.merge(prodottoDaAggiungere.getBarcode(), 1, Integer::sum);
+                            prodottiCounter.merge(prodottoDaAggiungere.getBarcode(), quantityToAdd, Integer::sum);
                         }
                         else {
                             carrello.add(prodottoDaAggiungere);
-                            prodottiCounter.put(prodottoDaAggiungere.getBarcode(), 1);
+                            prodottiCounter.put(prodottoDaAggiungere.getBarcode(), quantityToAdd);
                         }
 
                         //Aggiungo carrello e contatore alla sessione
@@ -98,9 +100,11 @@ public class CarrelloServlet extends HttpServlet {
                         List<ProdottoBean> carrello = new LinkedList<>();
                         HashMap<String, Integer> prodottiCounter = new HashMap<>();
 
+
                         //Aggiungo il prodotto e incremento il contatore
+                        int quantityToAdd = json.getInt("qta");
                         carrello.add(prodottoDaAggiungere);
-                        prodottiCounter.put(prodottoDaAggiungere.getBarcode(), 1);
+                        prodottiCounter.put(prodottoDaAggiungere.getBarcode(), quantityToAdd);
 
                         //Aggiungo carrello e contatore alla sessione
                         req.getSession().setAttribute("carrello", carrello);

@@ -34,6 +34,9 @@ function addProduct() {
     console.log("function addProduct")
     //Formatto i dati per la request
     let data = {actionType: "addProduct"};
+
+    //Recupero la quantità di prodotto da aggiungere e la aggiungo alla request
+    data["qta"] = $("#inputQuantity").val()
     console.log(JSON.stringify(data))
 
     //Creo la richiesta POST.

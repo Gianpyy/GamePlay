@@ -185,3 +185,31 @@ hr {
   margin-top: 0;
   margin-bottom: 15px;
 }
+
+.carousel-control-next, .carousel-control-prev {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.carousel-control-prev {
+  left: 0;
+}
+
+.carousel-control-next {
+  right: 0;
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+  filter: invert(1); /* Inverte il colore dell'icona (facoltativo) */
+}
+
+#inputQuantity {
+  max-width: 4rem
+}
+
+.card-img-top {
+  max-width: 350px;
+  height: auto;
+}
