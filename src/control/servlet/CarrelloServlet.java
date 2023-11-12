@@ -50,7 +50,7 @@ public class CarrelloServlet extends HttpServlet {
                 LOGGER.info("Switch case: addProduct");
 
                 //Recupero l'id del prodotto
-                String productId = (String) req.getSession().getAttribute("productId");
+                String productId = json.getString("productId");
 
                 //Recupero il prodotto da inserire nel carrello
                 ProdottoBean prodottoDaAggiungere = new ProdottoBean();

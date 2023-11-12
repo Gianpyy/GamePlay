@@ -56,7 +56,7 @@
                             String piattaforma = v.getPiattaforma();
                             if (!(piattaforme.contains(piattaforma))) {
                                 piattaforme.add(piattaforma); %>
-                    <button class="btn btn-outline-dark flex-shrink-0" onclick="changeDataOnVideogamePage('<%=v.getNome()%>', '<%=v.getPrezzo()%>', '<%=v.getPiattaforma()%>', '<%=v.getEdizione()%>', '<%=v.getDescrizione()%>')" <% if(piattaforma.equals(prodotto.getPiattaforma())) { %> disabled <% } %>><%=piattaforma%></button>
+                    <button class="btn btn-outline-dark flex-shrink-0" onclick="changeDataOnVideogamePage('<%=v.getNome()%>', '<%=v.getPrezzo()%>', '<%=v.getPiattaforma()%>', '<%=v.getEdizione()%>', '<%=v.getDescrizione()%>', '<%=v.getBarcode()%>')" <% if(piattaforma.equals(prodotto.getPiattaforma())) { %> disabled <% } %>><%=piattaforma%></button>
                     <% }
                     }
                     %>
@@ -71,7 +71,7 @@
                             String edizione = v.getEdizione();
                             if (!(edizioni.contains(edizione))) {
                                 edizioni.add(edizione); %>
-                    <button class="btn btn-outline-dark flex-shrink-0" onclick="changeDataOnVideogamePage('<%=v.getNome()%>', '<%=v.getPrezzo()%>', '<%=v.getPiattaforma()%>', '<%=v.getEdizione()%>', '<%=v.getDescrizione()%>')" <% if(edizione.equals(prodotto.getEdizione())) { %> disabled <% } %>><%=edizione%></button>
+                    <button class="btn btn-outline-dark flex-shrink-0" onclick="changeDataOnVideogamePage('<%=v.getNome()%>', '<%=v.getPrezzo()%>', '<%=v.getPiattaforma()%>', '<%=v.getEdizione()%>', '<%=v.getDescrizione()%>', '<%=v.getBarcode()%>')" <% if(edizione.equals(prodotto.getEdizione())) { %> disabled <% } %>><%=edizione%></button>
                     <% }
                     }
                     %>
@@ -89,7 +89,7 @@
                         <option value="8">8</option>
                         <option value="9">9</option>
                     </select>
-                    <button class="btn btn-outline-dark flex-shrink-0" type="submit" onclick="addProduct()">
+                    <button class="btn btn-outline-dark flex-shrink-0" id="submitButton" type="submit" data-id="<%=prodotto.getBarcode()%>" onclick="addProduct()">
                         <i class="bi-cart-fill me-1"></i>
                         Aggiungi al carrello
                     </button>

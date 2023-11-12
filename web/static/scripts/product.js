@@ -33,7 +33,9 @@ function redirectToProductPage (id) {
 function addProduct() {
     console.log("function addProduct")
     //Formatto i dati per la request
-    let data = {actionType: "addProduct"};
+    let productId = $("#submitButton").data("id")
+    console.log(productId)
+    let data = {actionType: "addProduct", productId: productId.toString()};
 
     //Recupero la quantità di prodotto da aggiungere e la aggiungo alla request
     data["qta"] = $("#inputQuantity").val()
@@ -176,7 +178,7 @@ function redirectToEditPage(id, productType) {
     })
 }
 
-function changeDataOnVideogamePage(nome, prezzo, piattaforma, edizione, descrizione) {
+function changeDataOnVideogamePage(nome, prezzo, piattaforma, edizione, descrizione, id) {
     //Cambio gli elementi nella pagina
     $("#productName").html(nome)
     $("#productPrice span").text(prezzo + " €")
@@ -207,9 +209,11 @@ function changeDataOnVideogamePage(nome, prezzo, piattaforma, edizione, descrizi
             currentButton.prop("disabled", false)
         }
     })
+
+    $("#submitButton").attr("data-id", id)
 }
 
-function changeDataOnConsolePage(nome, prezzo, edizione) {
+function changeDataOnConsolePage(nome, prezzo, edizione, id) {
     //Cambio gli elementi nella pagina
     $("#productName").html(nome)
     $("#productPrice span").text(prezzo + " €")
@@ -226,5 +230,7 @@ function changeDataOnConsolePage(nome, prezzo, edizione) {
             currentButton.prop("disabled", false)
         }
     })
+
+    $("#submitButton").attr("data-id", id)
 }
 
