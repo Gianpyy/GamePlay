@@ -1,6 +1,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.ProdottoBean" %>
 <%@ page import="java.util.HashMap" %>
+<%@ page import="control.dao.PhotoDAO" %>
+<%@ page import="java.io.InputStream" %>
+<%@ page import="control.ImageUtilities" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it" class="h-100">
@@ -54,6 +57,14 @@
                             String productId = p.getBarcode();
                             Float productPrice = p.getPrezzo();
                             Integer productCount = prodottiCounter.get(p.getBarcode()); %>
+            <%  PhotoDAO photoDAO = new PhotoDAO();
+                InputStream thumbnailImage = photoDAO.doRetrieveThumbnailImageForProduct(productId);
+                if (thumbnailImage != null) { %>
+            <img src="data:image/jpeg;base64, <%= ImageUtilities.convertToBase64(thumbnailImage) %>" class="rounded float-start img-fluid img-thumbnail imgStandard" alt="Immagine non trovata">
+            <% }
+            else { %>
+            <img src="static/img/videogame_thumbnail_placeholder.png" class="rounded float-start img-fluid img-thumbnail" alt="img not found">
+            <% }%>
                         <div id="<%=productId%>">
                                 <h3> <%=productName%>  </h3>
                                 <h3> <%=productPrice%> €</h3>
