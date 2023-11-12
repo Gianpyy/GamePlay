@@ -38,8 +38,8 @@
         <div class="row g-5">
             <div class="col-md-5 col-lg-4 order-md-last">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-primary">Il tuo ordine</span>
-                    <span class="badge bg-primary rounded-pill"><%=numberOfProducts%></span>
+                    <span class="colorPrimary">Il tuo ordine</span>
+                    <span class="badge backgroundPrimary rounded-pill"><%=numberOfProducts%></span>
                 </h4>
                 <ul class="list-group mb-3">
                     <% for (ProdottoBean p : carrello) {
@@ -186,7 +186,7 @@
 
                     <hr class="my-4">
 
-                    <button class="w-100 btn btn-primary btn-lg" type="submit">Continua al pagamento</button>
+                    <button class="w-100 btn btn-outline-dark flex-shrink-0 btn-lg" type="submit">Continua al pagamento</button>
                 </form>
             </div>
         </div>

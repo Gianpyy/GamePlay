@@ -364,8 +364,7 @@ function submitLogout() {
             'Content-Type': "application/json"},
     }).then(res => {
         console.log("Request complete! response: ", res)
-        window.location.href = "index.jsp"
-        window.location.reload()
+        window.location.replace("index.jsp")
     })
 }
 

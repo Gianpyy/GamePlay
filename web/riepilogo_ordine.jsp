@@ -78,9 +78,9 @@
     </div>
 
     <div class="container text-center">
-        Puoi controllare lo stato del tuo ordine dalla <a href="cronologia_ordini.jsp">cronologia ordini</a> del tuo profilo. <br>
+        Puoi controllare lo stato del tuo ordine dalla <a class="remove" href="cronologia_ordini.jsp">cronologia ordini</a> del tuo profilo. <br>
 
-        <a href="index.jsp">Torna alla homepage</a>
+        <a class="remove" href="index.jsp">Torna alla homepage</a>
     </div>
 </section>
 

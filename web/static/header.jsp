@@ -23,21 +23,21 @@
 
 <div class="col-md-3 text-end"> <%-- Bottone carrello ed utente --%>
     <%-- Bottone carrello --%>
-    <button type="button" class="btn btn-primary" onclick="window.location.href = 'carrello.jsp' ">
+    <button type="button" class="btn btn-outline-dark flex-shrink-0" onclick="window.location.href = 'carrello.jsp' ">
         <i class="bi bi-cart2"></i> Carrello
     </button>
 
     <%
         if(isLogged == null || !isLogged) {
             session.setAttribute("isLogged", Boolean.FALSE); %>
-    <button type="submit" class="btn btn-primary" onclick="window.location.href = 'login.jsp'">
+    <button type="submit" class="btn btn-outline-dark flex-shrink-0" onclick="window.location.href = 'login.jsp'">
         <i class="bi bi-person-circle"></i> Login
     </button>
     <% }
     else {
         String username = (String) session.getAttribute("username"); %>
     <div class="dropdown">
-        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true">
+        <button type="button" class="btn btn-outline-dark flex-shrink-0" data-bs-toggle="dropdown" aria-expanded="true">
             <i class="bi bi-person-circle"></i> <%=username%>
         </button>
         <ul class="dropdown-menu">

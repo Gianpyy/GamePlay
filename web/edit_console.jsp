@@ -12,7 +12,7 @@
     <%-- Bootstrap icons   --%>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
-<body class="container d-flex align-items-center justify-content-center flex-column py-4"> <!-- justify-content-center -->
+<body class="container d-flex align-items-center justify-content-center flex-column py-4 backgroundSecondary"> <!-- justify-content-center -->
 <main class="form-signin w-100 mx-auto"> <!-- container mx-auto -->
     <% Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
         if (isAdmin == null || !isAdmin) { %>
@@ -24,7 +24,7 @@
         ConsoleBean c = (ConsoleBean) session.getAttribute("product");
     %>
 
-    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="updateConsoleForm" enctype="multipart/form-data">
+    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary backgroundColor" id="updateConsoleForm" enctype="multipart/form-data">
         <h1 class="h3 mb-3 fw-normal">Dati console</h1>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" name="nomeProdotto" id="floatingNome" placeholder="Nome" value="<%=c.getNome()%>">
@@ -78,7 +78,7 @@
             </div>
         </div>
 
-        <button class="w-100 btn btn-lg btn-primary" type="submit" id="updateConsoleSubmit">Modifica console</button>
+        <button class="w-100 btn btn-lg btn-outline-dark flex-shrink-0" type="submit" id="updateConsoleSubmit">Modifica console</button>
     </form>
 </main>
 <%

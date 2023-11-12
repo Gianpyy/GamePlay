@@ -32,9 +32,9 @@
         <div class="py-5 text-center mb-3">
             <h2>Gestione catalogo</h2>
             <div class="row g-3 align-items-center justify-content-center my-3">
-                <button class="btn btn-primary col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVideogioco" aria-expanded="false" aria-controls="collapseVideogioco">Aggiungi videogioco</button>
-                <button class="btn btn-primary col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseConsole" aria-expanded="false" aria-controls="collapseConsole">Aggiungi console</button>
-                <button class="btn btn-primary col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGadget" aria-expanded="false" aria-controls="collapseGadget">Aggiungi gadget</button>
+                <button class="btn btn-outline-dark flex-shrink-0 col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVideogioco" aria-expanded="false" aria-controls="collapseVideogioco">Aggiungi videogioco</button>
+                <button class="btn btn-outline-dark flex-shrink-0 col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseConsole" aria-expanded="false" aria-controls="collapseConsole">Aggiungi console</button>
+                <button class="btn btn-outline-dark flex-shrink-0 col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGadget" aria-expanded="false" aria-controls="collapseGadget">Aggiungi gadget</button>
                 <div class="collapse col-12" id="collapseVideogioco">
                     <%@include file="static/aggiunta_videogioco.jsp" %>
                 </div>
@@ -44,9 +44,6 @@
                 <div class="collapse col-12" id="collapseGadget">
                     <%@include file="static/aggiunta_gadget.jsp" %>
                 </div>
-                <form class="col-12 mb-3 mb-lg-0 me-lg-3" role="search">
-                    <input type="search" class="form-control" placeholder="Cerca un prodotto..." aria-label="Search">
-                </form>
             </div>
 
 <% ProdottoDAO prodottoDAO = new ProdottoDAO();
@@ -75,8 +72,8 @@
                         </div>
                     </div>
                     <div class="col-3 d-flex flex-column order-last align-self-center">
-                        <button class="btn btn-primary my-1" id="modificaProdotto" onclick="redirectToEditPage(<%=p.getBarcode()%>, '<%=p.getTipo()%>')">Modifica prodotto</button>
-                        <button class="btn btn-danger" onclick="deleteProduct(<%=p.getBarcode()%>)">Elimina prodotto</button>
+                        <button class="btn btn-primary btn-outline-dark flex-shrink-0 my-1" id="modificaProdotto" onclick="redirectToEditPage(<%=p.getBarcode()%>, '<%=p.getTipo()%>')">Modifica prodotto</button>
+                        <button class="btn btn-danger btn-outline-dark flex-shrink-0" onclick="deleteProduct(<%=p.getBarcode()%>)">Elimina prodotto</button>
                     </div>
                 </div>
             </div>

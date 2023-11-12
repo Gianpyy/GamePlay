@@ -12,9 +12,9 @@
     <%-- Bootstrap icons   --%>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
-<body class="container d-flex align-items-center justify-content-center flex-column py-4">
+<body class="container d-flex align-items-center justify-content-center flex-column py-4 backgroundSecondary">
 <main class="form-signin w-100 mx-auto">
-    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="registerForm">
+    <form class="p-4 p-md-5 border rounded-3 backgroundColor" id="registerForm">
         <div class="text-center">
             <img class="logo mb-4" src="./static/img/logo_placeholder.png" alt="cool logo" onclick="window.location.href = 'index.jsp'">
         </div>
@@ -98,7 +98,7 @@
                 Nascondi password
             </button>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit" id="registerSubmit">Registrati</button>
+        <button class="w-100 btn btn-lg btn-outline-dark flex-shrink-0" type="submit" id="registerSubmit">Registrati</button>
     </form>
 </main>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>

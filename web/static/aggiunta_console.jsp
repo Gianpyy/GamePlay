@@ -59,7 +59,7 @@
     </div>
   </div>
 
-  <button class="w-100 btn btn-lg btn-primary" type="submit" id="consoleSubmit">Aggiungi console</button>
+  <button class="w-100 btn btn-lg btn-outline-dark flex-shrink-0" type="submit" id="consoleSubmit">Aggiungi console</button>
 </form>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </body>

@@ -5,8 +5,9 @@
     <title>Footer</title>
 </head>
 <body>
-    <div style="background-color: indianred">
-        <h1>FOOTER</h1>
+    <div class="container text-center">
+        <hr>
+        <p class="text-center">© 2023 GamePlay </p>
     </div>
 </body>
 </html>

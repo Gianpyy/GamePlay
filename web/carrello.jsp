@@ -63,7 +63,7 @@
             <img src="data:image/jpeg;base64, <%= ImageUtilities.convertToBase64(thumbnailImage) %>" class="rounded float-start img-fluid img-thumbnail imgStandard" alt="Immagine non trovata">
             <% }
             else { %>
-            <img src="static/img/videogame_thumbnail_placeholder.png" class="rounded float-start img-fluid img-thumbnail" alt="img not found">
+            <img src="static/img/videogame_thumbnail_placeholder.png" class="rounded float-start img-fluid img-thumbnail imgStandard" alt="img not found">
             <% }%>
                         <div id="<%=productId%>">
                                 <h3> <%=productName%>  </h3>
@@ -99,7 +99,7 @@
             </h2>
 <%--            <button class="btn btn-primary" type="s">Procedi al checkout</button>--%>
             <form tabindex="0" id="checkoutButton" <% if (!isUserLogged) { %> data-bs-toggle="tooltip" title="Devi aver effettuato il login per poter procedere al checkout"  <% } %>>
-                <button type="submit" class="btn btn-primary" <% if (!isUserLogged) { %> disabled  <% } %>>Procedi al checkout</button>
+                <button type="submit" class="btn btn-outline-dark flex-shrink-0" <% if (!isUserLogged) { %> disabled  <% } %>>Procedi al checkout</button>
             </form>
         </div>
     </div>

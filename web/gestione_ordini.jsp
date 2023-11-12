@@ -29,9 +29,9 @@
     <div class="py-5 text-center mb-3">
       <h2>Gestione ordini</h2>
       <div class="row g-3 align-items-center justify-content-center my-3">
-        <button class="btn btn-primary col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltroUtente" aria-expanded="false" aria-controls="collapseFiltroUtente">Filtra ordini per utente</button>
-        <button class="btn btn-primary col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltroData" aria-expanded="false" aria-controls="collapseFiltroData">Filtra ordini per data</button>
-        <button class="btn btn-primary col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltroID" aria-expanded="false" aria-controls="collapseFiltroID">Filtra ordini per numero ordine</button>
+        <button class="btn btn-outline-dark flex-shrink-0 col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltroUtente" aria-expanded="false" aria-controls="collapseFiltroUtente">Filtra ordini per utente</button>
+        <button class="btn btn-outline-dark flex-shrink-0 col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltroData" aria-expanded="false" aria-controls="collapseFiltroData">Filtra ordini per data</button>
+        <button class="btn btn-outline-dark flex-shrink-0 col-8 col-md-3 mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltroID" aria-expanded="false" aria-controls="collapseFiltroID">Filtra ordini per numero ordine</button>
         <div class="collapse col-12 p-2 p-md-3 border rounded-3 bg-body-tertiary filtroData" id="collapseFiltroUtente">
           <form class="" id="filtroUtente">
             <div class="row g-1">
@@ -43,7 +43,7 @@
                 </div>
               </div>
 
-              <button class="btn btn-xl btn-primary col-8 col-md-2 mx-3" type="submit">Filtra</button>
+              <button class="btn btn-xl btn-outline-dark flex-shrink-0 col-8 col-md-2 mx-3" type="submit">Filtra</button>
             </div>
           </form>
         </div>
@@ -64,7 +64,7 @@
                   Inserisci una data valida
                 </div>
               </div>
-              <button class="btn btn-primary col-8" type="submit">Filtra</button>
+              <button class="btn btn-outline-dark flex-shrink-0 col-8" type="submit">Filtra</button>
             </div>
           </form>
         </div>
@@ -113,8 +113,8 @@
                 </div>
               </div>
               <div class="col-3 d-flex flex-column order-last align-self-center">
-                <button class="btn btn-primary my-1" id="modificaProdotto">Visualizza dettagli ordine</button>
-                <button class="btn btn-danger" onclick="deleteOrder(<%=o.getNumeroOrdine()%>)">Elimina ordine</button>
+                <button class="btn btn-outline-dark flex-shrink-0 my-1" id="modificaProdotto">Visualizza dettagli ordine</button>
+                <button class="btn btn-outline-dark flex-shrink-0 btn-danger" onclick="deleteOrder(<%=o.getNumeroOrdine()%>)">Elimina ordine</button>
               </div>
             </div>
           </div>

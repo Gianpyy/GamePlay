@@ -12,9 +12,9 @@
     <%-- Bootstrap icons   --%>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
-<body class="container d-flex align-items-center justify-content-center flex-column py-4"> <!-- justify-content-center -->
+<body class="container d-flex align-items-center justify-content-center flex-column py-4 backgroundSecondary"> <!-- justify-content-center -->
 <main class="form-signin w-100 mx-auto"> <!-- container mx-auto -->
-    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="editPasswordForm">
+    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary backgroundColor" id="editPasswordForm">
         <div class="text-center">
             <img class="logo mb-4" src="./static/img/logo_placeholder.png" alt="cool logo" onclick="window.location.href = 'index.jsp'">
         </div>
@@ -54,7 +54,7 @@
                 Nascondi password
             </button>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Modifica password</button>
+        <button class="w-100 btn btn-lg btn-outline-dark flex-shrink-0" type="submit">Modifica password</button>
     </form>
 </main>
 
@@ -65,7 +65,7 @@
                 <h5 class="modal-title">Password modificata con successo</h5>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="location.replace('index.jsp')">Portami alla homepage</button>
+                <button type="button" class="btn btn-outline-dark flex-shrink-0" onclick="location.replace('index.jsp')">Portami alla homepage</button>
             </div>
         </div>
     </div>
