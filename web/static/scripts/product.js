@@ -175,3 +175,56 @@ function redirectToEditPage(id, productType) {
 
     })
 }
+
+function changeDataOnVideogamePage(nome, prezzo, piattaforma, edizione, descrizione) {
+    //Cambio gli elementi nella pagina
+    $("#productName").html(nome)
+    $("#productPrice span").text(prezzo + " €")
+    $("#productPiattaforma span").text(piattaforma)
+    $("#productEdizione span").text(edizione)
+    $("#productDescrizione p").text(descrizione)
+
+    //Disabilito il bottone dell'edizione attuale e riattivo gli altri
+    $("#edizioni button").each(function () {
+        let currentButton = $(this)
+
+        if(currentButton.text() === edizione) {
+            currentButton.prop("disabled", true)
+        }
+        else {
+            currentButton.prop("disabled", false)
+        }
+    })
+
+    //Disabilito il bottone della piattaforma attuale e riattivo gli altri
+    $("#piattaforme button").each(function () {
+        let currentButton = $(this)
+
+        if(currentButton.text() === piattaforma) {
+            currentButton.prop("disabled", true)
+        }
+        else {
+            currentButton.prop("disabled", false)
+        }
+    })
+}
+
+function changeDataOnConsolePage(nome, prezzo, edizione) {
+    //Cambio gli elementi nella pagina
+    $("#productName").html(nome)
+    $("#productPrice span").text(prezzo + " €")
+    $("#productEdizione span").text(edizione)
+
+    //Disabilito il bottone dell'edizione attuale e riattivo gli altri
+    $("#edizioni button").each(function () {
+        let currentButton = $(this)
+
+        if(currentButton.text() === edizione) {
+            currentButton.prop("disabled", true)
+        }
+        else {
+            currentButton.prop("disabled", false)
+        }
+    })
+}
+

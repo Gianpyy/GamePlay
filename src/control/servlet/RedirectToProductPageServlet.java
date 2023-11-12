@@ -66,8 +66,10 @@ public class RedirectToProductPageServlet extends HttpServlet {
             case "videogioco" -> {
                 //Recupero tutte le edizioni del videogioco specificato dall'id nella request
                 VideogiocoDAO videogiocoDAO = new VideogiocoDAO();
+                VideogiocoBean requestedVideogioco = null;
                 LinkedList<VideogiocoBean> videogiocoBeans = new LinkedList<>();
                 try {
+                    requestedVideogioco = videogiocoDAO.doRetrieveByKey(requestedProduct.getBarcode());
                     videogiocoBeans = (LinkedList<VideogiocoBean>) videogiocoDAO.doRetrieveAllByVideogameName(requestedProduct.getNome());
                     LOGGER.log(Level.INFO, "Retrieved {0} products", videogiocoBeans.size());
                 } catch (SQLException e) {
@@ -75,9 +77,8 @@ public class RedirectToProductPageServlet extends HttpServlet {
                 }
 
                 //Aggiungo il bean alla request
-                req.getSession().setAttribute("prodotto", requestedProduct);
+                req.getSession().setAttribute("prodotto", requestedVideogioco);
                 req.getSession().setAttribute("edizioni-piattaforme", videogiocoBeans);
-                req.getSession().setAttribute("descrizione", videogiocoBeans.getFirst().getDescrizione());
 
                 //Aggiungo come header nella response il tipo di prodotto
                 resp.addHeader("PRODUCT-TYPE", "videogioco");
@@ -93,8 +94,10 @@ public class RedirectToProductPageServlet extends HttpServlet {
             case "console" -> {
                 //Recupero tutte le edizioni della console specificata dall'id nella request
                 ConsoleDAO consoleDAO = new ConsoleDAO();
+                ConsoleBean consoleRequested = null;
                 LinkedList<ConsoleBean> consoleBeans = new LinkedList<>();
                 try {
+                    consoleRequested = consoleDAO.doRetrieveByKey(requestedProduct.getBarcode());
                     consoleBeans = (LinkedList<ConsoleBean>) consoleDAO.doRetrieveAllByConsoleName(requestedProduct.getNome());
                     LOGGER.log(Level.INFO, "Retrieved {0} products", consoleBeans.size());
                 } catch (SQLException e) {
@@ -102,7 +105,7 @@ public class RedirectToProductPageServlet extends HttpServlet {
                 }
 
                 //Aggiungo il bean alla request
-                req.getSession().setAttribute("prodotto", requestedProduct);
+                req.getSession().setAttribute("prodotto", consoleRequested);
                 req.getSession().setAttribute("edizioni-piattaforme", consoleBeans);
 
                 //Aggiungo come header nella response il tipo di prodotto

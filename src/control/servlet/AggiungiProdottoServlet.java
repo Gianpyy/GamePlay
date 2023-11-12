@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 @WebServlet("/AddProduct")
@@ -47,11 +48,18 @@ public class AggiungiProdottoServlet extends HttpServlet {
             return;
         }
 
-        String barcode = "";
+        String barcode = null;
+        try {
+            barcode = Utilities.generateBarcode();
+        } catch (SQLException e) {
+            LOGGER.severe(e.toString());
+            resp.addHeader("OPERATION-RESULT", "error");
+            requestDispatcher.forward(req,resp);
+            return;
+        }
         switch (tipo) {
             case "videogioco" -> {
                 try {
-                    barcode = Utilities.generateBarcode();
                     //Creo il bean da inserire nel database
                     VideogiocoBean videogiocoBean = new VideogiocoBean();
                     videogiocoBean.setTipo("videogioco");

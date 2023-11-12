@@ -20,50 +20,10 @@
 <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
     <%@include file="static/header.jsp"%>
 </header>
-<%--<%--%>
-<%--    //Dati da visualizzare nella pagina--%>
-<%--    ProdottoBean prodotto = (ProdottoBean) session.getAttribute("prodotto");--%>
-<%--    List<VideogiocoBean> edizioniPiattaforme = (List<VideogiocoBean>) session.getAttribute("edizioni-piattaforme");--%>
-<%--    session.setAttribute("productId", prodotto.getBarcode());--%>
-<%--%>--%>
-<%--<div>--%>
-<%--    <h1><%=prodotto.getNome()%></h1> <br>--%>
-<%--    <h1><%=prodotto.getPrezzo()%> €</h1> <br>--%>
-<%--</div>--%>
-
-<%--<div>--%>
-<%--    <h2>Piattaforme: </h2>--%>
-<%--    <%--%>
-<%--        ArrayList<String> piattaforme = new ArrayList<>();--%>
-<%--        for (VideogiocoBean v : edizioniPiattaforme) {--%>
-<%--            if (!(piattaforme.contains(v.getPiattaforma()))) {--%>
-<%--                piattaforme.add(v.getPiattaforma()); %>--%>
-<%--                <button name="<%=v.getBarcode()%>"><%=v.getPiattaforma()%></button>--%>
-<%--        <%--%>
-<%--             }--%>
-<%--        }--%>
-<%--    %>--%>
-<%--</div>--%>
-
-<%--<div>--%>
-<%--    <h2>Edizioni: </h2>--%>
-<%--    <%--%>
-<%--        ArrayList<String> edizioni = new ArrayList<>();--%>
-<%--        for (VideogiocoBean v : edizioniPiattaforme) {--%>
-<%--            if(!(edizioni.contains(v.getEdizione()))) {--%>
-<%--                edizioni.add(v.getEdizione());--%>
-<%--    %>--%>
-<%--        <button name="<%=v.getBarcode()%>"><%=v.getEdizione()%></button>--%>
-<%--    <%--%>
-<%--            }--%>
-<%--        }--%>
-<%--    %>--%>
-<%--</div>--%>
 <%
     //Dati da visualizzare nella pagina
-    ProdottoBean prodotto = (ProdottoBean) session.getAttribute("prodotto");
+    VideogiocoBean prodotto = (VideogiocoBean) session.getAttribute("prodotto");
     List<VideogiocoBean> edizioniPiattaforme = (List<VideogiocoBean>) session.getAttribute("edizioni-piattaforme");
-    String descrizione = (String) session.getAttribute("descrizione");
     session.setAttribute("productId", prodotto.getBarcode());
 %>
 <!-- Product section-->
@@ -82,11 +42,42 @@
             </div>
             <div class="col-md-6">
                 <h1 class="display-5 fw-bolder" id="productName"><%=prodotto.getNome()%></h1>
-                <div class="fs-5 mb-5" id="productPrice">
+                <hr>
+                <div class="fs-2 mb-3" id="productPrice">
                     <span><%=prodotto.getPrezzo()%> €</span>
                 </div>
-                <p class="lead" id="productDescription"><%=descrizione%></p>
-                <div class="d-flex my-3">
+
+                <div class="fs-5" id="productPiattaforma">
+                    Piattaforma: <span><%=prodotto.getPiattaforma()%></span>
+                </div>
+                <div class="mt-1 mb-5" id="piattaforme">
+                    <%  ArrayList<String> piattaforme = new ArrayList<>();
+                        for (VideogiocoBean v : edizioniPiattaforme) {
+                            String piattaforma = v.getPiattaforma();
+                            if (!(piattaforme.contains(piattaforma))) {
+                                piattaforme.add(piattaforma); %>
+                    <button class="btn btn-outline-dark flex-shrink-0" onclick="changeDataOnVideogamePage('<%=v.getNome()%>', '<%=v.getPrezzo()%>', '<%=v.getPiattaforma()%>', '<%=v.getEdizione()%>', '<%=v.getDescrizione()%>')" <% if(piattaforma.equals(prodotto.getPiattaforma())) { %> disabled <% } %>><%=piattaforma%></button>
+                    <% }
+                    }
+                    %>
+                </div>
+
+                <div class="fs-5" id="productEdizione">
+                    Edizione: <span><%=prodotto.getEdizione()%></span>
+                </div>
+                <div class="mt-1 mb-4" id="edizioni">
+                    <%  ArrayList<String> edizioni = new ArrayList<>();
+                        for (VideogiocoBean v : edizioniPiattaforme) {
+                            String edizione = v.getEdizione();
+                            if (!(edizioni.contains(edizione))) {
+                                edizioni.add(edizione); %>
+                    <button class="btn btn-outline-dark flex-shrink-0" onclick="changeDataOnVideogamePage('<%=v.getNome()%>', '<%=v.getPrezzo()%>', '<%=v.getPiattaforma()%>', '<%=v.getEdizione()%>', '<%=v.getDescrizione()%>')" <% if(edizione.equals(prodotto.getEdizione())) { %> disabled <% } %>><%=edizione%></button>
+                    <% }
+                    }
+                    %>
+                </div>
+                <hr>
+                <div class="d-flex mt-5 mb-3">
                     <select class="form-select text-center me-3 w-25" id="inputQuantity">
                         <option value="1" selected>1</option>
                         <option value="2">2</option>
@@ -104,6 +95,10 @@
                     </button>
                 </div>
             </div>
+        </div>
+        <hr>
+        <div id="productDescrizione">
+            <p class="lead"><%=prodotto.getDescrizione()%></p>
         </div>
     </div>
 </section>

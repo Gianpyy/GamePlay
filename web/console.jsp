@@ -22,7 +22,7 @@
 </header>
 <%
     //Dati da visualizzare nella pagina
-    ProdottoBean prodotto = (ProdottoBean) session.getAttribute("prodotto");
+    ConsoleBean prodotto = (ConsoleBean) session.getAttribute("prodotto");
     List<ConsoleBean> edizioniPiattaforme = (List<ConsoleBean>) session.getAttribute("edizioni-piattaforme");
     session.setAttribute("productId", prodotto.getBarcode());
 %>
@@ -42,9 +42,27 @@
             </div>
             <div class="col-md-6">
                 <h1 class="display-5 fw-bolder" id="productName"><%=prodotto.getNome()%></h1>
-                <div class="fs-5 mb-5" id="productPrice">
+                <hr>
+                <div class="fs-2 mb-3" id="productPrice">
                     <span><%=prodotto.getPrezzo()%> €</span>
                 </div>
+
+                <div class="fs-5" id="productEdizione">
+                    Edizione: <span><%=prodotto.getEdizione()%></span>
+                </div>
+                <div class="mt-1 mb-4" id="edizioni">
+                    <%  ArrayList<String> edizioni = new ArrayList<>();
+                        for (ConsoleBean v : edizioniPiattaforme) {
+                            String edizione = v.getEdizione();
+                            if (!(edizioni.contains(edizione))) {
+                                edizioni.add(edizione); %>
+                    <button class="btn btn-outline-dark flex-shrink-0" onclick="changeDataOnConsolePage('<%=v.getNome()%>', '<%=v.getPrezzo()%>','<%=v.getEdizione()%>')" <% if(edizione.equals(prodotto.getEdizione())) { %> disabled <% } %>><%=edizione%></button>
+                    <% }
+                    }
+                    %>
+                </div>
+                <hr>
+
                 <div class="d-flex my-3">
                     <select class="form-select text-center me-3 w-25" id="inputQuantity">
                         <option value="1" selected>1</option>
