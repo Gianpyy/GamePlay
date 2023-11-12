@@ -17,8 +17,8 @@
 </div>
 
 <%-- Barra di ricerca --%>
-<form class="col-12 col-md-5 mb-3 mb-lg-0 me-lg-3" role="search">
-    <input type="search" class="form-control" placeholder="Cerca un prodotto..." aria-label="Search">
+<form id="searchForm" class="col-12 col-md-5 mb-3 mb-lg-0 me-lg-3" role="search">
+    <input type="search" name="searchbar" class="form-control" placeholder="Cerca un prodotto..." aria-label="Search">
 </form>
 
 <div class="col-md-3 text-end"> <%-- Bottone carrello ed utente --%>

@@ -265,4 +265,47 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean, String> {
         }
 
     }
+
+    public Collection<ProdottoBean> doSearch(String name) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        Collection<ProdottoBean> prodottoBeanCollection = new LinkedList<>();
+
+        String sqlStatement = "SELECT * FROM " + ProdottoDAO.TABLE_NAME+" WHERE nome LIKE ?";
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, "%"+name+"%");
+
+            //Eseguo la query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            //Salvo il risultato della query nei bean
+            while (resultSet.next()) {
+                ProdottoBean prodottoBean = new ProdottoBean();
+                prodottoBean.setNome(resultSet.getString("nome"));
+                prodottoBean.setBarcode(resultSet.getString("barcode"));
+                prodottoBean.setPrezzo(resultSet.getFloat("prezzo"));
+                prodottoBean.setTipo(resultSet.getString("tipo"));
+                prodottoBeanCollection.add(prodottoBean);
+            }
+            //Chiudo la connessione
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return prodottoBeanCollection;
+    }
+
 }

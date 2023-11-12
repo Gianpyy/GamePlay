@@ -197,6 +197,10 @@ $("form").submit(function (event) {
                 data["filterType"] = "userId"
                 submitOrderFilter(data)
                 break
+
+            case "searchForm":
+                submitSearchForm(data)
+                break
         }
     }
 })
@@ -604,4 +608,18 @@ function updateOrdini(data) {
         })
     }
 
+}
+
+function submitSearchForm(data) {
+    fetch("Search", {
+        method: "POST",
+        headers: {
+            'Accept': "application/json",
+            'Content-Type': "application/json"},
+        body: JSON.stringify(data)
+    }).then(res => {
+        if (res.ok) {
+            window.location.href = "search_result.jsp"
+        }
+    })
 }
