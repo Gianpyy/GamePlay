@@ -6,6 +6,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -44,7 +46,7 @@ public class UtenteDAO implements IBeanDAO<UtenteBean, Integer>{
             //Preparo il PreparedStatement
             preparedStatement = connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, item.getUsername());
-            preparedStatement.setString(2, item.getPassword());
+            preparedStatement.setString(2, hashPassword(item.getPassword()));
             preparedStatement.setBoolean(3, false);
 
             //Eseguo la query
@@ -79,7 +81,7 @@ public class UtenteDAO implements IBeanDAO<UtenteBean, Integer>{
             //Preparo il PreparedStatement
             preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, item.getUsername());
-            preparedStatement.setString(2, item.getPassword());
+            preparedStatement.setString(2, hashPassword(item.getPassword()));
             preparedStatement.setBoolean(3, false);
 
             //Eseguo la query
@@ -210,6 +212,8 @@ public class UtenteDAO implements IBeanDAO<UtenteBean, Integer>{
             //Salvo il risultato della query nei bean
             while (resultSet.next()) {
                 UtenteBean utenteBean = new UtenteBean();
+
+
                 utenteBean.setCodice(resultSet.getInt("codice"));
                 utenteBean.setUsername(resultSet.getString("username"));
                 utenteBean.setPassword(resultSet.getString("psw"));
@@ -245,7 +249,7 @@ public class UtenteDAO implements IBeanDAO<UtenteBean, Integer>{
             //Preparo il PreparedStatement
             preparedStatement = connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
+            preparedStatement.setString(2, hashPassword(password));
 
             //Eseguo la query
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -286,7 +290,7 @@ public class UtenteDAO implements IBeanDAO<UtenteBean, Integer>{
 
             //Preparo il PreparedStatement
             preparedStatement = connection.prepareStatement(sqlStatement);
-            preparedStatement.setString(1, newPassword);
+            preparedStatement.setString(1, hashPassword(newPassword));
             preparedStatement.setInt(2, code);
 
 
@@ -306,4 +310,24 @@ public class UtenteDAO implements IBeanDAO<UtenteBean, Integer>{
 
         return (result != 0);
     }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = digest.digest(password.getBytes());
+
+            // Converto i byte in formato esadecimale
+            StringBuilder stringBuilder = new StringBuilder();
+            for (byte b : hashedBytes) {
+                stringBuilder.append(String.format("%02x", b));
+            }
+
+            // Confronto l'hash generato con quello memorizzato nel database
+            return stringBuilder.toString();
+        } catch (NoSuchAlgorithmException | NullPointerException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
+
