@@ -17,19 +17,6 @@
     <%@include file="static/header.jsp"%>
 </header>
 <%
-    List<String> errors = (List<String>) request.getAttribute("errors");
-    if(errors != null) {
-        for (String error : errors) { %>
-<%=error%> <br>
-<%
-        }
-     %>
-
-        <br>
-<%
-    }
-%>
-<%
     Boolean isCarrelloEmpty = (Boolean) request.getSession().getAttribute("isCarrelloEmpty");
     Boolean isUserLogged = (Boolean) request.getSession().getAttribute("isLogged");
     List<ProdottoBean> carrello;

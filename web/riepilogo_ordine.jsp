@@ -21,7 +21,6 @@
     <%@include file="static/header.jsp"%>
 </header>
 <%  OrdineBean ordine = (OrdineBean) session.getAttribute("ordine");
-    //OrdineBean ordine = new OrdineBean(1, new Date(), 50.0f, "Carta di credito", "Consegnato", "Via Fittizia, 123", new ArrayList<>(), new ArrayList<>(), 123);
     String username = (String) session.getAttribute("username"); %>
 <section class="h-100">
     <div class="container py-5 h-100">
