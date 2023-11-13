@@ -1,6 +1,5 @@
 package control.dao;
 
-import model.PhotoBean;
 import model.ProdottoBean;
 
 import javax.naming.Context;
@@ -193,43 +192,6 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean, String> {
         return prodottoBeanCollection;
     }
 
-    public String doRetrieveProductTypeById(String code) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        Collection<ProdottoBean> prodottoBeanCollection = new LinkedList<>();
-
-        String sqlStatement = "SELECT tipo FROM " + ProdottoDAO.TABLE_NAME+ " WHERE  barcode = ?";
-        String productType;
-
-        try {
-            //Ottengo la connessione
-            connection = dataSource.getConnection();
-            connection.setAutoCommit(false);
-
-            //Preparo il PreparedStatement
-            preparedStatement = connection.prepareStatement(sqlStatement);
-            preparedStatement.setString(1, code);
-
-            //Eseguo la query
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            //Salvo il risultato della query
-            productType = resultSet.getString("tipo");
-
-            //Chiudo la connessione
-        } finally {
-            try {
-                if (preparedStatement != null)
-                    preparedStatement.close();
-            } finally {
-                if (connection != null)
-                    connection.close();
-            }
-        }
-
-        return productType;
-    }
-
     public void doUpdate(ProdottoBean item) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -308,4 +270,45 @@ public class ProdottoDAO implements IBeanDAO<ProdottoBean, String> {
         return prodottoBeanCollection;
     }
 
+    public Collection<ProdottoBean> doRetrieveAllForHomepage() throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        Collection<ProdottoBean> prodottoBeanCollection = new LinkedList<>();
+
+        String sqlStatement = "SELECT * FROM " + ProdottoDAO.TABLE_NAME+" GROUP BY nome";
+
+
+        try {
+            //Ottengo la connessione
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+
+            //Preparo il PreparedStatement
+            preparedStatement = connection.prepareStatement(sqlStatement);
+
+            //Eseguo la query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            //Salvo il risultato della query nei bean
+            while (resultSet.next()) {
+                ProdottoBean prodottoBean = new ProdottoBean();
+                prodottoBean.setNome(resultSet.getString("nome"));
+                prodottoBean.setBarcode(resultSet.getString("barcode"));
+                prodottoBean.setPrezzo(resultSet.getFloat("prezzo"));
+                prodottoBean.setTipo(resultSet.getString("tipo"));
+                prodottoBeanCollection.add(prodottoBean);
+            }
+            //Chiudo la connessione
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } finally {
+                if (connection != null)
+                    connection.close();
+            }
+        }
+
+        return prodottoBeanCollection;
+    }
 }

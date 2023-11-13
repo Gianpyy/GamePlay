@@ -1,3 +1,4 @@
+<%@ page import="java.util.HashMap" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="it">
@@ -21,14 +22,26 @@
     <input type="search" name="searchbar" class="form-control" placeholder="Cerca un prodotto..." aria-label="Search">
 </form>
 
-<div class="col-md-3 text-end"> <%-- Bottone carrello ed utente --%>
+<div class="col-md-3 text-end" id="bottoniHeader"> <%-- Bottone carrello ed utente --%>
     <%-- Bottone carrello --%>
+    <%  Boolean carrelloEmpty = (Boolean) request.getSession().getAttribute("isCarrelloEmpty");
+        int numOfProducts = 0;
+        //Se c'è un carrello, conto i prodotti
+        if(carrelloEmpty != null && Boolean.FALSE.equals(carrelloEmpty)) {
+            //Recupero il contatore dei prodotti
+            HashMap<String, Integer> prodottiCount = (HashMap<String, Integer>) request.getSession().getAttribute("prodottiCounter");
+
+            //Conto i prodotti
+            for (int i : prodottiCount.values()) {
+                numOfProducts += i;
+            }
+        }
+    %>
     <button type="button" class="btn btn-outline-dark flex-shrink-0" onclick="window.location.href = 'carrello.jsp' ">
-        <i class="bi bi-cart2"></i> Carrello
+        <i class="bi bi-cart2"></i> Carrello <% if (numOfProducts > 0) { %> (<%=numOfProducts%>) <% } %>
     </button>
 
-    <%
-        if(isLogged == null || !isLogged) {
+    <% if(isLogged == null || !isLogged) {
             session.setAttribute("isLogged", Boolean.FALSE); %>
     <button type="submit" class="btn btn-outline-dark flex-shrink-0" onclick="window.location.href = 'login.jsp'">
         <i class="bi bi-person-circle"></i> Login

@@ -11,7 +11,7 @@
     <div class="center">
         <img src="https://mokoko.info/assets/img/emotes/emoji_a_08.png" alt="notfound">
         <h1>La risorsa da te richiesta non è disponibile</h1>
-        <a class="remove" href="../../index.jsp">Torna alla homepage</a>
+        <a class="removeDecorations" href="../../index.jsp">Torna alla homepage</a>
     </div>
 </div>
 </body>

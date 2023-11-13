@@ -24,7 +24,7 @@
 <% ProdottoDAO prodottoDAO = new ProdottoDAO(); %>
 <% LinkedList<ProdottoBean> prodotti;
     try {
-        prodotti = (LinkedList<ProdottoBean>) prodottoDAO.doRetrieveAll("");
+        prodotti = (LinkedList<ProdottoBean>) prodottoDAO.doRetrieveAllForHomepage();
     } catch (SQLException e) {
         throw new RuntimeException(e);
     }
@@ -32,7 +32,7 @@
 
 <div class="container" id="homepageWrapper">
     <section class="py-5" id="latestProducts">
-        <h2>Ultime uscite</h2>
+        <h2 id="textHomePage">I nostri prodotti</h2>
         <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <% int itemsPerSlide = 4;

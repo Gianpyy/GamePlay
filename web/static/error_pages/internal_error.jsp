@@ -11,7 +11,7 @@
   <div class="center">
     <img src="https://mokoko.info/assets/img/emotes/emoji_a_32.png" alt="notfound">
     <h1>La tua richiesta ha riscontrato un errore inaspettato</h1>
-    <a class="remove" href="../../index.jsp">Torna alla homepage</a>
+    <a class="removeDecorations" href="../../index.jsp">Torna alla homepage</a>
   </div>
 </div>
 </body>

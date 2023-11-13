@@ -21,7 +21,7 @@
         if (isAdmin == null || !isAdmin) { %>
     <div class="py-5 text-center">
         <h2>Non sei autorizzato a visualizzare il contenuto di questa pagina.</h2>
-        <a class="remove" href="index.jsp">Torna alla homepage</a>
+        <a class="removeDecorations" href="index.jsp">Torna alla homepage</a>
     </div>
     <% } else {
         VideogiocoBean v = (VideogiocoBean) session.getAttribute("product");

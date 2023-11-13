@@ -54,7 +54,7 @@
             <option value="8">8</option>
             <option value="9">9</option>
           </select>
-          <button class="btn btn-outline-dark flex-shrink-0" type="submit" onclick="addProduct()">
+          <button class="btn btn-outline-dark flex-shrink-0" id="submitButton" data-id="<%=prodotto.getBarcode()%>" onclick="addProduct()">
             <i class="bi-cart-fill me-1"></i>
             Aggiungi al carrello
           </button>
