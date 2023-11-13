@@ -63,7 +63,7 @@
                         <img src="static/img/videogame_cover_placeholder.png" class="rounded float-start imgStandard" alt="img not found">
                     </div>
                     <% } %>
-                    <div class="col-7 d-flex flex-column align-items-start">
+                    <div class="col-7 d-flex flex-column align-items-start catalogoText">
                         <div>
                             <h2><%=p.getNome()%></h2>
                         </div>
@@ -71,7 +71,7 @@
                             <span class="price"><%=p.getPrezzo()%> €</span>
                         </div>
                     </div>
-                    <div class="col-3 d-flex flex-column order-last align-self-center">
+                    <div class="col-3 d-flex flex-column order-last align-self-center" id="catalogoButtons">
                         <button class="btn btn-primary btn-outline-dark flex-shrink-0 my-1" id="modificaProdotto" onclick="redirectToEditPage(<%=p.getBarcode()%>, '<%=p.getTipo()%>')">Modifica prodotto</button>
                         <button class="btn btn-danger btn-outline-dark flex-shrink-0" onclick="deleteProduct(<%=p.getBarcode()%>)">Elimina prodotto</button>
                     </div>

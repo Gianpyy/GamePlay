@@ -276,6 +276,30 @@ body {
 }
 
 #productCarousel {
-  width: 80%; /* Larghezza del tuo carosello, regola di conseguenza */
-  margin: 0 auto; /* Per centrare il carosello orizzontalmente nella pagina */
+  width: 80%;
+  margin: 0 auto;
+}
+
+.selectStatoOrdine {
+  margin-bottom: 10px;
+}
+
+#buttonGestioneOrdini {
+  margin-right: 20px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+#textGestioneOrdini {
+  margin-left: 20px;
+  padding-top: 25px;
+}
+
+#catalogoButtons {
+  padding-right: 25px;
+}
+
+.catalogoText {
+  margin-top: 30px;
+  margin-left: -40px;
 }

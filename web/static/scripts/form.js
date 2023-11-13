@@ -576,29 +576,23 @@ function updateOrdini(data) {
             ordineDiv.html(`
             <div class="bg-body-secondary rounded-3 my-3">
                 <div class="row">
-                    <div class="col-2">
-                        <img src="static/img/videogame_cover_placeholder.jpg" class="rounded float-start imgStandard" alt="img not found">
-                    </div>
-                    <div class="col-7 d-flex flex-column align-items-start">
+                    <div class="col-8 d-flex flex-column align-items-start" id="textGestioneOrdini">
                         <div>
                             <h4>Numero ordine: ${ordine.numeroOrdine}</h4>
                         </div>
                         <div>
                             <h4>Effettuato il: ${ordine.data}</h4>
                         </div>
-                        <div>
-                            <select class="form-select" name="statoOrdine" id="statoOrdine${ordine.numeroOrdine}" onchange="changeOrderStatus('${ordine.numeroOrdine}')">
+                    </div>
+                    <div class="col-3 d-flex flex-column order-last align-self-center" id="buttonGestioneOrdini">
+                          <select class="form-select" name="statoOrdine" id="statoOrdine${ordine.numeroOrdine}" onchange="changeOrderStatus('${ordine.numeroOrdine}')">
                                 <option value="Pagamento ricevuto" ${ordine.stato === 'Pagamento Ricevuto' ? 'selected' : ''}>Pagamento ricevuto</option>
                                 <option value="In preparazione alla spedizione" ${ordine.stato === 'In preparazione alla spedizione' ? 'selected' : ''}>In preparazione alla spedizione</option>
                                 <option value="Spedito" ${ordine.stato === 'Spedito' ? 'selected' : ''}>Spedito</option>
                                 <option value="In Consegna" ${ordine.stato === 'In consegna' ? 'selected' : ''}>In Consegna</option>
                                 <option value="Consegnato" ${ordine.stato === 'Consegnato' ? 'selected' : ''}>Consegnato</option>
                             </select>
-                        </div>
-                    </div>
-                    <div class="col-3 d-flex flex-column order-last align-self-center">
-                          <button class="btn btn-primary my-1" id="modificaProdotto">Visualizza dettagli ordine</button>
-                          <button class="btn btn-danger" onclick="deleteOrder(${ordine.numeroOrdine})">Elimina ordine</button>
+                          <button class="btn btn-outline-dark flex-shrink-0 btn-danger" onclick="deleteOrder(${ordine.numeroOrdine})">Elimina ordine</button>
                     </div>
                 </div>
             </div>
